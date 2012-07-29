@@ -24,13 +24,14 @@ Command Line Interfaces
 -----------------------
 
 commonoptions = [
-  --loglevel=LEVEL
-  --configuration=FILE
+x  --loglevel=LEVEL
+x  --configuration=FILE
   --cache=DIR
-  --logfile=FILE (syslog, file, - STDOUT)
+x  --logfile=FILE (syslog, file, - STDOUT)
   --functions=FUNCIONS
-  --help
-  --version
+  --backups
+x  --help
+x  --version
 ]
 
 options = [
@@ -50,7 +51,6 @@ options = [
   --pidfile=PIDFILE
   --uid=USER
   --gid=GROUP
-  --chroot=DIR
   --core=on|off -> DEFAULT = off
   ]
 singularity daemon [options] [start] :: DEFAULT

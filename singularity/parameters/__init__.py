@@ -4,6 +4,7 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,16 @@ COMMON_PARAMETERS = [
             "help": "".join([
                 "The logging level (corresponds to the levels in the python ",
                 "logging module).  LEVEL defaults to warning.",
+                ]),
+            },
+        { # --backup, -b
+            "options": [ "--backup", "-b" ],
+            "default": False,
+            "action": "store_true",
+            "help": "".join([
+                "Create backup files of all items modified by singularity.  ",
+                "The backup file will be prefixed with '.' and suffixed with ",
+                "'.bak'.",
                 ]),
             },
         { # --configuration=FILE, -f=FILE; FILE => /etc/singularity.conf
@@ -37,7 +48,7 @@ COMMON_PARAMETERS = [
                 ]),
             },
         { # --loghandler=HANDLER, -l=HANDLER; HANDLER => syslog
-            "options": [ "--loghandler", "-l" ],
+            "options": [ "--loghandler", "-H" ],
             "default": "syslog",
             "metavar": "HANDLER",
             "help": "".join([
@@ -63,7 +74,6 @@ APPLY_PARAMETERS = [
             "options": [ "--force" ],
             "action": "store_true",
             "default": False,
-            "type": bool,
             "help": "".join([
                 "Force all functions to run even if a subset is specified ",
                 "with --functions or -F.",
@@ -73,7 +83,6 @@ APPLY_PARAMETERS = [
             "options": [ "--noop" ],
             "action": "store_true",
             "default": False,
-            "type": bool,
             "help": "".join([
                 "Show what actions would occur but don't apply any changes. ",
                 "Works like a dry run mode and forces info level logging.",
@@ -116,7 +125,6 @@ DAEMON_PARAMETERS = [
             "options": [ "--coredumps" ],
             "action": "store_true",
             "default": False,
-            "type": bool,
             "help": "".join([
                 "Turns on coredumps from singularity.",
                 ]),
