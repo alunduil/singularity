@@ -31,18 +31,15 @@ class SingularityConfiguration(object):
         defaults.update(_extract_defaults(singularity.parameters.COMMON_PARAMETERS))
         logger.debug("Default values after %s: %s", "COMMON_PARAMETERS", defaults)
 
-        defaults.update(_extract_defaults(singularity.parameters.APPLY_PARAMETERS))
-        logger.debug("Default values after %s: %s", "APPLY_PARAMETERS", defaults)
-
         defaults.update(_extract_defaults(singularity.parameters.DAEMON_PARAMETERS))
         logger.debug("Default values after %s: %s", "DAEMON_PARAMETERS", defaults)
 
         self.__dict__["_config"] = ConfigParser.SafeConfigParser(defaults)
         self._config.read(configuration)
 
+    # TODO Switch to dictionary style to handle section.name parameters?
     def __getattr__(self, key):
-        section, key = key.split('.', 1)
-        return self._config.get(section, key, raw = True)
+        return self._config.get("main", key, raw = True)
 
 def _extract_defaults(parameters):
     return dict([ (item["options"][0][2:], item["default"]) for item in parameters.iteritems() if "default" in item ])
