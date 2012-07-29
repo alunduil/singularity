@@ -123,3 +123,46 @@ DAEMON_PARAMETERS = [
             },
         ]
 
+DEFAULTS = {}
+DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in COMMON_PARAMETERS if "default" in item ]))
+DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in APPLY_PARAMETERS if "default" in item ]))
+DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in DAEMON_PARAMETERS if "default" in item ]))
+
+logger.debug("DEFAULTS dictionary: %s", DEFAULTS)
+
+class SingularityParameters(object):
+    def __init__(self, *args, **kwargs):
+        """Initialize the collapsed parameters for Singularity.
+
+        ### Arguments
+
+        Argument | Description
+        -------- | -----------
+        args     | The arguments to pass to the internal ArgumentParser.
+        kwargs   | The arguments to pass to the internal ArgumentParser.
+
+        ### Description
+
+        Reads the parameters from the command line and configuration file and
+        presents them as attributes of this class.  Will resolve parameters in
+        the following order:
+        1. Arguments on the command line
+        2. Arguments specified in a configuration file
+        3. Argument defaults
+
+        """
+
+        from singularity.parameters.arguments import SingularityArguments
+        from singularity.parameters.configuration import SingularityConfiguration
+
+        self.__dict__["_arguments"] = SingularityArguments(*args, **kwargs)
+        self.__dict__["_configuration"] = SingularityConfiguration(self._arguments.configuration)
+
+    def __getattr__(self, key):
+        argument = getattr(self._arguments, key)
+        default = DEFAULTS[key]
+
+        if default in sys.argv[0] or argument != default:
+            return argument
+        return getattr(self._configuration, key)
+
