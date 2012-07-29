@@ -3,6 +3,10 @@
 # muaor is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class SingularityConfigurator(object):
     def __init__(self):
         """Initalize any common properties of SingularityConfigurators."""
@@ -217,14 +221,14 @@ class SingularityConfigurators(object):
                 os.path.join(re.sub(r"usr/", r"usr/local/", os.path.join(os.path.abspath(os.path.dirname(__file__))))), # Corresponding /usr/local location of Module's Directory
                 ]
 
-        logging.debug("Extra directories passed: %s", directories)
+        logger.debug("Extra directories passed: %s", directories)
 
         self.path.extend(directories)
 
-        logging.debug("SingularityConfigurator.path: %s", self.path)
+        logger.debug("SingularityConfigurator.path: %s", self.path)
 
         for directory in self.path:
-            logging.info("Searching %s for SingularityConfigurators ...", directory)
+            logger.info("Searching %s for SingularityConfigurators ...", directory)
 
             if not os.access(directory, os.R_OK):
                 continue
@@ -232,11 +236,11 @@ class SingularityConfigurators(object):
             if directory not in sys.path:
                 sys.path.append(directory)
 
-            logging.debug("Files in current directory, %s: %s", directory, os.listdir(directory))
+            logger.debug("Files in current directory, %s: %s", directory, os.listdir(directory))
 
             module_names = list(set([ re.sub(r"\.py.?", "", filename) for filename in os.listdir(directory) if not filename.startswith("_") ]))
 
-            logging.debug("Potential modules found: %s", module_names)
+            logger.debug("Potential modules found: %s", module_names)
 
             modules = []
 
@@ -244,7 +248,7 @@ class SingularityConfigurators(object):
                 try:
                     modules.append(__import__(module_name, globals(), locals(), [], -1))
                 except ImportError as error:
-                    logging.warning("Module, %s, not able to be imported", module_name)
+                    logger.warning("Module, %s, not able to be imported", module_name)
                     continue
 
             for module in modules:
@@ -255,7 +259,7 @@ class SingularityConfigurators(object):
 
             self._commands = self._commands.values()
 
-            logging.info("SingularityConfigurators found: %s", self._commands)
+            logger.info("SingularityConfigurators found: %s", self._commands)
 
     def __len__(self):
         return len(self._commands)
