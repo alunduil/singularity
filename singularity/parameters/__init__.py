@@ -77,6 +77,7 @@ APPLY_PARAMETERS = [
             "help": "".join([
                 "Show what actions would occur but don't apply any changes. ",
                 "Works like a dry run mode and forces info level logging.",
+                "Overrides --force if it is specified.",
                 ]),
             },
         ]
