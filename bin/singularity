@@ -11,17 +11,12 @@ import sys
 from singularity.application import SingularityApplication
 
 logger = logging.getLogger("console")
-logger.setLevel(logging.DEBUG)
-handler = logging.StreamHandler()
-formatter = logging.Formatter("%(levelname)s-%(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 def main():
     global logger
     try:
         app = SingularityApplication()
-        logger = logging.getLogger(__name__)
+        logger = logging.getLogger("singularity")
         app.run()
     except Exception as error:
         logger.exception(error)

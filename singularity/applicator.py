@@ -5,7 +5,7 @@
 
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("console")
 
 class SingularityApplicator(object):
     def __init__(self, arguments):

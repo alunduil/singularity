@@ -168,13 +168,20 @@ class SingularityParameters(object):
         self.__dict__["_configuration"] = SingularityConfiguration(self._arguments["configuration"])
 
     def __getitem__(self, key):
-        # TODO Make this less ugly.
+        short = key
+
+        logger.debug("Finding key, %s, in parameters", key)
+        logger.debug("Dots found in key: %s", key.count("."))
+
         if key.count("."):
             section, short = key.split(".", 1)
 
+        default = None
+        if short in DEFAULTS:
+            default = DEFAULTS[short]
+
         argument = self._arguments[key]
-        default = DEFAULTS[short]
-        configuration = self._configuration[section + "." + key]
+        configuration = self._configuration[key]
 
         if default in sys.argv[0] or argument != default:
             return argument

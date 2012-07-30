@@ -5,13 +5,22 @@
 
 import logging
 import logging.handlers
+
+# Setup basic console logging until the full logger is configured ...
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
+
+logger = logging.getLogger("console") 
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
+
 import sys
 
 import singularity.information
 
 from singularity.parameters import SingularityParameters
-
-logger = logging.getLogger("console")
+from singularity.applicator import SingularityApplicator
+from singularity.daemon import SingularityDaemon
 
 class SingularityApplication(object):
     def __init__(self):
@@ -26,12 +35,9 @@ class SingularityApplication(object):
                 )
 
         # Someone set us up the logger mechanisms ...
-        root = logging.getLogger()
+        root = logging.getLogger("singularity")
         root.setLevel(getattr(logging, self.arguments["main.loglevel"].upper()))
         sladdr = { "linux2": "/dev/log", "darwin": "/var/run/syslog", }
-
-        dfl = logging.Formatter("%(levelname)s-%(name)s: %(pathname)s:%{lineno)d in %(funcName)s: %(message)s")
-        nfl = logging.Formatter("%(levelname)s-%(name)s: %(message)s")
 
         dhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform])
         nhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform])
@@ -40,24 +46,51 @@ class SingularityApplication(object):
             dhl = logging.StreamHandler(stream = sys.stderr)
             nhl = logging.StreamHandler(stream = sys.stderr)
         elif self.arguments["main.loghandler"] != "syslog":
-            dhl = logging.FileHandler(self.arguments.logfile, delay = True)
-            nhl = logging.FileHandler(self.arguments.logfile, delay = True)
+            dhl = logging.FileHandler(self.arguments["main.loghandler"], delay = True)
+            nhl = logging.FileHandler(self.arguments["main.loghandler"], delay = True)
 
         dhl.setLevel(logging.DEBUG)
         nhl.setLevel(logging.INFO)
 
-        dhl.setFormatter(dfl)
-        nhl.setFormatter(nfl)
+        dhl.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
+        nhl.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(message)s"))
 
         root.addHandler(dhl)
         root.addHandler(nhl)
 
-        logger = logging.getLogger(__name__)
+        print "LOGGING LOGGER ->",logger
+        print "LOGGING HANDLERS ->",logger.handlers
+        print "LOGGING LEVEL ->",logger.level
+        print "LOGGING NAME ->",logger.name
+        print "LOGGING PARENT ->",logger.parent
+        print "LOGGING PROPAGATE ->",logger.propagate
+
+        print "ROOT LOGGER ->",root
+        print "ROOT HANDLERS ->",root.handlers
+        print "ROOT LEVEL ->",root.level
+        print "ROOT NAME ->",root.name
+        print "ROOT PARENT ->",root.parent
+        print "ROOT PROPAGATE ->",root.propagate
+
+        root.critical("Testing message on logger!")
+
+        for module in [ module for name, module in sys.modules.iteritems() if name.startswith("singularity") and module and "logger" in module.__dict__ ]:
+            logger.debug("Module logger being changed on: %s", str(module))
+            module.logger = logging.getLogger(module.__name__)
+
+        print "LOGGING LOGGER ->",logger
+        print "LOGGING HANDLERS ->",logger.handlers
+        print "LOGGING LEVEL ->",logger.level
+        print "LOGGING NAME ->",logger.name
+        print "LOGGING PARENT ->",logger.parent
+        print "LOGGING PROPAGATE ->",logger.propagate
+
+        assert(logger == logging.getLogger(__name__))
 
     def run(self):
         subcommands = {
                 "apply": SingularityApplicator,
                 "daemon": SingularityDaemon,
                 }
-        subcommands[self.arguments.subcommand](self.arguments)()
+        subcommands[self.arguments["subcommand"]](self.arguments)()
 
