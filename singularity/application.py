@@ -7,10 +7,10 @@ import logging
 import logging.handlers
 
 # Setup basic console logging until the full logger is configured ...
-handler = logging.StreamHandler()
-handler.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
+handler = logging.StreamHandler() # pylint: disable=C0103
+handler.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s")) # pylint: disable=C0301
 
-logger = logging.getLogger("console") 
+logger = logging.getLogger("console") # pylint: disable=C0103
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
@@ -22,9 +22,9 @@ from singularity.parameters import SingularityParameters
 from singularity.applicator import SingularityApplicator
 from singularity.daemon import SingularityDaemon
 
-class SingularityApplication(object):
+class SingularityApplication(object): # pylint: disable=R0903
     def __init__(self):
-        global logger
+        global logger # pylint: disable=W0603
 
         self.arguments = SingularityParameters(
                 description = singularity.information.DESCRIPTION,
@@ -39,21 +39,21 @@ class SingularityApplication(object):
         root.setLevel(getattr(logging, self.arguments["main.loglevel"].upper()))
         sladdr = { "linux2": "/dev/log", "darwin": "/var/run/syslog", }
 
-        dhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform])
-        nhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform])
+        dhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform]) # pylint: disable=C0301
+        nhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform]) # pylint: disable=C0301
 
         if self.arguments["main.loghandler"] == "-":
             dhl = logging.StreamHandler(stream = sys.stderr)
             nhl = logging.StreamHandler(stream = sys.stderr)
         elif self.arguments["main.loghandler"] != "syslog":
-            dhl = logging.FileHandler(self.arguments["main.loghandler"], delay = True)
-            nhl = logging.FileHandler(self.arguments["main.loghandler"], delay = True)
+            dhl = logging.FileHandler(self.arguments["main.loghandler"], delay = True) # pylint: disable=C0301
+            nhl = logging.FileHandler(self.arguments["main.loghandler"], delay = True) # pylint: disable=C0301
 
         dhl.setLevel(logging.DEBUG)
         nhl.setLevel(logging.INFO)
 
-        dhl.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
-        nhl.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(message)s"))
+        dhl.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s")) # pylint: disable=C0301
+        nhl.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(message)s")) # pylint: disable=C0301
 
         class LevelFilter(logging.Filter):
             def __init__(self, level, *args, **kwargs):
@@ -71,7 +71,7 @@ class SingularityApplication(object):
 
         logger = logging.getLogger(__name__)
 
-        for module in [ module for name, module in sys.modules.iteritems() if name.startswith("singularity") and module and "logger" in module.__dict__ ]:
+        for module in [ module for name, module in sys.modules.iteritems() if name.startswith("singularity") and module and "logger" in module.__dict__ ]: # pylint: disable=C0301
             logger.debug("Module logger being changed on: %s", str(module))
             module.logger = logging.getLogger(module.__name__)
 

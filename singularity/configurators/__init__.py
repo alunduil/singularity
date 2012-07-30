@@ -4,8 +4,13 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import os
+import re
+import sys
+import inspect
+import copy
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class SingularityConfigurator(object):
     def __init__(self):
@@ -32,7 +37,7 @@ class SingularityConfigurator(object):
         
         """
 
-        raise AttributeError("class {0} has no attribute 'filename'".format(self.__class__.__name__))
+        raise AttributeError("class {0} has no attribute 'filename'".format(self.__class__.__name__)) # pylint: disable=C0301
 
     @property
     def function(self):
@@ -63,7 +68,7 @@ class SingularityConfigurator(object):
 
         """
 
-        raise AttributeError("class {0} has no attribute 'function'".format(self.__class__.__name__))
+        raise AttributeError("class {0} has no attribute 'function'".format(self.__class__.__name__)) # pylint: disable=C0301
 
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
@@ -100,7 +105,7 @@ class SingularityConfigurator(object):
 
         """
 
-        raise NotImplementedError("class {0} does not implement 'runnable(self, configuration)'".format(self.__class__.__name__))
+        raise NotImplementedError("class {0} does not implement 'runnable(self, configuration)'".format(self.__class__.__name__)) # pylint: disable=C0301
 
     def content(self, configuration):
         """Generated content of this configurator as a list.
@@ -143,10 +148,14 @@ class SingularityConfigurator(object):
 
         """
 
-        return list(self.iter_content())
+        return list(self.iter_content(configuration))
 
-    def iter_content(self):
+    def iter_content(self, configuration):
         """Generated content of this configurator as a generator.
+
+        ### Arguments
+
+        See SingularityConfigurator.content for a description of arguments.
         
         ### Description
 
@@ -168,10 +177,11 @@ class SingularityConfigurator(object):
         SingularityConfigurator.content
         
         """
+        # pylint: disable=W0511
 
-        raise NotImplementedError("class {0} does not implement 'iter_content(self)'".format(self.__class__.__name__))
+        raise NotImplementedError("class {0} does not implement 'iter_content(self)'".format(self.__class__.__name__)) # pylint: disable=C0301
 
-class SingularityConfigurators(object):
+class SingularityConfigurators(object): # pylint: disable=R0903
     """Dictionary style object for interacting with the configurators.
 
     ### Description
@@ -213,12 +223,14 @@ class SingularityConfigurators(object):
         <singularity.configurators.SingularityConfigurators instance at 0xXXXXXXX>
 
         """
+        # pylint: disable=W0511
 
         self._configurators = {}
 
+        mydir = os.path.abspath(os.path.dirname(__file__)) # Module's Directory
         self.path = [
-                os.path.join(os.path.abspath(os.path.dirname(__file__))), # Module's Directory
-                os.path.join(re.sub(r"usr/", r"usr/local/", os.path.join(os.path.abspath(os.path.dirname(__file__))))), # Corresponding /usr/local location of Module's Directory
+                mydir,
+                re.sub(r"usr/", r"usr/local/", mydir),
                 ]
 
         logger.debug("Extra directories passed: %s", directories)
@@ -228,7 +240,7 @@ class SingularityConfigurators(object):
         logger.debug("SingularityConfigurator.path: %s", self.path)
 
         for directory in self.path:
-            logger.info("Searching %s for SingularityConfigurators ...", directory)
+            logger.info("Searching %s for SingularityConfigurators ...", directory) # pylint: disable=C0301
 
             if not os.access(directory, os.R_OK):
                 continue
@@ -236,9 +248,9 @@ class SingularityConfigurators(object):
             if directory not in sys.path:
                 sys.path.append(directory)
 
-            logger.debug("Files in current directory, %s: %s", directory, os.listdir(directory))
+            logger.debug("Files in current directory, %s: %s", directory, os.listdir(directory)) # pylint: disable=C0301
 
-            module_names = list(set([ re.sub(r"\.py.?", "", filename) for filename in os.listdir(directory) if not filename.startswith("_") ]))
+            module_names = list(set([ re.sub(r"\.py.?", "", filename) for filename in os.listdir(directory) if not filename.startswith("_") ])) # pylint: disable=C0301
 
             logger.debug("Potential modules found: %s", module_names)
 
@@ -246,36 +258,36 @@ class SingularityConfigurators(object):
 
             for module_name in module_names:
                 try:
-                    modules.append(__import__(module_name, globals(), locals(), [], -1))
-                except ImportError as error:
-                    logger.warning("Module, %s, not able to be imported", module_name)
+                    modules.append(__import__(module_name, globals(), locals(), [], -1)) # pylint: disable=C0301
+                except ImportError:
+                    logger.warning("Module, %s, not able to be imported", module_name) # pylint: disable=C0301
                     continue
 
             for module in modules:
-                log.debug("Classes found in Module, %s: %s", module.__name__, inspect.getmembers(module, inspect.isclass))
+                logger.debug("Classes found in Module, %s: %s", module.__name__, inspect.getmembers(module, inspect.isclass)) # pylint: disable=C0301
 
-                for object_ in [ object_() for name, object_ in inspect.getmembers(module, inspect.isclass) if issubclass(object_.__class__, SingularityConfigurator) and object_.__class__ != SingularityConfigurator]:
-                    self._commands[object_.__class__.__name__] = object_
+                for object_ in [ object_() for name, object_ in inspect.getmembers(module, inspect.isclass) if issubclass(object_.__class__, SingularityConfigurator) and object_.__class__ != SingularityConfigurator]: # pylint: disable=C0301,W0612
+                    self._configurators[object_.__class__.__name__] = object_
 
-            self._commands = self._commands.values()
+            self._configurators = self._configurators.values()
 
-            logger.info("SingularityConfigurators found: %s", self._commands)
+            logger.info("SingularityConfigurators found: %s", self._configurators) # pylint: disable=C0301
 
     def __len__(self):
-        return len(self._commands)
+        return len(self._configurators)
 
     def __getitem__(self, key):
-        return self._commands[key]
+        return self._configurators[key]
 
     def __iter__(self):
-        for command in self._commands:
-            yield command
+        for configurator in self._configurators:
+            yield configurator
 
     def __reversed__(self):
-        tmp = copy.deepcopy(self._commands)
+        tmp = copy.deepcopy(self._configurators)
         tmp.reverse()
         return tmp
 
     def __contains__(self, item):
-        return item in self._commands
+        return item in self._configurators
 

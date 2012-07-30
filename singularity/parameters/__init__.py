@@ -7,7 +7,7 @@ import logging
 import os
 import sys
 
-logger = logging.getLogger("console")
+logger = logging.getLogger("console") # pylint: disable=C0103
 
 COMMON_PARAMETERS = [
         { # --loglevel=LEVEL, -l=LEVEL; LEVEL => warning
@@ -57,7 +57,7 @@ COMMON_PARAMETERS = [
                 "a filepath is passed log messages will be sent to that file.",
                 ]),
             },
-        { # --functions=FUNCTIONS, -F=FUNCTIONS; FUNCTIONS => network,hosts,resolvers,reboot,password
+        { # --functions=FUNCTIONS, -F=FUNCTIONS; FUNCTIONS => network,hosts,resolvers,reboot,password # pylint: disable=C0301
             "options": [ "--functions", "-F" ],
             "default": "network,hosts,resolvers,reboot,password",
             "metavar": "FUNCTIONS",
@@ -95,7 +95,7 @@ APPLY_PARAMETERS = [
 DAEMON_PARAMETERS = [
         { # --pidfile=FILE, -p=FILE; FILE => /var/run/singularity.pid
             "options": [ "--pidfile", "-p" ],
-            "default": os.path.join(os.path.sep, "var", "run", "singularity.pid"),
+            "default": os.path.join(os.path.sep, "var", "run", "singularity.pid"), # pylint: disable=C0301
             "metavar": "FILE",
             "help": "".join([
                 "The file that holds the PID of the running daemon.  FILE ",
@@ -133,13 +133,13 @@ DAEMON_PARAMETERS = [
         ]
 
 DEFAULTS = {}
-DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in COMMON_PARAMETERS if "default" in item ]))
-DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in APPLY_PARAMETERS if "default" in item ]))
-DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in DAEMON_PARAMETERS if "default" in item ]))
+DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in COMMON_PARAMETERS if "default" in item ])) # pylint: disable=C0301
+DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in APPLY_PARAMETERS if "default" in item ])) # pylint: disable=C0301
+DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in DAEMON_PARAMETERS if "default" in item ])) # pylint: disable=C0301
 
 logger.debug("DEFAULTS dictionary: %s", DEFAULTS)
 
-class SingularityParameters(object):
+class SingularityParameters(object): # pylint: disable=R0903
     def __init__(self, *args, **kwargs):
         """Initialize the collapsed parameters for Singularity.
 
@@ -162,10 +162,10 @@ class SingularityParameters(object):
         """
 
         from singularity.parameters.arguments import SingularityArguments
-        from singularity.parameters.configuration import SingularityConfiguration
+        from singularity.parameters.configuration import SingularityConfiguration # pylint: disable=C0301
 
-        self.__dict__["_arguments"] = SingularityArguments(*args, **kwargs)
-        self.__dict__["_configuration"] = SingularityConfiguration(self._arguments["configuration"])
+        self._arguments = SingularityArguments(*args, **kwargs)
+        self._configuration = SingularityConfiguration(self._arguments["configuration"]) # pylint: disable=C0301
 
     def __getitem__(self, key):
         short = key
@@ -175,7 +175,7 @@ class SingularityParameters(object):
 
         if key.count(".") > 0:
             logger.debug("Splitting key, %s", key)
-            section, short = key.split(".", 1)
+            section, short = key.split(".", 1) # pylint: disable=W0612
 
         default = "" 
         if short in DEFAULTS:

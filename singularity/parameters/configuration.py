@@ -6,9 +6,9 @@
 import logging
 import ConfigParser
 
-logger = logging.getLogger("console")
+logger = logging.getLogger("console") # pylint: disable=C0103
 
-class SingularityConfiguration(object):
+class SingularityConfiguration(object): # pylint: disable=R0903
     def __init__(self, configuration):
         """Initialize the Singularity configuration file parameters.
 
@@ -29,13 +29,13 @@ class SingularityConfiguration(object):
 
         import singularity.parameters
 
-        defaults.update(_extract_defaults(singularity.parameters.COMMON_PARAMETERS))
-        logger.debug("Default values after %s: %s", "COMMON_PARAMETERS", defaults)
+        defaults.update(_extract_defaults(singularity.parameters.COMMON_PARAMETERS)) # pylint: disable=C0301
+        logger.debug("Default values after %s: %s", "COMMON_PARAMETERS", defaults) # pylint: disable=C0301
 
-        defaults.update(_extract_defaults(singularity.parameters.DAEMON_PARAMETERS))
-        logger.debug("Default values after %s: %s", "DAEMON_PARAMETERS", defaults)
+        defaults.update(_extract_defaults(singularity.parameters.DAEMON_PARAMETERS)) # pylint: disable=C0301
+        logger.debug("Default values after %s: %s", "DAEMON_PARAMETERS", defaults) # pylint: disable=C0301
 
-        self.__dict__["_config"] = ConfigParser.SafeConfigParser(defaults)
+        self._config = ConfigParser.SafeConfigParser(defaults)
         self._config.read(configuration)
 
         for section in [ "main", "apply", "daemon" ]:
@@ -52,5 +52,5 @@ class SingularityConfiguration(object):
             return None
 
 def _extract_defaults(parameters):
-    return dict([ (item["options"][0][2:], item["default"]) for item in parameters if "default" in item ])
+    return dict([ (item["options"][0][2:], item["default"]) for item in parameters if "default" in item ]) # pylint: disable=C0301
 
