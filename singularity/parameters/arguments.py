@@ -6,8 +6,9 @@
 import logging
 import sys
 import argparse
+import copy
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("console")
 
 class SingularityArguments(object):
     def __init__(self, *args, **kwargs):
@@ -85,9 +86,11 @@ class SingularityArguments(object):
         return self._parsed_args
 
     def __getitem__(self, key):
-        section, key = key.split('.', 1)
+        if key.count("."):
+            section, key = key.split('.', 1)
         return getattr(self._parsed_args, key)
 
 def _extract_options(parameters):
+    parameters = copy.deepcopy(parameters)
     return dict([ (item["options"][0][2:], { "args": item.pop("options"), "kwargs": item }) for item in parameters ])
 

@@ -4,8 +4,9 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import ConfigParser
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("console")
 
 class SingularityConfiguration(object):
     def __init__(self, configuration):
@@ -37,10 +38,13 @@ class SingularityConfiguration(object):
         self.__dict__["_config"] = ConfigParser.SafeConfigParser(defaults)
         self._config.read(configuration)
 
-    def __getattr__(self, key):
+    def __getitem__(self, key):
         section, key = key.split(".", 1)
-        return self._config.get(section, key, raw = True)
+        try:
+            return self._config.get(section, key, raw = True)
+        except ConfigParser.NoSectionError:
+            return None
 
 def _extract_defaults(parameters):
-    return dict([ (item["options"][0][2:], item["default"]) for item in parameters.iteritems() if "default" in item ])
+    return dict([ (item["options"][0][2:], item["default"]) for item in parameters if "default" in item ])
 

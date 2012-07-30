@@ -272,7 +272,7 @@ class SingularityConfigurators(object):
             yield command
 
     def __reversed__(self):
-        tmp = copy.copy(self._commands)
+        tmp = copy.deepcopy(self._commands)
         tmp.reverse()
         return tmp
 

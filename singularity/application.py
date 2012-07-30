@@ -4,12 +4,14 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import logging.handlers
+import sys
 
 import singularity.information
 
 from singularity.parameters import SingularityParameters
 
-logger = logging.getLogger("DEFAULT")
+logger = logging.getLogger("console")
 
 class SingularityApplication(object):
     def __init__(self):
@@ -25,19 +27,19 @@ class SingularityApplication(object):
 
         # Someone set us up the logger mechanisms ...
         root = logging.getLogger()
-        root.setLevel(getattr(logging, self.arguments.loglevel.upper()))
+        root.setLevel(getattr(logging, self.arguments["main.loglevel"].upper()))
         sladdr = { "linux2": "/dev/log", "darwin": "/var/run/syslog", }
 
-        dfl = logging.Formatter("%(levelname)s-%(name): %(pathname)s:%{lineno)d in %(funcName)s: %(message)s")
-        nfl = logging.Formatter("%(levelname)s-%(name): %(message)s")
+        dfl = logging.Formatter("%(levelname)s-%(name)s: %(pathname)s:%{lineno)d in %(funcName)s: %(message)s")
+        nfl = logging.Formatter("%(levelname)s-%(name)s: %(message)s")
 
-        dhl = logging.SysLogHandler(facility = "daemon", address = sladdr[sys.platform])
-        nhl = logging.SysLogHandler(facility = "daemon", address = sladdr[sys.platform])
+        dhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform])
+        nhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform])
 
-        if self.arguments.logfile == "-":
+        if self.arguments["main.loghandler"] == "-":
             dhl = logging.StreamHandler(stream = sys.stderr)
             nhl = logging.StreamHandler(stream = sys.stderr)
-        elif self.arguments.logfile != "syslog":
+        elif self.arguments["main.loghandler"] != "syslog":
             dhl = logging.FileHandler(self.arguments.logfile, delay = True)
             nhl = logging.FileHandler(self.arguments.logfile, delay = True)
 

@@ -5,8 +5,9 @@
 
 import logging
 import os
+import sys
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("console")
 
 COMMON_PARAMETERS = [
         { # --loglevel=LEVEL, -l=LEVEL; LEVEL => warning
@@ -164,13 +165,20 @@ class SingularityParameters(object):
         from singularity.parameters.configuration import SingularityConfiguration
 
         self.__dict__["_arguments"] = SingularityArguments(*args, **kwargs)
-        self.__dict__["_configuration"] = SingularityConfiguration(self._arguments.configuration)
+        self.__dict__["_configuration"] = SingularityConfiguration(self._arguments["configuration"])
 
     def __getitem__(self, key):
+        # TODO Make this less ugly.
+        if key.count("."):
+            section, short = key.split(".", 1)
+
         argument = self._arguments[key]
-        default = DEFAULTS[key]
+        default = DEFAULTS[short]
+        configuration = self._configuration[section + "." + key]
 
         if default in sys.argv[0] or argument != default:
             return argument
-        return self._configuration[key]
+        if configuration:
+            return configuration
+        return default
 
