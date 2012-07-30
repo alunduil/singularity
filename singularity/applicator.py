@@ -5,7 +5,7 @@
 
 import logging
 
-logger = logging.getLogger("console")
+logger = logging.getLogger("console") # pylint: disable=C0103
 
 class SingularityApplicator(object):
     def __init__(self, arguments):
