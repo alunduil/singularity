@@ -67,6 +67,10 @@ class SingularityArguments(object):
             logger.debug("Adding option, %s, with options, %s and %s", name, options["args"], options["kwargs"]) # pylint: disable=C0301
             apply_parser.add_argument(*options["args"], **options["kwargs"]) # pylint: disable=W0142,C0301
 
+        apply_parser.add_argument("action", metavar = "ACTION", choices = [
+            "all", "network", "hosts", "resolvers", "reboot", "password" ],
+            help = "Specifies the action to apply to the system.")
+
         daemon_parser = subparsers.add_parser('daemon', parents = [common],
                 help = "".join([
                     "Watches for messages from the hypervisor and applies ",
@@ -77,6 +81,10 @@ class SingularityArguments(object):
         for name, options in _extract_options(singularity.parameters.DAEMON_PARAMETERS).iteritems(): # pylint: disable=C0301
             logger.debug("Adding option, %s, with options, %s and %s", name, options["args"], options["kwargs"]) # pylint: disable=C0301
             daemon_parser.add_argument(*options["args"], **options["kwargs"]) # pylint: disable=W0142,C0301
+
+        daemon_parser.add_argument("action", metavar = "ACTION", choices = [
+            "start", "stop", "restart", "reload" ],
+            help = "Specifies what action to take when controlling the daemon process.") # pylint: disable=C0301
 
         self._parsed_args = self._parser.parse_args()
 

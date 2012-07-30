@@ -4,6 +4,9 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import os
+
+from singularity.parameters import SingularityParameters
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 
@@ -22,9 +25,20 @@ class SingularityApplicator(object):
 
         """
 
+        if not os.access(SingularityParameters()["main.cache"], os.R_OK):
+            return
+
+        if functions == "all":
+            functions = set([ 
+                    "network", "hosts", "resolvers", "reboot", "password"
+                    ])
+
+        functions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
+
+        for function in functions:
+            logger.info("Applying %s configuration to the system ...", function) # pylint: disable=C0301
+
         # Check for cached items in the cache directory
         # Backup files if requested
         # Overwrite system files with cached versions
-
-        pass
 

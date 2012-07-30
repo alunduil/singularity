@@ -140,6 +140,10 @@ DEFAULTS.update(dict([ (item["options"][0][2:], item["default"]) for item in DAE
 logger.debug("DEFAULTS dictionary: %s", DEFAULTS)
 
 class SingularityParameters(object): # pylint: disable=R0903
+    # The borg make life easier than singletons when you sillywalk ...
+
+    __shared_state = {}
+
     def __init__(self, *args, **kwargs):
         """Initialize the collapsed parameters for Singularity.
 
@@ -161,11 +165,15 @@ class SingularityParameters(object): # pylint: disable=R0903
 
         """
 
-        from singularity.parameters.arguments import SingularityArguments
-        from singularity.parameters.configuration import SingularityConfiguration # pylint: disable=C0301
+        self.__dict__ = self.__shared_state
 
-        self._arguments = SingularityArguments(*args, **kwargs)
-        self._configuration = SingularityConfiguration(self._arguments["configuration"]) # pylint: disable=C0301
+        if "_arguments" not in self.__dict__:
+            from singularity.parameters.arguments import SingularityArguments
+            self._arguments = SingularityArguments(*args, **kwargs)
+
+        if "_configuration" not in self.__dict__:
+            from singularity.parameters.configuration import SingularityConfiguration # pylint: disable=C0301
+            self._configuration = SingularityConfiguration(self._arguments["configuration"]) # pylint: disable=C0301
 
     def __getitem__(self, key):
         short = key
