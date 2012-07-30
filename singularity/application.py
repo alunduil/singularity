@@ -52,9 +52,18 @@ class SingularityApplication(object):
         dhl.setLevel(logging.DEBUG)
         nhl.setLevel(logging.INFO)
 
-        # TODO Setup a custom formatter to handle levels appropriately ...
         dhl.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
         nhl.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(message)s"))
+
+        class LevelFilter(logging.Filter):
+            def __init__(self, level, *args, **kwargs):
+                super(LevelFilter, self).__init__(*args, **kwargs)
+                self._level = level
+
+            def filter(self, record):
+                return record.levelno <= self._level
+
+        dhl.addFilter(LevelFilter(logging.DEBUG))
 
         root.addHandler(dhl)
         root.addHandler(nhl)
