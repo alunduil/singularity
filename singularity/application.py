@@ -52,40 +52,16 @@ class SingularityApplication(object):
         dhl.setLevel(logging.DEBUG)
         nhl.setLevel(logging.INFO)
 
+        # TODO Setup a custom formatter to handle levels appropriately ...
         dhl.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
         nhl.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(message)s"))
 
         root.addHandler(dhl)
         root.addHandler(nhl)
 
-        print "LOGGING LOGGER ->",logger
-        print "LOGGING HANDLERS ->",logger.handlers
-        print "LOGGING LEVEL ->",logger.level
-        print "LOGGING NAME ->",logger.name
-        print "LOGGING PARENT ->",logger.parent
-        print "LOGGING PROPAGATE ->",logger.propagate
-
-        print "ROOT LOGGER ->",root
-        print "ROOT HANDLERS ->",root.handlers
-        print "ROOT LEVEL ->",root.level
-        print "ROOT NAME ->",root.name
-        print "ROOT PARENT ->",root.parent
-        print "ROOT PROPAGATE ->",root.propagate
-
-        root.critical("Testing message on logger!")
-
         for module in [ module for name, module in sys.modules.iteritems() if name.startswith("singularity") and module and "logger" in module.__dict__ ]:
             logger.debug("Module logger being changed on: %s", str(module))
             module.logger = logging.getLogger(module.__name__)
-
-        print "LOGGING LOGGER ->",logger
-        print "LOGGING HANDLERS ->",logger.handlers
-        print "LOGGING LEVEL ->",logger.level
-        print "LOGGING NAME ->",logger.name
-        print "LOGGING PARENT ->",logger.parent
-        print "LOGGING PROPAGATE ->",logger.propagate
-
-        assert(logger == logging.getLogger(__name__))
 
     def run(self):
         subcommands = {
