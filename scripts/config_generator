@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+#
+# Copyright (C) 2012 by Alex Brandt <alunduil@alunduil.com>
+#
+# singularity is freely distributable under the terms of an MIT-style license.
+# See COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+import textwrap
+
+from singularity.parameters import COMMON_PARAMETERS
+from singularity.parameters import APPLY_PARAMETERS
+from singularity.parameters import DAEMON_PARAMETERS
+
+def main():
+    output = []
+    output.extend([ "# " + line for line in textwrap.wrap("".join([
+        "This is the singularity configuration file.  See singularity.conf(5) ",
+        "for more information.\n\nOptions in this configuration file, ",
+        "singularity.conf, are specified with their default value where ",
+        "possible but left commented.  Uncommented options override the ",
+        "default value.",
+        ]), 78) ])
+    output.append("")
+
+    output.append("[main]")
+    output.append("")
+    output.extend([ "# " + line for line in textwrap.wrap("".join([
+        "Options specified in this section can be overwritten in other ",
+        "sections.  The value specified here will only be used when the value ",
+        "cannot be found in the requested section.",
+        ]), 78) ])
+    output.append("")
+    for parameter in COMMON_PARAMETERS:
+        output.extend([ "# " + line for line in textwrap.wrap(parameter["help"], 78) ])
+        output.append("#{0} = {1}".format(parameter["options"][0][2:], parameter["default"]))
+        output.append("")
+
+    output.append("[apply]")
+    output.append("")
+    for parameter in APPLY_PARAMETERS:
+        output.extend([ "# " + line for line in textwrap.wrap(parameter["help"], 78) ])
+        output.append("#{0} = {1}".format(parameter["options"][0][2:], parameter["default"]))
+        output.append("")
+
+    output.append("[daemon]")
+    output.append("")
+    for parameter in DAEMON_PARAMETERS:
+        output.extend([ "# " + line for line in textwrap.wrap(parameter["help"], 78) ])
+        output.append("#{0} = {1}".format(parameter["options"][0][2:], parameter["default"]))
+        output.append("")
+
+        
+    for line in output:
+        print line
+
+if __name__ == "__main__":
+    main()
+
