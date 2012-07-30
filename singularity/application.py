@@ -57,37 +57,5 @@ class SingularityApplication(object):
                 "apply": SingularityApplicator,
                 "daemon": SingularityDaemon,
                 }
-        subcommands[self.arguments.subcommand](self.arguments)
-
-    def apply_(self):
-        """Apply an existing configuration to the system.
-
-        ### Description
-
-        Checks for an existing set of configuration items in the cache
-        directory (defaults to /var/cache/singularity) and replaces the
-        corresponding items in the filesystem.
-
-        ### Algorithm
-
-        1. Check for cached items in cache directory
-        2. Backup files if requested
-        3. Overwrite system files with cached versions
-
-        """
-
-        pass
-
-    def daemon(self):
-        """Watch the communication module for system updates to apply.
-
-        ### Description
-
-        Watches the communication bus (i.e. xenbus for xenU) and updates the
-        allowed configuration items or runs the appropriate commands on the
-        system.
-
-        """
-        
-        pass
+        subcommands[self.arguments.subcommand](self.arguments)()
 
