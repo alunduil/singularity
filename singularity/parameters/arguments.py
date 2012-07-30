@@ -84,8 +84,8 @@ class SingularityArguments(object):
     def parsed_args(self):
         return self._parsed_args
 
-    # TODO Switch to dictionary style access to handle section.name parameters?
-    def __getattr__(self, key):
+    def __getitem__(self, key):
+        section, key = key.split('.', 1)
         return getattr(self._parsed_args, key)
 
 def _extract_options(parameters):

@@ -37,9 +37,9 @@ class SingularityConfiguration(object):
         self.__dict__["_config"] = ConfigParser.SafeConfigParser(defaults)
         self._config.read(configuration)
 
-    # TODO Switch to dictionary style to handle section.name parameters?
     def __getattr__(self, key):
-        return self._config.get("main", key, raw = True)
+        section, key = key.split(".", 1)
+        return self._config.get(section, key, raw = True)
 
 def _extract_defaults(parameters):
     return dict([ (item["options"][0][2:], item["default"]) for item in parameters.iteritems() if "default" in item ])

@@ -166,12 +166,11 @@ class SingularityParameters(object):
         self.__dict__["_arguments"] = SingularityArguments(*args, **kwargs)
         self.__dict__["_configuration"] = SingularityConfiguration(self._arguments.configuration)
 
-    # TODO Switch to dictionary access to handle section.name parameters?
-    def __getattr__(self, key):
-        argument = getattr(self._arguments, key)
+    def __getitem__(self, key):
+        argument = self._arguments[key]
         default = DEFAULTS[key]
 
         if default in sys.argv[0] or argument != default:
             return argument
-        return getattr(self._configuration, key)
+        return self._configuration[key]
 
