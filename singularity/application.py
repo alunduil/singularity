@@ -12,7 +12,11 @@ handler.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(pathname)s:
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+
+import os
+
+if "LOGLEVEL" in os.environ:
+    logger.setLevel(getattr(logging, os.environ["LOGLEVEL"].upper()))
 
 import sys
 
