@@ -5,6 +5,8 @@
 
 import logging
 
+import singularity.information
+
 from singularity.parameters import SingularityParameters
 
 logger = logging.getLogger("DEFAULT")
@@ -14,14 +16,11 @@ class SingularityApplication(object):
         global logger
 
         self.arguments = SingularityParameters(
-                description = "".join([
-                    "singularity(8) -- An Agent for Openstack Guest and ",
-                    "Hypervisor Intercommunication.",
-                    ]),
+                description = singularity.information.DESCRIPTION,
                 epilog = "".join([
-                    "Copyright (C) 2012 by Alex Brandt Licensed under an MIT ",
-                    "License",
-                    ])
+                    "Copyright (C) {i.COPY_YEAR} by {i.AUTHOR} Licensed under ",
+                    "a {i.LICENSE} License",
+                    ]).format(i = singularity.information)
                 )
 
         # Someone set us up the logger mechanisms ...

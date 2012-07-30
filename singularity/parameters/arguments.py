@@ -29,7 +29,14 @@ class SingularityArguments(object):
 
         self.__dict__["_parser"] = argparse.ArgumentParser(*args, **kwargs)
         
-        self._parser.add_argument("--version", action = "version", version = "%(prog)s 9999")
+        self._parser.add_argument("--version", action = "version", version = "".join([
+            "%(prog)s-{i.VERSION}\n",
+            "\n",
+            "Copyright {i.COPY_YEAR} by {i.AUTHOR} <{i.AUTHOR_EMAIL}> and ",
+            "contributors.  This is free software; see the source for copying ",
+            "conditions. There is NO warranty; not even for MERCHANTABILITY ",
+            "or FITNESS FOR A PARTICULAR PURPOSE.",
+            ]))
 
         import singularity.parameters
 

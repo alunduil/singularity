@@ -1,6 +1,6 @@
 # Copyright (C) 2012 by Alex Brandt <alunduil@alunduil.com>
 #
-# muaor is freely distributable under the terms of an MIT-style license.
+# singularity is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 from distutils.core import setup
@@ -12,14 +12,14 @@ except ImportError:
     from singularity import information
 
 PARAMS = {}
-PARAMS["name"] = information.name
-PARAMS["version"] = information.version
-PARAMS["description"] = information.description
-PARAMS["long_description"] = information.long_description
-PARAMS["author"] = information.author
-PARAMS["author_email"] = information.author_email
-PARAMS["url"] = information.url
-PARAMS["license"] = information.license
+PARAMS["name"] = information.NAME
+PARAMS["version"] = information.VERSION
+PARAMS["description"] = information.DESCRIPTION
+PARAMS["long_description"] = information.LONG_DESCRIPTION
+PARAMS["author"] = information.AUTHOR
+PARAMS["author_email"] = information.AUTHOR_EMAIL
+PARAMS["url"] = information.URL
+PARAMS["license"] = information.LICENSE
 
 PARAMS["scripts"] = [
         "bin/singularity",
