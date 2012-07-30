@@ -173,10 +173,11 @@ class SingularityParameters(object):
         logger.debug("Finding key, %s, in parameters", key)
         logger.debug("Dots found in key: %s", key.count("."))
 
-        if key.count("."):
+        if key.count(".") > 0:
+            logger.debug("Splitting key, %s", key)
             section, short = key.split(".", 1)
 
-        default = None
+        default = "" 
         if short in DEFAULTS:
             default = DEFAULTS[short]
 

@@ -38,11 +38,17 @@ class SingularityConfiguration(object):
         self.__dict__["_config"] = ConfigParser.SafeConfigParser(defaults)
         self._config.read(configuration)
 
+        for section in [ "main", "apply", "daemon" ]:
+            if not self._config.has_section(section):
+                self._config.add_section(section)
+
     def __getitem__(self, key):
-        section, key = key.split(".", 1)
+        section = "main"
+        if key.count("."):
+            section, key = key.split(".", 1)
         try:
             return self._config.get(section, key, raw = True)
-        except ConfigParser.NoSectionError:
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             return None
 
 def _extract_defaults(parameters):

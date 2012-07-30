@@ -8,7 +8,7 @@ import logging.handlers
 
 # Setup basic console logging until the full logger is configured ...
 handler = logging.StreamHandler()
-handler.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
+handler.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
 
 logger = logging.getLogger("console") 
 logger.addHandler(handler)
@@ -52,8 +52,8 @@ class SingularityApplication(object):
         dhl.setLevel(logging.DEBUG)
         nhl.setLevel(logging.INFO)
 
-        dhl.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
-        nhl.setFormatter(logging.Formatter("%(levelname)s-%(name)s: %(message)s"))
+        dhl.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s"))
+        nhl.setFormatter(logging.Formatter("%(levelname)s => %(name)s: %(message)s"))
 
         class LevelFilter(logging.Filter):
             def __init__(self, level, *args, **kwargs):
@@ -63,10 +63,13 @@ class SingularityApplication(object):
             def filter(self, record):
                 return record.levelno <= self._level
 
+        # TODO Switch to custom formatter instead to handle various formats ...
         dhl.addFilter(LevelFilter(logging.DEBUG))
 
         root.addHandler(dhl)
         root.addHandler(nhl)
+
+        logger = logging.getLogger(__name__)
 
         for module in [ module for name, module in sys.modules.iteritems() if name.startswith("singularity") and module and "logger" in module.__dict__ ]:
             logger.debug("Module logger being changed on: %s", str(module))
