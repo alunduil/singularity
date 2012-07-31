@@ -9,17 +9,24 @@ import signal
 import pwd
 import grp
 import os
+import fcntl
+import sys
 
 from singularity.parameters import SingularityParameters
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 
 class SingularityDaemon(object):
-    def __init__(self):
-        """Initialize the daemon context."""
-
-
     def __call__(self):
+        actions = {
+                "start": self.start,
+                "stop": self.stop,
+                "reload": self.reinit,
+                "restart": self.restart,
+                }
+        actions[SingularityParameters()["action"]]()
+
+    def start(self):
         """Watch the communication module for system updates to apply.
 
         ### Description
@@ -30,49 +37,39 @@ class SingularityDaemon(object):
 
         """
 
-        actions = {
-                "start": self.start,
-                "stop": self.stop,
-                "reload": self.reinit,
-                "restart": self.restart,
-                }
-        actions[SingularityParameters()["action"]]()
-
-    def start(self):
+        # Summoning 
         context = daemon.DaemonContext()
 
         # TODO Add in proper pidfile locking logic ...
+        context.pidfile = PidFile(SingularityParameters()["daemon.pidfile"])
 
         context.umask = 0o002
-        context.pidfile = PidFile(SingularityParameters()["daemon.pidfile"])
-        context.files_preserve = [ handler.stream for handler in logger.handlers if hasattr(self, stream) ]
+        context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
         context.uid = pwd.getpwnam(SingularityParameters()["uid"]).pw_uid
         context.gid = grp.getgrnam(SingularityParameters()["gid"]).gr_gid
         context.prevent_core = not SingularityParameters()["coredumps"]
 
-        def term(signum, frame):
+        def term_handler(signum, frame):
             logger.info("Shutting down.")
             context.close()
             sys.exit(0)
 
-        def hup(signum, frame):
+        def hup_handler(signum, frame):
             SingularityParameters().reinit()
 
         context.signal_map = {
-                signal.SIGTERM: term,
-                signal.SIGINT: term,
-                signal.SIGHUP: hup,
+                signal.SIGTERM: term_handler,
+                signal.SIGINT: term_handler,
+                signal.SIGHUP: hup_handler,
                 }
 
         logger.info("Starting up.")
-        try:
-            with context:
-                while True:
-                    logger.debug("Running ...")
-                    time.sleep(10)
-        except Exception as error:
-            logger.exception(error)
-            sys.exit(1)
+        with context:
+            import time
+
+            while True:
+                logger.debug("Running ...")
+                time.sleep(10)
            
     def stop(self):
         if self.running:

@@ -39,7 +39,7 @@ class SingularityApplication(object): # pylint: disable=R0903
                 )
 
         # Someone set us up the logger mechanisms ...
-        root = logging.getLogger("singularity")
+        root = logging.getLogger()
         root.setLevel(getattr(logging, SingularityParameters()["main.loglevel"].upper())) # pylint: disable=C0301
         sladdr = { "linux2": "/dev/log", "darwin": "/var/run/syslog", }
 

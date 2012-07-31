@@ -16,7 +16,7 @@ def main():
     global logger
     try:
         app = SingularityApplication()
-        logger = logging.getLogger("singularity")
+        logger = logging.getLogger()
         app.run()
     except Exception as error:
         logger.exception(error)
