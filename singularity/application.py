@@ -24,7 +24,7 @@ import singularity.information
 
 from singularity.parameters import SingularityParameters
 from singularity.applicator import SingularityApplicator
-from singularity.daemon import SingularityDaemon
+from singularity.daemonizer import SingularityDaemon
 
 class SingularityApplication(object): # pylint: disable=R0903
     def __init__(self):
@@ -50,8 +50,8 @@ class SingularityApplication(object): # pylint: disable=R0903
             dhl = logging.StreamHandler(stream = sys.stderr)
             nhl = logging.StreamHandler(stream = sys.stderr)
         elif SingularityParameters()["main.loghandler"] != "syslog":
-            dhl = logging.FileHandler(SingularityParameters["main.loghandler"], delay = True) # pylint: disable=C0301
-            nhl = logging.FileHandler(SingularityParameters["main.loghandler"], delay = True) # pylint: disable=C0301
+            dhl = logging.FileHandler(SingularityParameters()["main.loghandler"], delay = True) # pylint: disable=C0301
+            nhl = logging.FileHandler(SingularityParameters()["main.loghandler"], delay = True) # pylint: disable=C0301
 
         dhl.setLevel(logging.DEBUG)
         nhl.setLevel(logging.INFO)

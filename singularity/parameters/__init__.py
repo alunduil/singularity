@@ -192,7 +192,7 @@ class SingularityParameters(object): # pylint: disable=R0903
         argument = self._arguments[key]
         configuration = self._configuration[key]
 
-        if default in sys.argv[0] or argument != default:
+        if str(default) in sys.argv[0] or argument != default:
             return argument
         if configuration:
             return configuration

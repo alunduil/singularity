@@ -4,6 +4,11 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import daemon
+import signal
+import pwd
+import grp
+import os
 
 from singularity.parameters import SingularityParameters
 
@@ -25,26 +30,25 @@ class SingularityDaemon(object):
 
         """
 
-        action = SingularityParameters()["action"]
-
-        if action == "start":
-            self.start()
-        elif action == "stop":
-            self.stop()
-        elif action == "reload":
-            self.reinit()
-        elif action == "restart":
-            self.stop()
-            while self.running:
-                time.sleep(1)
-            self.start()
+        actions = {
+                "start": self.start,
+                "stop": self.stop,
+                "reload": self.reinit,
+                "restart": self.restart,
+                }
+        actions[SingularityParameters()["action"]]()
 
     def start(self):
         context = daemon.DaemonContext()
 
+        # TODO Add in proper pidfile locking logic ...
+
         context.umask = 0o002
         context.pidfile = PidFile(SingularityParameters()["daemon.pidfile"])
         context.files_preserve = [ handler.stream for handler in logger.handlers if hasattr(self, stream) ]
+        context.uid = pwd.getpwnam(SingularityParameters()["uid"]).pw_uid
+        context.gid = grp.getgrnam(SingularityParameters()["gid"]).gr_gid
+        context.prevent_core = not SingularityParameters()["coredumps"]
 
         def term(signum, frame):
             logger.info("Shutting down.")
@@ -61,8 +65,14 @@ class SingularityDaemon(object):
                 }
 
         logger.info("Starting up.")
-        with context:
-            pass
+        try:
+            with context:
+                while True:
+                    logger.debug("Running ...")
+                    time.sleep(10)
+        except Exception as error:
+            logger.exception(error)
+            sys.exit(1)
            
     def stop(self):
         if self.running:
@@ -78,11 +88,20 @@ class SingularityDaemon(object):
         else:
             logger.warning("Daemon not running.")
 
+    def restart(self):
+        self.stop()
+
+        # TODO Change this to a non-busy wait somehow?
+        while self.running:
+            time.sleep(1)
+
+        self.start()
+
     @property
     def pid(self):
         if os.access(SingularityParameters()["daemon.pidfile"], os.R_OK):
             with open(SingularityParameters()["daemon.pidfile"], "r") as pidfile:
-                return pidfile.readline()
+                return int(pidfile.readline())
 
     @property
     def running(self):
