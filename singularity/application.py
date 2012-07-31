@@ -30,7 +30,7 @@ class SingularityApplication(object): # pylint: disable=R0903
     def __init__(self):
         global logger # pylint: disable=W0603
 
-        self.arguments = SingularityParameters(
+        SingularityParameters(
                 description = singularity.information.DESCRIPTION,
                 epilog = "".join([
                     "Copyright (C) {i.COPY_YEAR} by {i.AUTHOR} Licensed under ",
@@ -40,18 +40,18 @@ class SingularityApplication(object): # pylint: disable=R0903
 
         # Someone set us up the logger mechanisms ...
         root = logging.getLogger("singularity")
-        root.setLevel(getattr(logging, self.arguments["main.loglevel"].upper()))
+        root.setLevel(getattr(logging, SingularityParameters()["main.loglevel"].upper()))
         sladdr = { "linux2": "/dev/log", "darwin": "/var/run/syslog", }
 
         dhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform]) # pylint: disable=C0301
         nhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform]) # pylint: disable=C0301
 
-        if self.arguments["main.loghandler"] == "-":
+        if SingularityParameters()["main.loghandler"] == "-":
             dhl = logging.StreamHandler(stream = sys.stderr)
             nhl = logging.StreamHandler(stream = sys.stderr)
-        elif self.arguments["main.loghandler"] != "syslog":
-            dhl = logging.FileHandler(self.arguments["main.loghandler"], delay = True) # pylint: disable=C0301
-            nhl = logging.FileHandler(self.arguments["main.loghandler"], delay = True) # pylint: disable=C0301
+        elif SingularityParameters()["main.loghandler"] != "syslog":
+            dhl = logging.FileHandler(SingularityParameters["main.loghandler"], delay = True) # pylint: disable=C0301
+            nhl = logging.FileHandler(SingularityParameters["main.loghandler"], delay = True) # pylint: disable=C0301
 
         dhl.setLevel(logging.DEBUG)
         nhl.setLevel(logging.INFO)
@@ -80,9 +80,10 @@ class SingularityApplication(object): # pylint: disable=R0903
             module.logger = logging.getLogger(module.__name__)
 
     def run(self):
+        logger.info("Running %s ... ", SingularityParameters()["subcommand"])
         subcommands = {
                 "apply": SingularityApplicator,
                 "daemon": SingularityDaemon,
                 }
-        subcommands[self.arguments["subcommand"]](self.arguments)()
+        subcommands[SingularityParameters()["subcommand"]]()()
 

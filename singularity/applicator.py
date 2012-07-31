@@ -11,10 +11,7 @@ from singularity.parameters import SingularityParameters
 logger = logging.getLogger("console") # pylint: disable=C0103
 
 class SingularityApplicator(object):
-    def __init__(self, arguments):
-        self.arguments = arguments
-
-    def __call__(self, functions = None):
+    def __call__(self):
         """Apply an existing configuration to the system.
 
         ### Description
@@ -25,20 +22,33 @@ class SingularityApplicator(object):
 
         """
 
-        if not os.access(SingularityParameters()["main.cache"], os.R_OK):
+        cache_dir = SingularityParameters()["main.cache"]
+
+        if not os.access(cache_dir, os.R_OK):
+            logger.warning("Cache directory is not accessible.  Application aborted!")
             return
 
-        if functions == "all":
-            functions = set([ 
-                    "network", "hosts", "resolvers", "reboot", "password"
-                    ])
+        actions = SingularityParameters()["action"]
 
-        functions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
+        if actions == "all":
+            actions = set([ "network", "hosts", "resolvers", "reboot", "password" ]) # pylint: disable=C0301
 
-        for function in functions:
-            logger.info("Applying %s configuration to the system ...", function) # pylint: disable=C0301
+        actions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
 
-        # Check for cached items in the cache directory
-        # Backup files if requested
-        # Overwrite system files with cached versions
+        for action in actions:
+            logger.info("Applying %s configuration to the system ...", action)
+
+            action_dir = os.path.join(cache_dir, action)
+
+            if not os.access(action_dir, os.R_OK):
+                logger.warning("Cache for %s not accessible.  Application of %s skipped!", action, action)
+                continue
+
+            if os.access(os.path.join(action_dir, "conflict")):
+                logger.error("Conflict found for %s!  Please check the logs for more information.")
+                continue
+
+            # Find all files in action_dir
+            # Backup all matching files in system if requested
+            # Move all files from action_dir to the system locations
 
