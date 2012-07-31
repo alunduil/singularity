@@ -38,7 +38,13 @@ class SingularityDaemon(object):
 
         """
 
-        # Summoning 
+        # Summoning deamons is tricky business ... 
+        #
+        # "... for the demon shall bear a nine-bladed sword. NINE-bladed! Not
+        # two or five or seven, but NINE, which he will wield on all wretched
+        # sinners, sinners just like you, sir, there, and the horns shall be on
+        # the head, with which he will..."
+
         context = daemon.DaemonContext()
 
         # TODO Add in proper pidfile locking logic ...
