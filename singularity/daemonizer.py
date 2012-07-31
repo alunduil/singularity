@@ -11,6 +11,7 @@ import grp
 import os
 import fcntl
 import sys
+import time
 
 from singularity.parameters import SingularityParameters
 
@@ -26,7 +27,7 @@ class SingularityDaemon(object):
                 }
         actions[SingularityParameters()["action"]]()
 
-    def start(self):
+    def start(self): # pylint: disable=R0201
         """Watch the communication module for system updates to apply.
 
         ### Description
@@ -49,12 +50,12 @@ class SingularityDaemon(object):
         context.gid = grp.getgrnam(SingularityParameters()["gid"]).gr_gid
         context.prevent_core = not SingularityParameters()["coredumps"]
 
-        def term_handler(signum, frame):
+        def term_handler(signum, frame): # pylint: disable=W0613
             logger.info("Shutting down.")
             context.close()
             sys.exit(0)
 
-        def hup_handler(signum, frame):
+        def hup_handler(signum, frame): # pylint: disable=W0613
             SingularityParameters().reinit()
 
         context.signal_map = {
@@ -65,8 +66,6 @@ class SingularityDaemon(object):
 
         logger.info("Starting up.")
         with context:
-            import time
-
             while True:
                 logger.debug("Running ...")
                 time.sleep(10)
@@ -95,16 +94,16 @@ class SingularityDaemon(object):
         self.start()
 
     @property
-    def pid(self):
+    def pid(self): # pylint: disable=R0201
         if os.access(SingularityParameters()["daemon.pidfile"], os.R_OK):
-            with open(SingularityParameters()["daemon.pidfile"], "r") as pidfile:
+            with open(SingularityParameters()["daemon.pidfile"], "r") as pidfile: # pylint: disable=C0301
                 return int(pidfile.readline())
 
     @property
     def running(self):
         return os.path.exists("/proc/{0}".format(self.pid))
 
-class PidFile(object):
+class PidFile(object): # pylint: disable=R0903
     """Context manager for handling a locking pidfile.
 
     ### Description
@@ -128,7 +127,7 @@ class PidFile(object):
         try:
             fcntl.flock(self.pidfile.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except IOError:
-            raise SystemExit("Found an existing pidfile, %s, exiting.", self.path)
+            raise SystemExit("Found an existing pidfile, %s, exiting.", self.path) # TODO Change this up a bit? # pylint: disable=C0301
 
         self.pidfile.seek(0)
         self.pidfile.truncate()

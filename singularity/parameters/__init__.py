@@ -172,8 +172,7 @@ class SingularityParameters(object): # pylint: disable=R0903
             self._arguments = SingularityArguments(*args, **kwargs)
 
         if "_configuration" not in self.__dict__:
-            from singularity.parameters.configuration import SingularityConfiguration # pylint: disable=C0301
-            self._configuration = SingularityConfiguration(self._arguments["configuration"]) # pylint: disable=C0301
+            self.reinit()
 
     def __getitem__(self, key):
         short = key
@@ -198,3 +197,9 @@ class SingularityParameters(object): # pylint: disable=R0903
             return configuration
         return default
 
+    def reinit(self):
+        """Reload the configuration file parameters."""
+
+        from singularity.parameters.configuration import SingularityConfiguration # pylint: disable=C0301
+        self._configuration = SingularityConfiguration(self._arguments["configuration"]) # pylint: disable=C0301
+        
