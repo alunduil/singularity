@@ -25,7 +25,7 @@ class SingularityApplicator(object):
         cache_dir = SingularityParameters()["main.cache"]
 
         if not os.access(cache_dir, os.R_OK):
-            logger.warning("Cache directory is not accessible.  Application aborted!")
+            logger.warning("Cache directory is not accessible.  Application aborted!") # pylint: disable=C0301
             return
 
         actions = SingularityParameters()["action"]
@@ -41,11 +41,11 @@ class SingularityApplicator(object):
             action_dir = os.path.join(cache_dir, action)
 
             if not os.access(action_dir, os.R_OK):
-                logger.warning("Cache for %s not accessible.  Application of %s skipped!", action, action)
+                logger.warning("Cache for %s not accessible.  Application of %s skipped!", action, action) # pylint: disable=C0301
                 continue
 
             if os.access(os.path.join(action_dir, "conflict")):
-                logger.error("Conflict found for %s!  Please check the logs for more information.")
+                logger.error("Conflict found for %s!  Please check the logs for more information.") # pylint: disable=C0301
                 continue
 
             # Find all files in action_dir

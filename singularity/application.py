@@ -40,7 +40,7 @@ class SingularityApplication(object): # pylint: disable=R0903
 
         # Someone set us up the logger mechanisms ...
         root = logging.getLogger("singularity")
-        root.setLevel(getattr(logging, SingularityParameters()["main.loglevel"].upper()))
+        root.setLevel(getattr(logging, SingularityParameters()["main.loglevel"].upper())) # pylint: disable=C0301
         sladdr = { "linux2": "/dev/log", "darwin": "/var/run/syslog", }
 
         dhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform]) # pylint: disable=C0301
@@ -79,7 +79,7 @@ class SingularityApplication(object): # pylint: disable=R0903
             logger.debug("Module logger being changed on: %s", str(module))
             module.logger = logging.getLogger(module.__name__)
 
-    def run(self):
+    def run(self): # pylint: disable=R0201
         logger.info("Running %s ... ", SingularityParameters()["subcommand"])
         subcommands = {
                 "apply": SingularityApplicator,
