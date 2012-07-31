@@ -3,6 +3,11 @@ singularity
 
 Smaller and more configurable guest agent for Openstack
 
+Dependencies
+============
+
+* xen-tools
+
 Description
 ===========
 
@@ -23,48 +28,48 @@ delegate to other softwares to accomplish:
 Command Line Interfaces
 -----------------------
 
-commonoptions = [
-x  --loglevel=LEVEL
-x  --configuration=FILE
-  --cache=DIR
-x  --logfile=FILE (syslog, file, - STDOUT)
-  --functions=FUNCIONS
-  --backups
-x  --help
-x  --version
-]
-
-options = [
-  commonoptions
-  --force
-  --dry-run
-  ]
-singularity apply [options] [all] :: DEFAULT
-singularity apply [options] [network]
-singularity apply [options] [hosts]
-singularity apply [options] [resolvers]
-singularity apply [options] [reboot]
-singularity apply [options] [password]
-
-options = [
-  commonoptions
-  --pidfile=PIDFILE
-  --uid=USER
-  --gid=GROUP
-  --core=on|off -> DEFAULT = off
-  ]
-singularity daemon [options] [start] :: DEFAULT
-singularity daemon [options] [stop]
-singularity daemon [options] [restart]
-singularity daemon [options] [reload]
-
-Signals Interface
------------------
-
-SIGNALS = [
-  SIGHUP -> dameon restart
-  SIGINT -> daemon stop
-  SIGTERM -> daemon stop
-  SIGUSR1 -> daemon reload
-]
-
+    commonoptions = [
+    x  --loglevel=LEVEL
+    x  --configuration=FILE
+      --cache=DIR
+    x  --logfile=FILE (syslog, file, - STDOUT)
+      --functions=FUNCIONS
+      --backups
+    x  --help
+    x  --version
+    ]
+    
+    options = [
+      commonoptions
+      --force
+      --dry-run
+      ]
+    singularity apply [options] [all] :: DEFAULT
+    singularity apply [options] [network]
+    singularity apply [options] [hosts]
+    singularity apply [options] [resolvers]
+    singularity apply [options] [reboot]
+    singularity apply [options] [password]
+    
+    options = [
+      commonoptions
+      --pidfile=PIDFILE
+      --uid=USER
+      --gid=GROUP
+      --core=on|off -> DEFAULT = off
+      ]
+    singularity daemon [options] [start] :: DEFAULT
+    singularity daemon [options] [stop]
+    singularity daemon [options] [restart]
+    singularity daemon [options] [reload]
+    
+    Signals Interface
+    -----------------
+    
+    SIGNALS = [
+      SIGHUP -> dameon restart
+      SIGINT -> daemon stop
+      SIGTERM -> daemon stop
+      SIGUSR1 -> daemon reload
+    ]
+    
