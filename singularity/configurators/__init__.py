@@ -18,30 +18,8 @@ class SingularityConfigurator(object):
         pass
 
     @property
-    def filename(self):
-        """Name of the file this configurator provides content for.
-        
-        ### Description
-
-        Returns the name of the file that this SingularityConfigurator provides
-        content for.
-
-        This property coupled with SingularityConfigurator.function allows
-        Singularity to determine which of the runnable (see 
-        SingularityConfigurator.runnable) configurators to apply to the system.
-
-        ### Notes
-
-        This attribute is not defined in the base class and *must* be
-        implemented in specific configurators.
-        
-        """
-
-        raise AttributeError("class {0} has no attribute 'filename'".format(self.__class__.__name__)) # pylint: disable=C0301
-
-    @property
-    def function(self):
-        """Name of the function this configurator fulfills.
+    def functions(self):
+        """Name of the functions this configurator fulfills.
 
         ### Description
 
@@ -57,6 +35,8 @@ class SingularityConfigurator(object):
         * "resolvers"
         * "reboot"
         * "password"
+        * "version" Not generally used as it returns the version of singularity
+          on the server; not the version of the particular configurator.
 
         All other values are ignored and disqualify the configurator from being
         run.  Other values may be added in later incarnations of Singularity.
@@ -108,7 +88,7 @@ class SingularityConfigurator(object):
         raise NotImplementedError("class {0} does not implement 'runnable(self, configuration)'".format(self.__class__.__name__)) # pylint: disable=C0301
 
     def content(self, configuration):
-        """Generated content of this configurator as a list.
+        """Generated content of this configurator as a dictionary.
         
         ### Arguments
 
@@ -122,11 +102,8 @@ class SingularityConfigurator(object):
 
         ### Description
 
-        List of lines that will make up the content of the file provided by
-        this SingularityConfigurator.
-
-        Typically this can be implemented as a list conversion of
-        SingularityConfigurator.iter_content().
+        Dictionary mapping filenames being written to the content of the files
+        provided by the SingularityConfigurator.
 
         ### Examples
 
@@ -134,7 +111,7 @@ class SingularityConfigurator(object):
         would be the following data structure:
 
         >>> SingularityConfigurator.content()
-        ['# Set to the hostname of this machine', 'hostname="host.example.com"]
+        {'/etc/conf.d/hostname': '# Set to the hostname of this machine', 'hostname="host.example.com"}
 
         ### Notes
 
@@ -142,42 +119,7 @@ class SingularityConfigurator(object):
         SingularityConfigurator.iter_content to a list and should not be
         over-written in subclasses.
 
-        ### See Also
-
-        SingularityConfigurator.iter_content
-
         """
-
-        return list(self.iter_content(configuration))
-
-    def iter_content(self, configuration):
-        """Generated content of this configurator as a generator.
-
-        ### Arguments
-
-        See SingularityConfigurator.content for a description of arguments.
-        
-        ### Description
-
-        Generates lines for that will make up the content of the file provided
-        by this SingularityConfigurator.
-
-        ### Examples
-
-        >>> SingularityConfigurator.iter_content()
-        <generator object iter_content at 0xXXXXXXX>
-
-        ### Notes
-
-        This method is not defined in the base class and *must* be implemented
-        in specific configurators.
-
-        ### See Also
-
-        SingularityConfigurator.content
-        
-        """
-        # pylint: disable=W0511
 
         raise NotImplementedError("class {0} does not implement 'iter_content(self)'".format(self.__class__.__name__)) # pylint: disable=C0301
 

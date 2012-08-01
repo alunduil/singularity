@@ -191,7 +191,7 @@ class XenCommunicator(Communicator):
     * agentupdate
     * resetnetwork
     * injectfile
-    * kmsactivate
+    * kmsactivate # TODO What is this?
     * help # Registered as a command but only acts locally.
 
     Hostname is available in vm-data/hostname.
