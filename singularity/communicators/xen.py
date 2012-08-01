@@ -197,9 +197,9 @@ class XenCommunicator(Communicator):
 
     """
 
-    def send(self):
+    def receive(self):
         pass
 
-    def receive(self):
+    def send(self, message):
         pass
 
