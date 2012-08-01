@@ -83,7 +83,7 @@ class SingularityArguments(object):
             daemon_parser.add_argument(*options["args"], **options["kwargs"]) # pylint: disable=W0142,C0301
 
         daemon_parser.add_argument("action", metavar = "ACTION", choices = [
-            "start", "stop", "restart", "reload" ],
+            "start", "stop", "restart", "reload", "status" ],
             help = "Specifies what action to take when controlling the daemon process.") # pylint: disable=C0301
 
         self._parsed_args = self._parser.parse_args()

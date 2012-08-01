@@ -26,6 +26,7 @@ class SingularityDaemon(object):
                 "stop": self.stop,
                 "reload": self.reinit,
                 "restart": self.restart,
+                "status": self.status,
                 }
         actions[SingularityParameters()["action"]]()
 
@@ -98,15 +99,15 @@ class SingularityDaemon(object):
            
     def stop(self):
         if self.running:
-            logger.info("Sending daemon, %s, SIGTERM.", self.pid)
-            os.kill(self.pid, signal.SIGTERM)
+            logger.info("Sending daemon, %s, SIGTERM.", self.daemon_pid)
+            os.kill(self.daemon_pid, signal.SIGTERM)
         else:
             logger.warning("Daemon not running.")
 
     def reinit(self):
         if self.running:
-            logger.info("Sending daemon, %s, SIGHUP.", self.pid)
-            os.kill(self.pid, signal.SIGHUP)
+            logger.info("Sending daemon, %s, SIGHUP.", self.daemon_pid)
+            os.kill(self.daemon_pid, signal.SIGHUP)
         else:
             logger.warning("Daemon not running.")
 
@@ -119,8 +120,11 @@ class SingularityDaemon(object):
 
         self.start()
 
+    def status(self):
+        logger.info("Singularity is running at %s", self.daemon_pid)
+
     @property
-    def pid(self): # pylint: disable=R0201
+    def daemon_pid(self): # pylint: disable=R0201
         if os.access(SingularityParameters()["daemon.pidfile"], os.R_OK):
             with open(SingularityParameters()["daemon.pidfile"], "r") as pidfile: # pylint: disable=C0301
                 return int(pidfile.readline())
