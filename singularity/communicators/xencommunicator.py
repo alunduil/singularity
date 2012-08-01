@@ -199,7 +199,7 @@ class XenCommunicator(Communicator):
 
     """
 
-    def __init__(self, reveive_prefix = "data/host", send_prefix = "data/guest", data_prefix = "vm-data"): # pylint: disable=C0301
+    def __init__(self, receive_prefix = "data/host", send_prefix = "data/guest", data_prefix = "vm-data", *args, **kwargs): # pylint: disable=C0301
         """Initialize a communication "bus" with the Xen Hypervisor.
 
         ### Description
@@ -208,6 +208,8 @@ class XenCommunicator(Communicator):
         initializes pathing information used elsewhere.
 
         """
+
+        super(XenCommunicator, self).__init__(*args, **kwargs)
 
         self._receive_prefix = receive_prefix
         self._send_prefix = send_prefix
@@ -240,6 +242,8 @@ class XenCommunicator(Communicator):
         logger.info("Received message, %s, from %s", message, path)
         xs.transaction_end()
 
+        # TODO Define identifier ...
+
         return identifier, message
 
     def send(self, identifier, message):
@@ -251,6 +255,8 @@ class XenCommunicator(Communicator):
         evertyhing was successful.
 
         """
+
+        # TODO Add error handling that is appropriate here ...
 
         transaction = xs.transaction_start()
         xs.write(transaction, self._send_prefix + identifier, message)

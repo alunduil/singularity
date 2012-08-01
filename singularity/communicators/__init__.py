@@ -26,7 +26,7 @@ def create(*args, **kwargs):
     communicator = None
 
     if os.access(os.path.join(os.path.sep, "proc", "xen", "capabilities"), os.R_OK): # pylint: disable=C0301
-        from singularity.communicators.xen import XenCommunicator
+        from singularity.communicators.xencommunicator import XenCommunicator
         communicator = XenCommunicator(*args, **kwargs)
 
     if not isinstance(communicator, Communicator):
@@ -44,18 +44,22 @@ class Communicator(object):
         Once we've received a message it is passed back to the caller of this
         method.
 
+        Returns a tuple with an identifier for the message (to respond directly
+        to that message) and the message received.
+
         """
 
         raise NotImplementedError("class {0} does not implement 'receive(self)'".format(self.__class__.__name__)) # pylint: disable=C0301
 
-    def send(self, message):
+    def send(self, identifier, message):
         """Send a message (or response) to the hypervisor.
 
         ### Arguments
 
-        Argument | Description
-        -------- | -----------
-        message  | The message to send back to the hypervisor.
+        Argument   | Description
+        --------   | -----------
+        identifier | The identifier of the message to respond to.
+        message    | The message to send back to the hypervisor.
 
         ### Description
 

@@ -13,6 +13,8 @@ import fcntl
 import sys
 import time
 
+import singularity.communicators as communicators
+
 from singularity.parameters import SingularityParameters
 
 logger = logging.getLogger("console") # pylint: disable=C0103
@@ -73,8 +75,10 @@ class SingularityDaemon(object):
         logger.info("Starting up.")
         with context:
             while True:
-                logger.debug("Running ...")
-                time.sleep(10)
+                communicator = communicators.create()
+                identifier, message = communicator.receive()
+                logger.info("Got message, %s, with identifier, %s", message, identifier)
+                communicator.send(identifier, message)
            
     def stop(self):
         if self.running:
