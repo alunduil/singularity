@@ -5,6 +5,8 @@
 
 import logging
 
+import xen.lowlevel.xs as xs
+
 from singularity.communicators import Communicator
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
@@ -197,9 +199,60 @@ class XenCommunicator(Communicator):
 
     """
 
-    def receive(self):
-        pass
+    def __init__(self, reveive_prefix = "data/host", send_prefix = "data/guest", data_prefix = "vm-data"): # pylint: disable=C0301
+        """Initialize a communication "bus" with the Xen Hypervisor.
 
-    def send(self, message):
-        pass
+        ### Description
+
+        Sets up watches on paths we'll be receiving data on in xenstore and 
+        initializes pathing information used elsewhere.
+
+        """
+
+        self._receive_prefix = receive_prefix
+        self._send_prefix = send_prefix
+        self._data_prefix = data_prefix
+
+        xs.watch(self._receive_prefix, "COMMAND")
+        xs.watch(self._data_prefix, "DATA")
+
+    def __del__(self):
+        xs.unwatch(self._receive_prefix, "COMMAND")
+        xs.unwatch(self._data_prefix, "DATA")
+
+    def receive(self):
+        """Recieve message from hypervisor and package for upstream consumption
+
+        ### Description
+
+        Wait for the watch to return some data and then pass that data to the
+        caller.
+
+        """
+
+        # TODO Add error handling that is appropriate here ...
+
+        path, token = xs.read_watch()
+        logger.info("Recieved a watch event on %s with token, %s", path, token)
+
+        transaction = xs.transaction_start()
+        message = xs.read(transaction, path)
+        logger.info("Received message, %s, from %s", message, path)
+        xs.transaction_end()
+
+        return identifier, message
+
+    def send(self, identifier, message):
+        """Send the passed message to the hypervisor.
+
+        ### Description
+
+        Send the message to the hypervisor and wait for confirmation that
+        evertyhing was successful.
+
+        """
+
+        transaction = xs.transaction_start()
+        xs.write(transaction, self._send_prefix + identifier, message)
+        xs.transaction_end()
 
