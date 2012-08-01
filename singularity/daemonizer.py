@@ -48,10 +48,7 @@ class SingularityDaemon(object):
         # the head, with which he will..."
 
         context = daemon.DaemonContext()
-
-        # TODO Add in proper pidfile locking logic ...
         context.pidfile = PidFile(SingularityParameters()["daemon.pidfile"])
-
         context.umask = 0o002
         context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
         context.uid = pwd.getpwnam(SingularityParameters()["uid"]).pw_uid
@@ -78,7 +75,21 @@ class SingularityDaemon(object):
                 communicator = communicators.create()
                 identifier, message = communicator.receive()
                 logger.info("Got message, %s, with identifier, %s", message, identifier)
-                communicator.send(identifier, message)
+
+                functions = []
+
+                for configurator in [ configurator for configurator in SingularityConfigurators() if configurator.runnable(message) ]:
+                    functions.extend(configurator.functions)
+                    for filename, content in configurator.contents(message):
+                        with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile:
+                            cachefile.write(content)
+
+                SingularityApplicator()(actions = functions)
+
+                # TODO Fill in response ...
+                response = ""
+
+                communicator.send(identifier, response)
            
     def stop(self):
         if self.running:
@@ -90,7 +101,7 @@ class SingularityDaemon(object):
     def reinit(self):
         if self.running:
             logger.info("Sending daemon, %s, SIGHUP.", self.pid)
-            os.kill(self.pid, signal.SIGTERM)
+            os.kill(self.pid, signal.SIGHUP)
         else:
             logger.warning("Daemon not running.")
 

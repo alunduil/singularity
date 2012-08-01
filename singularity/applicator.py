@@ -11,7 +11,7 @@ from singularity.parameters import SingularityParameters
 logger = logging.getLogger("console") # pylint: disable=C0103
 
 class SingularityApplicator(object):
-    def __call__(self):
+    def __call__(self, actions = None):
         """Apply an existing configuration to the system.
 
         ### Description
@@ -28,7 +28,8 @@ class SingularityApplicator(object):
             logger.warning("Cache directory is not accessible.  Application aborted!") # pylint: disable=C0301
             return
 
-        actions = SingularityParameters()["action"]
+        if not actions:
+            actions = SingularityParameters()["action"]
 
         if actions == "all":
             actions = set([ "network", "hosts", "resolvers", "reboot", "password" ]) # pylint: disable=C0301
