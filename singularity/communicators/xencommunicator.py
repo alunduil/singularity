@@ -215,12 +215,14 @@ class XenCommunicator(Communicator):
         self._send_prefix = send_prefix
         self._data_prefix = data_prefix
 
-        xs.watch(self._receive_prefix, "COMMAND")
-        xs.watch(self._data_prefix, "DATA")
+        self.xs = xs.xs()
+
+        self.xs.watch(self._receive_prefix, "COMMAND")
+        self.xs.watch(self._data_prefix, "DATA")
 
     def __del__(self):
-        xs.unwatch(self._receive_prefix, "COMMAND")
-        xs.unwatch(self._data_prefix, "DATA")
+        self.xs.unwatch(self._receive_prefix, "COMMAND")
+        self.xs.unwatch(self._data_prefix, "DATA")
 
     def receive(self):
         """Recieve message from hypervisor and package for upstream consumption
@@ -233,14 +235,14 @@ class XenCommunicator(Communicator):
         """
 
         # TODO Add error handling that is appropriate here ...
-
+        # TODO Split off the D and allow us to die ...
         path, token = xs.read_watch()
         logger.info("Recieved a watch event on %s with token, %s", path, token)
 
-        transaction = xs.transaction_start()
-        message = xs.read(transaction, path)
+        transaction = self.xs.transaction_start()
+        message = self.xs.read(transaction, path)
         logger.info("Received message, %s, from %s", message, path)
-        xs.transaction_end()
+        self.xs.transaction_end()
 
         # TODO Define identifier ...
 
@@ -258,7 +260,7 @@ class XenCommunicator(Communicator):
 
         # TODO Add error handling that is appropriate here ...
 
-        transaction = xs.transaction_start()
-        xs.write(transaction, self._send_prefix + identifier, message)
-        xs.transaction_end()
+        transaction = self.xs.transaction_start()
+        self.xs.write(transaction, self._send_prefix + identifier, message)
+        self.xs.transaction_end()
 
