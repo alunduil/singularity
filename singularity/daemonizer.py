@@ -78,12 +78,17 @@ class SingularityDaemon(object):
 
                 functions = []
 
+                # TODO Add proper error handling here ...
+
                 for configurator in [ configurator for configurator in SingularityConfigurators() if configurator.runnable(message) ]:
+                    logger.info("Found configurator, %s, with functions, %s", configurator, configurator.functions)
                     functions.extend(configurator.functions)
                     for filename, content in configurator.contents(message):
+                        logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator)
                         with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile:
                             cachefile.write(content)
 
+                logger.info("Applying the functions found ...")
                 SingularityApplicator()(actions = functions)
 
                 # TODO Fill in response ...
