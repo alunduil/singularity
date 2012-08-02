@@ -33,6 +33,8 @@ class SingularityApplicator(object):
 
         if actions == "all":
             actions = set([ "network", "hosts", "resolvers", "reboot", "password" ]) # pylint: disable=C0301
+        else:
+            actions = set(actions)
 
         actions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
 

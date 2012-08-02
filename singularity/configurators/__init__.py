@@ -197,11 +197,11 @@ class SingularityConfigurators(object): # pylint: disable=R0903
                 for object_ in [ object_() for name, object_ in inspect.getmembers(module, inspect.isclass) if issubclass(object_.__class__, SingularityConfigurator) and object_.__class__ != SingularityConfigurator]: # pylint: disable=C0301,W0612
                     self._configurators[object_.__class__.__name__] = object_
 
-            logger.debug("Type of self._configurators: %s", type(self._configurators))
+        logger.debug("Type of self._configurators: %s", type(self._configurators))
 
-            self._configurators = self._configurators.values()
+        self._configurators = self._configurators.values()
 
-            logger.info("SingularityConfigurators found: %s", self._configurators) # pylint: disable=C0301
+        logger.info("SingularityConfigurators found: %s", self._configurators) # pylint: disable=C0301
 
     def __len__(self):
         return len(self._configurators)

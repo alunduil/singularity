@@ -83,7 +83,7 @@ class SingularityDaemon(object):
                 identifier, message = communicator.receive()
                 logger.info("Got message, %s, with identifier, %s", message, identifier) # pylint: disable=C0301
 
-                functions = []
+                functions = set()
 
                 # TODO Add proper error handling here ...
 
@@ -94,7 +94,8 @@ class SingularityDaemon(object):
                     # TODO Add conflict resolution ...
 
                     logger.info("Found configurator, %s, with functions, %s", configurator, configurator.functions) # pylint: disable=C0301
-                    functions.extend(configurator.functions)
+                    functions |= set(configurator.functions)
+
                     for filename, content in configurator.contents(message):
                         logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator) # pylint: disable=C0301
                         with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile: # pylint: disable=C0301
