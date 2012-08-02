@@ -197,14 +197,22 @@ class SingularityParameters(object): # pylint: disable=R0903
         if short in DEFAULTS:
             default = DEFAULTS[short]
 
-        argument = self._arguments[key]
-        configuration = self._configuration[key]
+        argument = ""
+        if key in self._arguments:
+            argument = self._arguments[key]
 
-        if str(default) in sys.argv[0] or argument != default:
+        configuration = ""
+        if key in self._configuration:
+            configuration = self._configuration[key]
+
+        # TODO Check for string length seems unnecessary.
+        if len(str(default)) and str(default) in sys.argv[0] or argument != default:
             return argument
+
         if configuration:
             return configuration
-        return default
+
+        return default or None
 
     def reinit(self):
         """Reload the configuration file parameters."""

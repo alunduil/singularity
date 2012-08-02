@@ -24,7 +24,7 @@ class SocketCommunicator(Communicator):
 
         logger.info("Setting up socket at %s", path)
 
-        self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+        self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
         if os.access(path, os.W_OK):
             os.remove(path)

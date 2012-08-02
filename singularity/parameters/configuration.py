@@ -49,7 +49,13 @@ class SingularityConfiguration(object): # pylint: disable=R0903
         try:
             return self._config.get(section, key, raw = True)
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            return None
+            return None # TODO Raise KeyError instead?
+
+    def __contains__(self, key):
+        section = "main"
+        if key.count("."):
+            section, key = key.split(".", 1)
+        return self._config.has_option(section, key)
 
 def _extract_defaults(parameters):
     return dict([ (item["options"][0][2:], item["default"]) for item in parameters if "default" in item ]) # pylint: disable=C0301

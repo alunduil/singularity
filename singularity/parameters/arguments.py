@@ -101,6 +101,11 @@ class SingularityArguments(object):
             section, key = key.split('.', 1) # pylint: disable=W0612
         return getattr(self._parsed_args, key)
 
+    def __contains__(self, key):
+        if key.count("."):
+            section, key = key.split('.', 1) # pylint: disable=W0612
+        return hasattr(self._parsed_args, key)
+
 def _extract_options(parameters):
     parameters = copy.deepcopy(parameters)
     return dict([ (item["options"][0][2:], { "args": item.pop("options"), "kwargs": item }) for item in parameters ]) # pylint: disable=C0301
