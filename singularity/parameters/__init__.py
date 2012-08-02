@@ -201,5 +201,5 @@ class SingularityParameters(object): # pylint: disable=R0903
         """Reload the configuration file parameters."""
 
         from singularity.parameters.configuration import SingularityConfiguration # pylint: disable=C0301
-        self._configuration = SingularityConfiguration(self._arguments["configuration"]) # pylint: disable=C0301
+        self._configuration = SingularityConfiguration(self._arguments["configuration"]) # pylint: disable=C0301,W0201
         

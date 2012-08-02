@@ -16,6 +16,8 @@ import time
 import singularity.communicators as communicators
 
 from singularity.parameters import SingularityParameters
+from singularity.configurators import SingularityConfigurators
+from singularity.applicator import SingularityApplicator
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 
@@ -75,18 +77,18 @@ class SingularityDaemon(object):
             while True:
                 communicator = communicators.create()
                 identifier, message = communicator.receive()
-                logger.info("Got message, %s, with identifier, %s", message, identifier)
+                logger.info("Got message, %s, with identifier, %s", message, identifier) # pylint: disable=C0301
 
                 functions = []
 
                 # TODO Add proper error handling here ...
 
-                for configurator in [ configurator for configurator in SingularityConfigurators() if configurator.runnable(message) ]:
-                    logger.info("Found configurator, %s, with functions, %s", configurator, configurator.functions)
+                for configurator in [ configurator for configurator in SingularityConfigurators() if configurator.runnable(message) ]: # pylint: disable=C0301
+                    logger.info("Found configurator, %s, with functions, %s", configurator, configurator.functions) # pylint: disable=C0301
                     functions.extend(configurator.functions)
                     for filename, content in configurator.contents(message):
-                        logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator)
-                        with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile:
+                        logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator) # pylint: disable=C0301
+                        with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile: # pylint: disable=C0301
                             cachefile.write(content)
 
                 logger.info("Applying the functions found ...")
@@ -131,7 +133,7 @@ class SingularityDaemon(object):
 
     @property
     def running(self):
-        return os.path.exists("/proc/{0}".format(self.pid))
+        return os.path.exists("/proc/{0}".format(self.daemon_pid))
 
 class PidFile(object): # pylint: disable=R0903
     """Context manager for handling a locking pidfile.

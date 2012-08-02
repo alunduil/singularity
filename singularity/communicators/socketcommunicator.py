@@ -4,8 +4,11 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import os
+import socket
 
 from singularity.communicators import Communicator
+from singularity.parameters import SingularityParameters
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
@@ -13,10 +16,11 @@ class SocketCommunicator(Communicator):
     def __init__(self, path = None, *args, **kwargs):
         super(SocketCommunicator, self).__init__(*args, **kwargs)
 
+        # TODO Clean this up ...
         if not path:
             path = SingularityParameters()["socket_communicator.path"]
             if not path:
-                path = os.path.join(SingularityParameters()["main.cache"], "singularity.sock")
+                path = os.path.join(SingularityParameters()["main.cache"], "singularity.sock") # pylint: disable=C0301
 
         logger.info("Setting up socket at %s", path)
 
@@ -41,7 +45,7 @@ class SocketCommunicator(Communicator):
 
         """
 
-        self.connection, address = self.socket.accept()
+        self.connection, address = self.socket.accept() # pylint: disable=W0612
 
         message = ""
         while True:

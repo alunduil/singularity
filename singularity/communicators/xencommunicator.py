@@ -215,7 +215,7 @@ class XenCommunicator(Communicator):
         self._send_prefix = send_prefix
         self._data_prefix = data_prefix
 
-        self.xs = xs.xs()
+        self.xs = xs.xs() # pylint: disable=C0103
 
         self.xs.watch(self._receive_prefix, "COMMAND")
         self.xs.watch(self._data_prefix, "DATA")
