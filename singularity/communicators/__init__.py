@@ -6,6 +6,8 @@
 import logging
 import os
 
+from singularity import helpers
+
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 def create(*args, **kwargs):
@@ -25,7 +27,7 @@ def create(*args, **kwargs):
 
     communicator = None
 
-    if os.access(os.path.join(os.path.sep, "proc", "xen", "capabilities"), os.R_OK): # pylint: disable=C0301
+    if helpers.VIRTUAL == "xenU":
         from singularity.communicators.xencommunicator import XenCommunicator
         communicator = XenCommunicator(*args, **kwargs)
     # TODO Add KVM

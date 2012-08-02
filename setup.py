@@ -7,9 +7,11 @@ from distutils.core import setup
 
 try:
     from singularity import information
+    from singularity import helpers
 except ImportError:
     sys.path.append(os.path.abspath(os.path.dirname(__file__)))
     from singularity import information
+    from singularity import helpers
 
 PARAMS = {}
 PARAMS["name"] = information.NAME
@@ -40,7 +42,11 @@ PARAMS["data_files"] = [
         ]
 
 PARAMS["requires"] = [
+        "python-daemon",
         ]
+
+if helpers.VIRTUAL == "xenU":
+    PARAMS["requires"].append("xen")
 
 setup(**PARAMS)
 
