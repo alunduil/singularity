@@ -28,6 +28,12 @@ def create(*args, **kwargs):
     if os.access(os.path.join(os.path.sep, "proc", "xen", "capabilities"), os.R_OK): # pylint: disable=C0301
         from singularity.communicators.xencommunicator import XenCommunicator
         communicator = XenCommunicator(*args, **kwargs)
+    # TODO Add KVM
+    # TODO Add VirtualBox?
+    # TODO Add VMWare?
+    else: # Physical box or something we can't handle, set us up the socket.
+        from singularity.communicators.socketcommunicator import SocketCommunicator # pylint: disable=C0301
+        communicator = SocketCommunicator(*args, **kwargs)
 
     if not isinstance(communicator, Communicator):
         communicator = None
