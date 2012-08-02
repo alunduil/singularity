@@ -4,20 +4,21 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import os
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 def virtual():
     """Emulate the ruby-facter virtual determination."""
 
-    virtual = ""
+    virtualization = ""
 
     if os.access(os.path.join(os.path.sep, "proc", "xen", "capabilities"), os.R_OK): # pylint: disable=C0301
-        virtual = "xenU"
+        virtualization = "xenU"
     else:
-        virtual = "physical"
+        virtualization = "physical"
 
-    return virtual
+    return virtualization
 
 VIRTUAL = virtual()
 
