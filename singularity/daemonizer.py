@@ -43,6 +43,8 @@ class SingularityDaemon(object):
 
         """
 
+        self._configurators = SingularityConfigurators()
+
         # Summoning deamons is tricky business ... 
         #
         # "... for the demon shall bear a nine-bladed sword. NINE-bladed! Not
@@ -66,6 +68,7 @@ class SingularityDaemon(object):
 
         def hup_handler(signum, frame): # pylint: disable=W0613
             SingularityParameters().reinit()
+            self._configurators = SingularityConfigurators()
 
         context.signal_map = {
                 signal.SIGTERM: term_handler,
@@ -84,7 +87,12 @@ class SingularityDaemon(object):
 
                 # TODO Add proper error handling here ...
 
-                for configurator in [ configurator for configurator in SingularityConfigurators() if configurator.runnable(message) ]: # pylint: disable=C0301
+                for configurator in self._configurators:
+                    if not configurator.runnable(message):
+                        continue
+
+                    # TODO Add conflict resolution ...
+
                     logger.info("Found configurator, %s, with functions, %s", configurator, configurator.functions) # pylint: disable=C0301
                     functions.extend(configurator.functions)
                     for filename, content in configurator.contents(message):

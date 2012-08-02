@@ -135,8 +135,22 @@ DAEMON_PARAMETERS = [
             "action": "store_true",
             "default": False,
             "help": "".join([
-                "Specifies that the process should be detached (forked).  ",
-                "Defaults to True.",
+                "Detach, fork, the process into the background.  Defaults to ",
+                "True.",
+                ]),
+            },
+        { # --configurators=DIR, -d=DIR
+            "options": [ "--configurators", "-d" ],
+            "metavar": "DIR",
+            "default": [],
+            "action": "append",
+            "nargs": "*",
+            "help": "".join([
+                "Directories that the daemon should check for other ",
+                "configurators that may be provided by another mechanism or ",
+                "by the administrator.  Defaults to ""; which includes the ",
+                "current working directory of the daemon (the directory from ",
+                "which the daemon was launched.",
                 ]),
             },
         ]

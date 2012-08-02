@@ -55,7 +55,7 @@ class SocketCommunicator(Communicator):
                 break
             message += piece
 
-        logger.info("Got message, %s, from the user.")
+        logger.info("Got message, %s, from the user.", message)
         return hash(self), message
 
     def send(self, identifier, message):
@@ -68,6 +68,6 @@ class SocketCommunicator(Communicator):
 
         """
 
-        logger.info("Sending message, %s")
+        logger.info("Sending message, %s", message)
         self.connection.send(message)
 

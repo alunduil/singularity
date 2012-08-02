@@ -10,6 +10,8 @@ import sys
 import inspect
 import copy
 
+from singularity.parameters import SingularityParameters
+
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class SingularityConfigurator(object):
@@ -135,37 +137,22 @@ class SingularityConfigurators(object): # pylint: disable=R0903
 
     ### Examples
 
-    >>> configurators = SingularityConfigurators(os.path.join(os.path.sep, "etc", "singularity", "configurators"))
     >>> configurators = SingularityConfigurators()
     >>> configurators.path
     ['/usr/lib/python2.7/site-packages/singularity/configurators', '/usr/local/lib/python2.7/site-packages/singularity/configurators']
 
     """
 
-    def __init__(self, *directories):
+    def __init__(self):
         """Initialize and find all Configurators in the configurator path(s).
-
-        ### Arguments
-
-        Argument    | Description
-        --------    | -----------
-        directories | List of other directories to search for configurators (list)
 
         ### Description
 
         Populates this structure with the configurators found in the default
-        path plus any other directories specified.
-
-        ### Examples
-
-        >>> SingularityConfiguration()
-        <singularity.configurators.SingularityConfigurators instance at 0xXXXXXXX>
-
-        >>> SingularityConfiguration("dir1", "dir2")
-        <singularity.configurators.SingularityConfigurators instance at 0xXXXXXXX>
+        path plus any other directories specified.  The extra directories are
+        expected to come in via the CLI or the configuration file.
 
         """
-        # pylint: disable=W0511
 
         self._configurators = {}
 
@@ -175,9 +162,8 @@ class SingularityConfigurators(object): # pylint: disable=R0903
                 re.sub(r"usr/", r"usr/local/", mydir),
                 ]
 
-        logger.debug("Extra directories passed: %s", directories)
-
-        self.path.extend(directories)
+        logger.debug("Extra directories passed: %s", SingularityParameters()["daemon.configurators"])
+        self.path.extend(SingularityParameters()["daemon.configurators"] or [])
 
         logger.debug("SingularityConfigurator.path: %s", self.path)
 
@@ -188,7 +174,7 @@ class SingularityConfigurators(object): # pylint: disable=R0903
                 continue
 
             if directory not in sys.path:
-                sys.path.append(directory)
+                sys.path.insert(0, directory)
 
             logger.debug("Files in current directory, %s: %s", directory, os.listdir(directory)) # pylint: disable=C0301
 
@@ -210,6 +196,8 @@ class SingularityConfigurators(object): # pylint: disable=R0903
 
                 for object_ in [ object_() for name, object_ in inspect.getmembers(module, inspect.isclass) if issubclass(object_.__class__, SingularityConfigurator) and object_.__class__ != SingularityConfigurator]: # pylint: disable=C0301,W0612
                     self._configurators[object_.__class__.__name__] = object_
+
+            logger.debug("Type of self._configurators: %s", type(self._configurators))
 
             self._configurators = self._configurators.values()
 
