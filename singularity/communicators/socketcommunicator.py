@@ -48,12 +48,13 @@ class SocketCommunicator(Communicator):
         self.connection, address = self.socket.accept() # pylint: disable=W0612
 
         message = ""
+        messages = self.connection.makefile("r")
         while True:
-            piece = self.connection.recv(4096)
-            logger.debug("Received piece: %s", piece)
-            if not piece:
+            piece = messages.readline().strip()
+            if not len(piece):
                 break
             message += piece
+        messages.close()
 
         logger.info("Got message, %s, from the user.", message)
         return hash(self), message
@@ -69,5 +70,9 @@ class SocketCommunicator(Communicator):
         """
 
         logger.info("Sending message, %s", message)
-        self.connection.send(message)
+        try:
+            self.connection.send(message)
+        except socket.error as error:
+            if error.errno != 32: # No listener present!
+                raise
 
