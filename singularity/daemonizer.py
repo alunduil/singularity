@@ -54,9 +54,10 @@ class SingularityDaemon(object):
         context.pidfile = PidFile(SingularityParameters()["daemon.pidfile"])
         context.umask = 0o002
         context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
-        context.uid = pwd.getpwnam(SingularityParameters()["uid"]).pw_uid
-        context.gid = grp.getgrnam(SingularityParameters()["gid"]).gr_gid
-        context.prevent_core = not SingularityParameters()["coredumps"]
+        context.uid = pwd.getpwnam(SingularityParameters()["daemon.uid"]).pw_uid
+        context.gid = grp.getgrnam(SingularityParameters()["daemon.gid"]).gr_gid
+        context.prevent_core = not SingularityParameters()["daemon.coredumps"]
+        context.detach_process = not SingularityParameters()["daemon.nodaemonize"]
 
         def term_handler(signum, frame): # pylint: disable=W0613
             logger.info("Shutting down.")

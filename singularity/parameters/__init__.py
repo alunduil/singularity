@@ -130,6 +130,15 @@ DAEMON_PARAMETERS = [
                 "Turns on coredumps from singularity.",
                 ]),
             },
+        { # --nodaemonize
+            "options": [ "--nodaemonize" ],
+            "action": "store_true",
+            "default": False,
+            "help": "".join([
+                "Specifies that the process should be detached (forked).  ",
+                "Defaults to True.",
+                ]),
+            },
         ]
 
 DEFAULTS = {}
