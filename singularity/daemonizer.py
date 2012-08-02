@@ -44,6 +44,7 @@ class SingularityDaemon(object):
         """
 
         self._configurators = SingularityConfigurators()
+        self._communicator = communicators.create()
 
         # Summoning deamons is tricky business ... 
         #
@@ -55,11 +56,12 @@ class SingularityDaemon(object):
         context = daemon.DaemonContext()
         context.pidfile = PidFile(SingularityParameters()["daemon.pidfile"])
         context.umask = 0o002
-        context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
         context.uid = pwd.getpwnam(SingularityParameters()["daemon.uid"]).pw_uid
         context.gid = grp.getgrnam(SingularityParameters()["daemon.gid"]).gr_gid
         context.prevent_core = not SingularityParameters()["daemon.coredumps"]
         context.detach_process = not SingularityParameters()["daemon.nodaemonize"]
+        context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
+        context.files_preserve.append(self._communicator.socket)
 
         def term_handler(signum, frame): # pylint: disable=W0613
             logger.info("Shutting down.")
@@ -79,8 +81,7 @@ class SingularityDaemon(object):
         logger.info("Starting up.")
         with context:
             while True:
-                communicator = communicators.create()
-                identifier, message = communicator.receive()
+                identifier, message = self._communicator.receive()
                 logger.info("Got message, %s, with identifier, %s", message, identifier) # pylint: disable=C0301
 
                 functions = set()
@@ -107,7 +108,7 @@ class SingularityDaemon(object):
                 # TODO Fill in response ...
                 response = ""
 
-                communicator.send(identifier, response)
+                self._communicator.send(identifier, response)
            
     def stop(self):
         if self.running:

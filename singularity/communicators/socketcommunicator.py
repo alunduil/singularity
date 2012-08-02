@@ -51,8 +51,10 @@ class SocketCommunicator(Communicator):
         messages = self.connection.makefile("r")
         while True:
             piece = messages.readline().strip()
-            if not len(piece):
+
+            if not len(piece): # Blank line separates messages ...
                 break
+
             message += piece
         messages.close()
 
