@@ -3,6 +3,8 @@
 # singularity is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+from __future__ import print_function
+
 import logging
 import daemon
 import signal
@@ -22,6 +24,10 @@ from singularity.applicator import SingularityApplicator
 logger = logging.getLogger("console") # pylint: disable=C0103
 
 class SingularityDaemon(object):
+    def __init__(self):
+        self._configurators = SingularityConfigurators()
+        self._communicator = communicators.create()
+
     def __call__(self):
         actions = {
                 "start": self.start,
@@ -43,9 +49,6 @@ class SingularityDaemon(object):
 
         """
 
-        self._configurators = SingularityConfigurators()
-        self._communicator = communicators.create()
-
         # Summoning deamons is tricky business ... 
         #
         # "... for the demon shall bear a nine-bladed sword. NINE-bladed! Not
@@ -59,7 +62,7 @@ class SingularityDaemon(object):
         context.uid = pwd.getpwnam(SingularityParameters()["daemon.uid"]).pw_uid
         context.gid = grp.getgrnam(SingularityParameters()["daemon.gid"]).gr_gid
         context.prevent_core = not SingularityParameters()["daemon.coredumps"]
-        context.detach_process = not SingularityParameters()["daemon.nodaemonize"]
+        context.detach_process = not SingularityParameters()["daemon.nodaemonize"] # pylint: disable=C0301
         context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
         context.files_preserve.append(self._communicator.socket)
 
@@ -116,7 +119,7 @@ class SingularityDaemon(object):
             os.kill(self.daemon_pid, signal.SIGTERM)
         else:
             logger.warning("Daemon not running.")
-            print("Singularity is not running ...", file=sys.stderr)
+            print("Singularity is not running ...", file = sys.stderr)
             sys.exit(1)
 
     def reinit(self):

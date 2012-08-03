@@ -4,6 +4,7 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import json
 
 import xen.lowlevel.xs as xs
 
@@ -248,7 +249,7 @@ class XenCommunicator(Communicator):
 
         return identifier, message
 
-    def send(self, identifier, message):
+    def send(self, identifier, message, status = 0):
         """Send the passed message to the hypervisor.
 
         ### Description
@@ -259,6 +260,11 @@ class XenCommunicator(Communicator):
         """
 
         # TODO Add error handling that is appropriate here ...
+
+        message = json.dumps({
+            "returncode": status,
+            "message": message,
+            })
 
         transaction = self.xs.transaction_start()
         self.xs.write(transaction, self._send_prefix + identifier, message)

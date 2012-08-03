@@ -71,16 +71,16 @@ class SocketCommunicator(Communicator):
             message["function"] = parsed["name"]
         except KeyError:
             logging.error("Missing 'name' from message, %s", message)
-            send(identifier, "Missing 'name' from message.")
+            self.send(identifier, "Missing 'name' from message.")
 
         try:
             message["arguments"] = parsed["value"]
         except KeyError:
             logging.error("Missing 'value' from message, %s", message)
 
-        return hash(self), message
+        return identifier, message
 
-    def send(self, identifier, message):
+    def send(self, identifier, message, status = 0):
         """Send the passed message to the user.
 
         ### Description
@@ -91,8 +91,14 @@ class SocketCommunicator(Communicator):
         """
 
         logger.info("Sending message, %s", message)
+
+        message = json.dumps({
+            "returncode": status,
+            "message": message,
+            })
+
         try:
-            self.connection.send(message)
+            self.connection.send(message) # This method does exist! I swear! pylint: disable=E1101,C0301
         except socket.error as error:
             if error.errno != 32: # No listener present!
                 raise

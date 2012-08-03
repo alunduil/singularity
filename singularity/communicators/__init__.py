@@ -4,7 +4,6 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
-import os
 
 from singularity import helpers
 
