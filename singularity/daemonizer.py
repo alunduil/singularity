@@ -116,6 +116,8 @@ class SingularityDaemon(object):
             os.kill(self.daemon_pid, signal.SIGTERM)
         else:
             logger.warning("Daemon not running.")
+            print("Singularity is not running ...", file=sys.stderr)
+            sys.exit(1)
 
     def reinit(self):
         if self.running:
@@ -123,11 +125,11 @@ class SingularityDaemon(object):
             os.kill(self.daemon_pid, signal.SIGHUP)
         else:
             logger.warning("Daemon not running.")
+            self.start()
 
     def restart(self):
         self.stop()
 
-        # TODO Change this to a non-busy wait somehow?
         while self.running:
             time.sleep(1)
 

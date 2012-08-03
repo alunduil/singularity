@@ -49,9 +49,8 @@ def main():
         output.append("#{0} = {1}".format(parameter["options"][0][2:], parameter["default"]))
         output.append("")
 
-        
     for line in output:
-        print line
+        print(line)
 
 if __name__ == "__main__":
     main()
