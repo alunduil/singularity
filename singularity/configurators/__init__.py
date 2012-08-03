@@ -74,6 +74,7 @@ class SingularityConfigurator(object):
         * resolvers ::= list(tuple(ip, version))
         * hostname ::= str(hostname)
         * password ::= str(administrator password)
+        * function ::= str(system command to run)
         
         ### Description
 

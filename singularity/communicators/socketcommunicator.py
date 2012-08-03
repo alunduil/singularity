@@ -6,6 +6,7 @@
 import logging
 import os
 import socket
+import json
 
 from singularity.communicators import Communicator
 from singularity.parameters import SingularityParameters
@@ -45,6 +46,8 @@ class SocketCommunicator(Communicator):
 
         """
 
+        identifier = hash(self) # Purely for API consistency.
+
         self.connection, address = self.socket.accept() # pylint: disable=W0612
 
         message = ""
@@ -59,6 +62,22 @@ class SocketCommunicator(Communicator):
         messages.close()
 
         logger.info("Got message, %s, from the user.", message)
+
+        parsed = json.loads(message)
+
+        message = {}
+
+        try:
+            message["function"] = parsed["name"]
+        except KeyError:
+            logging.error("Missing 'name' from message, %s", message)
+            send(identifier, "Missing 'name' from message.")
+
+        try:
+            message["arguments"] = parsed["value"]
+        except KeyError:
+            logging.error("Missing 'value' from message, %s", message)
+
         return hash(self), message
 
     def send(self, identifier, message):

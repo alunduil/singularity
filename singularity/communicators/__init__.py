@@ -55,11 +55,15 @@ class Communicator(object):
         Returns a tuple with an identifier for the message (to respond directly
         to that message) and the message received.
 
+        The message should be a dictionary following the specification laid out
+        in the singularity.configurators.SingularityConfigurator.runnable
+        documentation.
+
         """
 
         raise NotImplementedError("class {0} does not implement 'receive(self)'".format(self.__class__.__name__)) # pylint: disable=C0301
 
-    def send(self, identifier, message):
+    def send(self, identifier, message, status = 0):
         """Send a message (or response) to the hypervisor.
 
         ### Arguments
@@ -68,6 +72,7 @@ class Communicator(object):
         --------   | -----------
         identifier | The identifier of the message to respond to.
         message    | The message to send back to the hypervisor.
+        status     | The status of the action that we are responding to.
 
         ### Description
 
