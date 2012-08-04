@@ -8,17 +8,8 @@ import os
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
-def virtual():
-    """Emulate the ruby-facter virtual determination."""
+VIRTUAL = "physical"
 
-    virtualization = ""
-
-    if os.access(os.path.join(os.path.sep, "proc", "xen", "capabilities"), os.R_OK): # pylint: disable=C0301
-        virtualization = "xenU"
-    else:
-        virtualization = "physical"
-
-    return virtualization
-
-VIRTUAL = virtual()
+if os.access(os.path.join(os.path.sep, "proc", "xen", "capabilities"), os.R_OK):
+    VIRTUAL = "xenU"
 
