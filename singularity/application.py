@@ -30,13 +30,13 @@ class SingularityApplication(object): # pylint: disable=R0903
     def __init__(self):
         global logger # pylint: disable=W0603
 
+        epilog = \
+                "Copyright (C) {i.COPY_YEAR} by {i.AUTHOR} Licensed under a " \
+                "{i.LICENSE} License"
+
         SingularityParameters(
                 description = singularity.information.DESCRIPTION,
-                epilog = "".join([
-                    "Copyright (C) {i.COPY_YEAR} by {i.AUTHOR} Licensed under ",
-                    "a {i.LICENSE} License",
-                    ]).format(i = singularity.information)
-                )
+                epilog = epilog.format(i = singularity.information))
 
         # Someone set us up the logger mechanisms ...
         root = logging.getLogger()

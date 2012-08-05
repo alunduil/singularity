@@ -7,7 +7,7 @@ import logging
 import argparse
 import copy
 
-import singularity.information as info
+import singularity.information 
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 
@@ -30,18 +30,17 @@ class SingularityArguments(object):
         """
 
         self._parser = argparse.ArgumentParser(*args, **kwargs)
+
+        version = \
+                "%(prog)s-{i.VERSION}\n" \
+                "\n" \
+                "Copyright {i.COPY_YEAR} by {i.AUTHOR} <{i.EMAIL}> and " \
+                "contributors.  This is free software; see the source for " \
+                "copying conditions.  There is NO warranty; not even for " \
+                "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
         
         self._parser.add_argument("--version", action = "version",
-                version = "".join([
-                    "%(prog)s-{version}\n",
-                    "\n",
-                    "Copyright {c} by {author} <{email}> and contributors.  ",
-                    "This is free software; see the source for copying ",
-                    "conditions. There is NO warranty; not even for ",
-                    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
-                    ]).format(version = info.VERSION, c = info.COPY_YEAR,
-                        author = info.AUTHOR, email = info.AUTHOR_EMAIL)
-                )
+                version = version.format(i = singularity.information))
 
         import singularity.parameters
 
@@ -56,11 +55,11 @@ class SingularityArguments(object):
                 )
 
         apply_parser = subparsers.add_parser('apply', parents = [common],
-                help = "".join([
-                    "Resets the configuration on the system based on the ",
-                    "cached values (last known settings received from the ",
-                    "hypervisor) and options passed to this command.",
-                    ])
+                help = \
+                        "Resets the configuration on the system based on " \
+                        "the cached values (last known settings received " \
+                        "from the hypervisor) and options passed to this " \
+                        "command."
                 )
 
         for name, options in _extract_options(singularity.parameters.APPLY_PARAMETERS).iteritems(): # pylint: disable=C0301
@@ -72,10 +71,9 @@ class SingularityArguments(object):
             help = "Specifies the action to apply to the system.")
 
         daemon_parser = subparsers.add_parser('daemon', parents = [common],
-                help = "".join([
-                    "Watches for messages from the hypervisor and applies ",
-                    "configuration changes as they are received.",
-                    ])
+                help = \
+                        "Watches for messages from the hypervisor and " \
+                        "applies configuration changes as they are received."
                 )
 
         for name, options in _extract_options(singularity.parameters.DAEMON_PARAMETERS).iteritems(): # pylint: disable=C0301

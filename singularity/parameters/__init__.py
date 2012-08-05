@@ -17,59 +17,55 @@ COMMON_PARAMETERS = [
             "default": "warning",
             "metavar": "LEVEL",
             "choices": ["debug", "info", "warning", "error", "critical"],
-            "help": "".join([
-                "The logging level (corresponds to the levels in the python ",
-                "logging module).  LEVEL defaults to warning.",
-                ]),
+            "help": \
+                    "The logging level (corresponds to the levels in the " \
+                    "python logging module).  LEVEL defaults to warning.",
             },
         { # --backup, -b
             "options": [ "--backup", "-b" ],
             "default": False,
             "action": "store_true",
-            "help": "".join([
-                "Create backup files of all items modified by singularity.  ",
-                "The backup file will be prefixed with '.' and suffixed with ",
-                "'.bak'.",
-                ]),
+            "help": \
+                    "Create backup files of all items modified by " \
+                    "singularity.  The backup file will be prefixed with '.' " \
+                    "and suffixed with '.bak'.",
             },
         # TODO Change short option?
         { # --configuration=DIR, -f=DIR; DIR => /etc/singularity
             "options": [ "--configuration", "-f" ],
             "default": CONFIG_DIR,
             "metavar": "DIR",
-            "help": "".join([
-                "The configuration directory to use for various settings.  ",
-                "DIR defaults to /etc/singularity",
-                ]),
+            "help": \
+                    "The configuration directory to use for various " \
+                    "settings.  DIR defaults to /etc/singularity",
             },
         { # --cache=DIR, -c=DIR; DIR => /var/cache/singularity
             "options": [ "--cache", "-c" ],
             "default": os.path.join(os.path.sep, "var", "cache", "singularity"),
             "metavar": "DIR",
-            "help": "".join([
-                "The directory in which to cache items.  DIR defaults to ",
-                "/var/cache/singularity",
-                ]),
+            "help": \
+                    "The directory in which to cache items.  DIR defaults " \
+                    "to /var/cache/singularity",
             },
         { # --loghandler=HANDLER, -l=HANDLER; HANDLER => syslog
             "options": [ "--loghandler", "-H" ],
             "default": "syslog",
             "metavar": "HANDLER",
-            "help": "".join([
-                "The log handler to utilize.  HANDLER defaults to syslog.  If ",
-                "a filepath is passed log messages will be sent to that file.",
-                ]),
+            "help": \
+                    "The log handler to utilize.  HANDLER defaults to " \
+                    "syslog.  If a filepath is passed log messages will be " \
+                    "sent to that file.",
             },
         { # --functions=FUNCTIONS, -F=FUNCTIONS; FUNCTIONS => network,hosts,resolvers,reboot,password # pylint: disable=C0301
             "options": [ "--functions", "-F" ],
             "default": "network,hosts,resolvers,reboot,password",
             "metavar": "FUNCTIONS",
-            "help": "".join([
-                "The functions that should be handled by singularity.  ",
-                "FUNCTIONS defaults to \"network,hosts,resolvers,reboot,",
-                "password\".  By specifying a subset of these functions; ",
-                "only the specified functions will be handled by singularity.",
-                ]),
+            "help": \
+                    "The functions that should be handled by singularity.  " \
+                    "FUNCTIONS defaults to \"network,hosts,resolvers,reboot," \
+                    "password\".  By specifying a subset of these functions; " \
+                    "only the specified functions will be handled by " \
+                    "singularity.",
             },
         ]
 
@@ -78,20 +74,18 @@ APPLY_PARAMETERS = [
             "options": [ "--force" ],
             "action": "store_true",
             "default": False,
-            "help": "".join([
-                "Force all functions to run even if a subset is specified ",
-                "with --functions or -F.",
-                ]),
+            "help": \
+                    "Force all functions to run even if a subset is " \
+                    "specified with --functions or -F.",
             },
         { # --noop
             "options": [ "--noop" ],
             "action": "store_true",
             "default": False,
-            "help": "".join([
-                "Show what actions would occur but don't apply any changes. ",
-                "Works like a dry run mode and forces info level logging.",
-                "Overrides --force if it is specified.",
-                ]),
+            "help": \
+                    "Show what actions would occur but don't apply any " \
+                    "changes.  Works like a dry run mode and forces info " \
+                    "level logging.  Overrides --force if it is specified.",
             },
         ]
 
@@ -102,56 +96,49 @@ DAEMON_PARAMETERS = [
             "options": [ "--run", "-r" ],
             "default": DEFAULT_RUN,
             "metavar": "DIR",
-            "help": "".join([
-                "The directory to store runtime items (sockets, etc).  ",
-                "Defaults to /var/run.",
-                ]),
+            "help": \
+                    "The directory to store runtime items (sockets, etc).  " \
+                    "Defaults to /var/run.",
             },
         { # --pidfile=FILE, -p=FILE; FILE => /var/run/singularity.pid
             "options": [ "--pidfile", "-p" ],
             "default": os.path.join(DEFAULT_RUN, "singularity.pid"),
             "metavar": "FILE",
-            "help": "".join([
-                "The file that holds the PID of the running daemon.  FILE ",
-                "defaults to /var/run/singularity.pid",
-                ]),
+            "help": \
+                    "The file that holds the PID of the running daemon.  " \
+                    "FILE defaults to /var/run/singularity.pid",
             },
         { # --uid=USER, -u=USER; USER => root
             "options": [ "--uid", "-u" ],
             "default": "root",
             "metavar": "USER",
-            "help": "".join([
-                "Username for the daemon to run as.  USER defaults to root. ",
-                "This can be changed but doesn't make sense with certain ",
-                "functions (i.e. password).",
-                ]),
+            "help": \
+                    "Username for the daemon to run as.  USER defaults to " \
+                    "root.  This can be changed but doesn't make sense with " \
+                    "certain functions (i.e. password).",
             },
         { # --gid=GROUP, -g=GROUP; GROUP => root
             "options": [ "--gid", "-g" ],
             "default": "root",
             "metavar": "GROUP",
-            "help": "".join([
-                "Group for the daemon to run as.  GROUP defaults to root. ",
-                "This can be changed but doesn't make sense with certain ",
-                "functions (i.e. password).",
-                ]),
+            "help": \
+                    "Group for the daemon to run as.  GROUP defaults to " \
+                    "root.  This can be changed but doesn't make sense with " \
+                    "certain functions (i.e. password).",
             },
         { # --coredumps
             "options": [ "--coredumps" ],
             "action": "store_true",
             "default": False,
-            "help": "".join([
-                "Turns on coredumps from singularity.  Defaults to False",
-                ]),
+            "help": "Turns on coredumps from singularity.  Defaults to False",
             },
         { # --nodaemonize
             "options": [ "--nodaemonize" ],
             "action": "store_true",
             "default": False,
-            "help": "".join([
-                "Detach, fork, the process into the background.  Defaults to ",
-                "False.",
-                ]),
+            "help": \
+                    "Detach, fork, the process into the background.  " \
+                    "Defaults to False.",
             },
         { # --configurators=DIR, -d=DIR
             "options": [ "--configurators", "-d" ],
@@ -159,12 +146,11 @@ DAEMON_PARAMETERS = [
             "default": [os.path.join(CONFIG_DIR, "configurators")],
             "action": "append",
             "nargs": "*",
-            "help": "".join([
-                "Directories that the daemon should check for other ",
-                "configurators that may be provided by another mechanism or ",
-                "by the administrator.  Defaults to []; which includes no ",
-                "extra directories.",
-                ]),
+            "help": \
+                    "Directories that the daemon should check for other " \
+                    "configurators that may be provided by another mechanism " \
+                    "or by the administrator.  Defaults to []; which " \
+                    "includes no extra directories.",
             },
         ]
 
@@ -232,6 +218,7 @@ class SingularityParameters(object): # pylint: disable=R0903
         if key in self._configuration:
             configuration = self._configuration[key]
 
+        # TODO Collapse dictionaries into one reference.
         # TODO Check for string length seems unnecessary.
         if len(str(default)) and str(default) in sys.argv[0] or argument != default:
             return argument

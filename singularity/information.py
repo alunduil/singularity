@@ -12,11 +12,11 @@ Contains tid-bits such as author, version, url, etc.
 NAME = "singularity"
 VERSION = "9999"
 DESCRIPTION = "An Openstack Guest Agent for Hypervisor and Guest Communication"
-LONG_DESCRIPTION = "".join([
-    "An Openstack Guest Agent for communication between the hypervisor and ",
-    "the guest running this daemon.  Allows the hypervisor to manipulate ",
-    "things like the following: networking, resolvers, passwords, etc.",
-    ])
+LONG_DESCRIPTION = \
+        "An Openstack Guest Agent for communication between the hypervisor " \
+        "and the guest running this daemon.  Allows the hypervisor to " \
+        "manipulate things like the following: networking, resolvers, " \
+        "passwords, etc."
 AUTHOR = "Alex Brandt"
 AUTHOR_EMAIL = "alunduil@alunduil.com"
 URL = ""
