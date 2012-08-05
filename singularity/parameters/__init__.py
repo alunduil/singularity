@@ -9,6 +9,8 @@ import sys
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 
+CONFIG_DIR = os.path.join(os.path.sep, "etc", "singularity")
+
 COMMON_PARAMETERS = [
         { # --loglevel=LEVEL, -l=LEVEL; LEVEL => warning
             "options": [ "--loglevel", "-l" ],
@@ -30,13 +32,14 @@ COMMON_PARAMETERS = [
                 "'.bak'.",
                 ]),
             },
-        { # --configuration=FILE, -f=FILE; FILE => /etc/singularity.conf
+        # TODO Change short option?
+        { # --configuration=DIR, -f=DIR; DIR => /etc/singularity
             "options": [ "--configuration", "-f" ],
-            "default": os.path.join(os.path.sep, "etc", "singularity.conf"),
-            "metavar": "FILE",
+            "default": CONFIG_DIR,
+            "metavar": "DIR",
             "help": "".join([
-                "The configuration file to use for various settings.  FILE ",
-                "defaults to /etc/singularity.conf",
+                "The configuration directory to use for various settings.  ",
+                "DIR defaults to /etc/singularity",
                 ]),
             },
         { # --cache=DIR, -c=DIR; DIR => /var/cache/singularity
@@ -92,10 +95,21 @@ APPLY_PARAMETERS = [
             },
         ]
 
+DEFAULT_RUN = os.path.join(os.path.sep, "var", "run", "singularity")
+
 DAEMON_PARAMETERS = [
+        { # --run=DIR, -r=DIR; DIR => /var/run
+            "options": [ "--run", "-r" ],
+            "default": DEFAULT_RUN,
+            "metavar": "DIR",
+            "help": "".join([
+                "The directory to store runtime items (sockets, etc).  ",
+                "Defaults to /var/run.",
+                ]),
+            },
         { # --pidfile=FILE, -p=FILE; FILE => /var/run/singularity.pid
             "options": [ "--pidfile", "-p" ],
-            "default": os.path.join(os.path.sep, "var", "run", "singularity.pid"), # pylint: disable=C0301
+            "default": os.path.join(DEFAULT_RUN, "singularity.pid"),
             "metavar": "FILE",
             "help": "".join([
                 "The file that holds the PID of the running daemon.  FILE ",
@@ -127,7 +141,7 @@ DAEMON_PARAMETERS = [
             "action": "store_true",
             "default": False,
             "help": "".join([
-                "Turns on coredumps from singularity.",
+                "Turns on coredumps from singularity.  Defaults to False",
                 ]),
             },
         { # --nodaemonize
@@ -136,21 +150,20 @@ DAEMON_PARAMETERS = [
             "default": False,
             "help": "".join([
                 "Detach, fork, the process into the background.  Defaults to ",
-                "True.",
+                "False.",
                 ]),
             },
         { # --configurators=DIR, -d=DIR
             "options": [ "--configurators", "-d" ],
             "metavar": "DIR",
-            "default": [],
+            "default": [os.path.join(CONFIG_DIR, "configurators")],
             "action": "append",
             "nargs": "*",
             "help": "".join([
                 "Directories that the daemon should check for other ",
                 "configurators that may be provided by another mechanism or ",
-                "by the administrator.  Defaults to ""; which includes the ",
-                "current working directory of the daemon (the directory from ",
-                "which the daemon was launched.",
+                "by the administrator.  Defaults to []; which includes no ",
+                "extra directories.",
                 ]),
             },
         ]
@@ -232,5 +245,5 @@ class SingularityParameters(object): # pylint: disable=R0903
         """Reload the configuration file parameters."""
 
         from singularity.parameters.configuration import SingularityConfiguration # pylint: disable=C0301
-        self._configuration = SingularityConfiguration(self._arguments["configuration"]) # pylint: disable=C0301,W0201
+        self._configuration = SingularityConfiguration(os.path.join(self._arguments["configuration"], "singularity.conf")) # pylint: disable=C0301,W0201
         
