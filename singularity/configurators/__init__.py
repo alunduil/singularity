@@ -68,13 +68,16 @@ class SingularityConfigurator(object):
         values it needs in the configuration dictionary it should alert
         Singularity that it is not runnable.
 
+        TODO Change tuples to dicts?
+
         [2]: Available keys in configuration:
-        * ips ::= dict(interface: tuple(ip, version))
-        * routes ::= dict(interface: tuple(network, ip, version))
-        * resolvers ::= list(tuple(ip, version))
+        * ips ::= dict(interface: list(tuple(ip, version)))
+        * routes ::= dict(interface: list(tuple(network, ip, version)))
+        * resolvers ::= list(tuple(ip, version, interface))
         * hostname ::= str(hostname)
         * password ::= str(administrator password)
         * function ::= str(system command to run)
+        * arguments ::= str(arguments to command)
         
         ### Description
 
