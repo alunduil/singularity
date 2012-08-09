@@ -8,6 +8,8 @@ import os
 import socket
 import json
 
+import singularity.communicators.helpers as helpers
+
 from singularity.communicators import Communicator
 from singularity.parameters import SingularityParameters
 
@@ -63,126 +65,7 @@ class SocketCommunicator(Communicator):
 
         logger.info("Got message, %s, from the user.", message)
 
-        # TODO Factor this out for the xen module as well.
-        parsed = json.loads(message)
-
-        message = {}
-
-        try:
-            message["function"] = parsed["name"]
-        except KeyError:
-            logger.warning("Did not recieve 'name' from message, %s", message)
-        
-        try:
-            message["arguments"] = parsed["value"]
-        except KeyError:
-            logger.warning("Did not recieve 'value' from message, %s", message)
-
-        # The other messages we can handle:
-        # {
-        #   "label": "public",
-        #   "ips": [
-        #     { 
-        #       "netmask": "255.255.255.0",
-        #       "enabled": "1",
-        #       "ip": "198.101.227.76"
-        #     }
-        #   ],
-        #   "mac": "40:40:97:83:78:2e",
-        #   "ip6s": [
-        #     {
-        #       "netmask": "96",
-        #       "enabled": "0",
-        #       "ip": "2001:4800:780F:0511:1E87:052F:FF83:782E",
-        #       "gateway": "fe80::def"
-        #     }
-        #   ],
-        #   "gateway": "198.101.227.1",
-        #   "slice": "21006919",
-        #   "dns": [
-        #     "72.3.128.240",
-        #     "72.3.128.241"
-        #   ]
-        # }
-        #
-        # {
-        #   "label": "private",
-        #   "ips": [
-        #     {
-        #       "netmask": "255.255.128.0",
-        #       "enabled": "1",
-        #       "ip": "10.180.144.116"
-        #     }
-        #   ],
-        #   "routes": [
-        #     {
-        #       "route": "10.176.0.0",
-        #       "netmask": "255.240.0.0",
-        #       "gateway": "10.180.128.1"
-        #     },
-        #     {
-        #       "route": "10.191.192.0",
-        #       "netmask": "255.255.192.0",
-        #       "gateway": "10.180.128.1"
-        #     }
-        #   ],
-        #   "mac": "40:40:a1:47:e2:af"
-        # }
-
-        message["ips"] = {}
-
-        try:
-            message["ips"][interface(parsed["mac"])] = []
-        except KeyError:
-            logger.warning("Did not receive 'mac' from message, %s", message)
-
-        try:
-            for ip in parsed["ips"]:
-                message["ips"][interface(parsed["mac"])].append((cidr(ip["ip"], ip["netmask"]), "ipv4"))
-        except KeyError:
-            logger.warning("Did not receive 'ips' or 'ips.ip' or 'ips.netmask' from message, %s", message)
-
-        try:
-            for ip in parsed["ip6s"]:
-                message["ips"][interface(parsed["mac"])].append((cidr(ip["ip"], ip["netmask"]), "ipv6"))
-        except KeyError:
-            logger.warning("Did not receive 'ip6s' or ip6s.ip' or 'ip6s.netmask' from message, %s", message)
-
-        try:
-            message["routes"][interface(parsed["mac"])] = []
-        except KeyError:
-            logger.warning("Did not receive 'mac' from message, %s", message)
-
-        try:
-            for ip in parsed["ips"]:
-                message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv4"))
-        except KeyError:
-            logger.warning("Did not receive 'ips' or 'ips.gateway' from message, %s", message)
-
-        try:
-            for ip in parsed["ip6s"]:
-                message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv6"))
-        except KeyError:
-            logger.warning("Did not receive 'ip6s' or 'ip6s.gateway' from message, %s", message)
-
-        try:
-            message["routes"][interface(parsed["mac"])].append(("default", parsed["gateway"], "ipv4")) # Should be ipv4 but need to verify ...
-        except KeyError:
-            logger.warning("Did not receive 'gateway' from message, %s", message)
-
-        try:
-            for route in parsed["routes"]:
-                message["routes"][interface(parsed["mac"])].append((cidr(route["route"], route["netmask"]), route["gateway"], "ipv4")) # Should be ipv4 but need to verify ...
-        except KeyError:
-            logger.warning("Did not receive 'routes' or 'routes.route' or 'routes.netmask' or 'routes.gateway' from message, %s", message)
-
-        try:
-            for resolver in parsed["dns"]:
-                message["resolvers"].append((resolver, "ipv4", interface(parsed["mac"]))) # Should be ipv4 but need to verify ...
-        except KeyError:
-            logger.warning("Did not receive 'dns' from message, %s", message)
-
-        return identifier, message
+        return identifier, helpers.translate(message)
 
     def send(self, identifier, message, status = 0):
         """Send the passed message to the user.
@@ -206,22 +89,4 @@ class SocketCommunicator(Communicator):
         except socket.error as error:
             if error.errno != 32: # No listener present!
                 raise
-
-def interface(mac_address):
-    """The interface name for the given MAC address."""
-    return None
-
-def cidr(ip, netmask):
-    bit_count = 0
-
-    try:
-        bits = reduce(lambda a, b: a << 8 | b, map(int, netmask.split('.')))
-
-        while bits:
-            bit_count += bits & 1
-            bits >>= 1
-    except AttributeError:
-        bit_count = int(netmask)
-
-    return "{0}/{1}".format(ip, bit_count)
 
