@@ -4,6 +4,9 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import pwd
+import os
+import subprocess
 
 from singularity.configurators import SingularityConfigurator
 
@@ -59,7 +62,7 @@ class PasswordConfigurator(SingularityConfigurator):
 
         """
 
-        subprocess.call("passwd {0}".format(configuration["password"]), shell = True)
+        subprocess.call("passwd {0}".format(configuration["password"]), shell = True) # pylint: disable=C0301
 
         return { "": "" }
 

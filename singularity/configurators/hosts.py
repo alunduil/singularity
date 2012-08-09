@@ -4,6 +4,8 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
+import os
+import re
 
 from singularity.configurators import SingularityConfigurator
 
@@ -11,14 +13,14 @@ logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class HostsConfigurator(SingularityConfigurator):
     @property
-    def hosts_path(self):
+    def hosts_path(self): # pylint: disable=R0201
         return os.path.join(os.path.sep, "etc", "hosts")
 
     @property
     def functions(self):
         """Fulfills hosts function."""
 
-        return "hosts"
+        return ["hosts"]
 
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
@@ -46,8 +48,7 @@ class HostsConfigurator(SingularityConfigurator):
 
         with open(self.hosts_path, "r") as hosts:
             lines = hosts.read()
-            if re.search(r"127\.0\.0\.1.*?{0}".format(configuration["hostname"]), lines) and \
-                    re.search(r"::1.*?{0}".format(configuration["hostname"]), lines):
+            if re.search(r"127\.0\.0\.1.*?{0}".format(configuration["hostname"]), lines) and re.search(r"::1.*?{0}".format(configuration["hostname"]), lines): # pylint: disable=C0301
                 return False
 
         return True
@@ -71,9 +72,9 @@ class HostsConfigurator(SingularityConfigurator):
 
         with open(self.hosts_path, "r") as hosts:
             for line in hosts:
-                if re.search(r"127\.0\.0\.1.*?(?!{0})".format(configuration["hostname"]), line):
+                if re.search(r"127\.0\.0\.1.*?(?!{0})".format(configuration["hostname"]), line): # pylint: disable=C0301
                     lines.append(line + " " + configuration["hostname"])
-                elif re.search(r"::1.*?(?!{0})".format(configuration["hostname"]), line):
+                elif re.search(r"::1.*?(?!{0})".format(configuration["hostname"]), line): # pylint: disable=C0301
                     lines.append(line + " " + configuration["hostname"])
                 else:
                     lines.append(line)
