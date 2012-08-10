@@ -13,12 +13,6 @@ from singularity.configurators import SingularityConfigurator
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class PasswordConfigurator(SingularityConfigurator):
-    @property
-    def functions(self):
-        """Fulfills password function."""
-
-        return ["password"]
-
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
 

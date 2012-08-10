@@ -43,14 +43,21 @@ class SingularityConfigurator(object):
         All other values are ignored and disqualify the configurator from being
         run.  Other values may be added in later incarnations of Singularity.
 
-        ### Notes
-
-        This attribute is not defined in the base class and *must* be
-        implemented in specific configurators.
+        A default value of the lowercase class name without any Configurator
+        part is returned.  
+        
+        #### Examples
+        
+        Configurator Name    | Default Return Value
+        -----------------    | --------------------
+        PasswordConfigurator | ["password"]
+        FooBarConfigurator   | ["foobar"]
+        FooBar               | ["foobar"]
 
         """
 
-        raise AttributeError("class {0} has no attribute 'function'".format(self.__class__.__name__)) # pylint: disable=C0301
+        logger.debug("Probable function: %s", self.__class__.__name__.replace("Configurator", "").lower())
+        return [self.__class__.__name__.replace("Configurator", "").lower()]
 
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.

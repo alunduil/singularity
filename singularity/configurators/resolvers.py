@@ -16,12 +16,6 @@ class ResolversConfigurator(SingularityConfigurator):
     def resolvconf_path(self): # pylint: disable=R0201
         return os.path.join(os.path.sep, "etc", "resolv.conf")
 
-    @property
-    def functions(self):
-        """Fulfills resolvers function."""
-
-        return ["resolvers"]
-
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
 

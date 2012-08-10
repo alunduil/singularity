@@ -16,12 +16,6 @@ class HostsConfigurator(SingularityConfigurator):
     def hosts_path(self): # pylint: disable=R0201
         return os.path.join(os.path.sep, "etc", "hosts")
 
-    @property
-    def functions(self):
-        """Fulfills hosts function."""
-
-        return ["hosts"]
-
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
 
