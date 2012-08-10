@@ -41,9 +41,11 @@ class ResolversConfigurator(SingularityConfigurator):
         """
 
         if not os.access(self.resolvconf_path, "w"):
+            logger.info("Must be able to write %s", self.resolvconf_path)
             return False
 
         if "resolvers" not in configuration:
+            logger.info("Must be passed resolver information in the message")
             return False
 
         existing_resolvers = set()
@@ -54,8 +56,10 @@ class ResolversConfigurator(SingularityConfigurator):
                     continue
                 existing_resolvers.add(match.group("ip"))
         if existing_resolvers >= set([ resolver[0] for resolver in configuration["resolvers"] ]): # pylint: disable=C0301
+            logger.info("The passed resolvers are already in use.")
             return False
 
+        logger.info("ResolverConfigurator is runnable!")
         return True
 
     def content(self, configuration):

@@ -37,14 +37,18 @@ class PasswordConfigurator(SingularityConfigurator):
         """
 
         if pwd.getpwuid(os.getuid())[0] != "root":
+            logger.info("This command must be run as root!")
             return False
 
         if subprocess.call("which passwd", shell = True) != 0:
+            logger.info("Must have access to passwd")
             return False
 
         if "password" not in configuration:
+            logger.info("Must be passed a password in the message")
             return False
 
+        logger.info("PasswordConfigurator is runnable!")
         return True
 
     def content(self, configuration):

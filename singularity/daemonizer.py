@@ -91,8 +91,12 @@ class SingularityDaemon(object):
 
                 # TODO Add proper error handling here ...
 
+                logger.debug("Length of configurators: %s", len(self._configurators))
+
                 for configurator in self._configurators:
+                    logger.info("Testing configurator %s", configurator)
                     if not configurator.runnable(message):
+                        logger.info("Configurator is not runnable.")
                         continue
 
                     # TODO Add conflict resolution ...
@@ -100,7 +104,7 @@ class SingularityDaemon(object):
                     logger.info("Found configurator, %s, with functions, %s", configurator, configurator.functions) # pylint: disable=C0301
                     functions |= set(configurator.functions)
 
-                    for filename, content in configurator.contents(message):
+                    for filename, content in configurator.contents(message).iteritems():
                         logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator) # pylint: disable=C0301
                         with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile: # pylint: disable=C0301
                             cachefile.write(content)
@@ -120,7 +124,6 @@ class SingularityDaemon(object):
         else:
             logger.warning("Daemon not running.")
             print("Singularity is not running ...", file = sys.stderr)
-            sys.exit(1)
 
     def reinit(self):
         if self.running:
@@ -143,9 +146,13 @@ class SingularityDaemon(object):
 
     @property
     def daemon_pid(self): # pylint: disable=R0201
-        if os.access(SingularityParameters()["daemon.pidfile"], os.R_OK):
+        try: # There is a race condition if we do a check first ... skipping.
             with open(SingularityParameters()["daemon.pidfile"], "r") as pidfile: # pylint: disable=C0301
                 return int(pidfile.readline())
+        except IOError as error:
+            if error.errno != 2:
+                raise
+            return None
 
     @property
     def running(self):

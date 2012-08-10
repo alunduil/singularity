@@ -7,7 +7,7 @@ import logging
 import argparse
 import copy
 
-import singularity.information 
+import singularity.information as info
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 
@@ -34,13 +34,13 @@ class SingularityArguments(object):
         version = \
                 "%(prog)s-{i.VERSION}\n" \
                 "\n" \
-                "Copyright {i.COPY_YEAR} by {i.AUTHOR} <{i.EMAIL}> and " \
-                "contributors.  This is free software; see the source for " \
-                "copying conditions.  There is NO warranty; not even for " \
-                "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+                "Copyright {i.COPY_YEAR} by {i.AUTHOR} <{i.AUTHOR_EMAIL}> " \
+                "and contributors.  This is free software; see the source " \
+                "for copying conditions.  There is NO warranty; not even " \
+                "for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
         
         self._parser.add_argument("--version", action = "version",
-                version = version.format(i = singularity.information))
+                version = version.format(i = info))
 
         import singularity.parameters
 

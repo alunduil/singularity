@@ -5,6 +5,7 @@
 
 import logging
 import json
+import os
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
@@ -87,77 +88,103 @@ def translate(message): # pylint: disable=R0912
 
     parsed = json.loads(message)
 
+    logger.info("Received message, %s", parsed)
+    logger.debug("Type of message, %s", type(parsed))
+
     message = {}
+
+    # TOOD Refactor this "parsing" to be more elegant.
 
     try:
         message["function"] = parsed["name"]
     except KeyError:
-        logger.warning("Did not recieve 'name' from message, %s", message)
+        logger.warning("Did not recieve 'name' from message, %s", parsed)
     
     try:
         message["arguments"] = parsed["value"]
     except KeyError:
-        logger.warning("Did not recieve 'value' from message, %s", message)
+        logger.warning("Did not recieve 'value' from message, %s", parsed)
 
     message["ips"] = {}
 
     try:
+        logger.debug("Interface name for %s: %s", parsed["mac"], interface(parsed["mac"]))
         message["ips"][interface(parsed["mac"])] = []
     except KeyError:
-        logger.warning("Did not receive 'mac' from message, %s", message)
+        logger.warning("Did not receive 'mac' from message, %s", parsed)
 
     try:
         for ip in parsed["ips"]: # pylint: disable=C0103
             message["ips"][interface(parsed["mac"])].append((cidr(ip["ip"], ip["netmask"]), "ipv4")) # pylint: disable=C0301
     except KeyError:
-        logger.warning("Did not receive 'ips' or 'ips.ip' or 'ips.netmask' from message, %s", message) # pylint: disable=C0301
+        logger.warning("Did not receive 'ips' or 'ips.ip' or 'ips.netmask' from message, %s", parsed) # pylint: disable=C0301
 
     try:
         for ip in parsed["ip6s"]: # pylint: disable=C0103
             message["ips"][interface(parsed["mac"])].append((cidr(ip["ip"], ip["netmask"]), "ipv6")) # pylint: disable=C0301
     except KeyError:
-        logger.warning("Did not receive 'ip6s' or ip6s.ip' or 'ip6s.netmask' from message, %s", message) # pylint: disable=C0301
+        logger.warning("Did not receive 'ip6s' or ip6s.ip' or 'ip6s.netmask' from message, %s", parsed) # pylint: disable=C0301
 
     try:
         message["routes"][interface(parsed["mac"])] = []
     except KeyError:
-        logger.warning("Did not receive 'mac' from message, %s", message)
+        logger.warning("Did not receive 'mac' from message, %s", parsed)
 
     try:
         for ip in parsed["ips"]: # pylint: disable=C0103
             message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv4")) # pylint: disable=C0301
     except KeyError:
-        logger.warning("Did not receive 'ips' or 'ips.gateway' from message, %s", message) # pylint: disable=C0301
+        logger.warning("Did not receive 'ips' or 'ips.gateway' from message, %s", parsed) # pylint: disable=C0301
 
     try:
         for ip in parsed["ip6s"]: # pylint: disable=C0103
             message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv6")) # pylint: disable=C0301
     except KeyError:
-        logger.warning("Did not receive 'ip6s' or 'ip6s.gateway' from message, %s", message) # pylint: disable=C0301
+        logger.warning("Did not receive 'ip6s' or 'ip6s.gateway' from message, %s", parsed) # pylint: disable=C0301
 
     try:
         message["routes"][interface(parsed["mac"])].append(("default", parsed["gateway"], "ipv4")) # Should be ipv4 but need to verify ... # pylint: disable=C0301 
     except KeyError:
-        logger.warning("Did not receive 'gateway' from message, %s", message)
+        logger.warning("Did not receive 'gateway' from message, %s", parsed)
 
     try:
         for route in parsed["routes"]:
             message["routes"][interface(parsed["mac"])].append((cidr(route["route"], route["netmask"]), route["gateway"], "ipv4")) # Should be ipv4 but need to verify ... # pylint: disable=C0301
     except KeyError:
-        logger.warning("Did not receive 'routes' or 'routes.route' or 'routes.netmask' or 'routes.gateway' from message, %s", message) # pylint: disable=C0301
+        logger.warning("Did not receive 'routes' or 'routes.route' or 'routes.netmask' or 'routes.gateway' from message, %s", parsed) # pylint: disable=C0301
 
     try:
+        logger.debug("Received DNS list: %s", parsed["dns"])
+        message["resolvers"] = []
         for resolver in parsed["dns"]:
+            logger.debug("Resolver to create an entry for: %s", resolver)
             message["resolvers"].append((resolver, "ipv4", interface(parsed["mac"]))) # Should be ipv4 but need to verify ... # pylint: disable=C0301
     except KeyError:
-        logger.warning("Did not receive 'dns' from message, %s", message)
+        logger.warning("Did not receive 'dns' or 'mac' from message, %s", parsed)
+        if "resolvers" in message and not len(message["resolvers"]):
+            del message["resolvers"]
+
+    if len(message["ips"]):
+        if not any([ len(message["ips"][nic]) for nic in message["ips"].iterkeys() ]):
+            del message["ips"]
+    else:
+        del message["ips"]
+
+    logger.info("Compiled message: %s", message)
 
     return message
 
 def interface(mac_address):
     """The interface name for the given MAC address."""
 
-    return None
+    sys_net = os.path.join(os.path.sep, "sys", "class", "net")
+
+    nics = {}
+    for nic in os.listdir(sys_net):
+        with open(os.path.join(sys_net, nic, "address")) as mac:
+            nics[mac.read().strip()] = nic
+
+    return nics[mac_address]
 
 def cidr(ip, netmask): # pylint: disable=C0103
     """Converts an IP and Netmask into CIDR notation."""
