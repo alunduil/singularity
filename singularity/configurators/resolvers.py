@@ -38,7 +38,7 @@ class ResolversConfigurator(SingularityConfigurator):
             logger.info("Must be passed resolver information in the message")
             return False
 
-        if not os.access(self.resolvconf_path, "w"):
+        if not os.access(self.resolvconf_path, os.W_OK):
             logger.info("Must be able to write %s", self.resolvconf_path)
             return False
 

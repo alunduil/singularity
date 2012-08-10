@@ -127,6 +127,9 @@ class SingularityConfigurator(object):
         >>> SingularityConfigurator.content()
         {'/etc/conf.d/hostname': '# Set to the hostname of this machine', 'hostname="host.example.com"}
 
+        If the key "message" is returned this gets passed back to the host as
+        a message in response to the passed configuration.
+
         ### Notes
 
         The default implementation of this class is to convert

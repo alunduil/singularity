@@ -88,6 +88,7 @@ class SingularityDaemon(object):
                 logger.info("Got message, %s, with identifier, %s", message, identifier) # pylint: disable=C0301
 
                 functions = set()
+                response = ""
 
                 # TODO Add proper error handling here ...
 
@@ -104,18 +105,21 @@ class SingularityDaemon(object):
                     logger.info("Found configurator, %s, with functions, %s", configurator, configurator.functions) # pylint: disable=C0301
                     functions |= set(configurator.functions)
 
-                    for filename, content in configurator.contents(message).iteritems(): # pylint: disable=C0301
-                        logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator) # pylint: disable=C0301
-                        with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile: # pylint: disable=C0301
-                            cachefile.write(content)
+                    for filename, content in configurator.content(message).iteritems(): # pylint: disable=C0301
+                        if "message" == filename:
+                            response += content + "\n"
+                        else:
+                            logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator) # pylint: disable=C0301
+                            with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile: # pylint: disable=C0301
+                                cachefile.write(content)
 
                 logger.info("Applying the functions found ...")
                 SingularityApplicator()(actions = functions)
 
                 # TODO Fill in response ...
-                response = ""
+                response = "" + "\n" + response
 
-                self._communicator.send(identifier, response)
+                self._communicator.send(identifier, response.strip())
            
     def stop(self):
         """Stop any running daemons.
