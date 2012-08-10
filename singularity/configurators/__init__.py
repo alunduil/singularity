@@ -35,13 +35,14 @@ class SingularityConfigurator(object):
         * "network"
         * "hosts"
         * "resolvers"
-        * "reboot"
         * "password"
         * "version" Not generally used as it returns the version of singularity
           on the server; not the version of the particular configurator.
 
         All other values are ignored and disqualify the configurator from being
         run.  Other values may be added in later incarnations of Singularity.
+
+        ### Default Value
 
         A default value of the lowercase class name without any Configurator
         part is returned.  
