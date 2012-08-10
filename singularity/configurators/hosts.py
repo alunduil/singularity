@@ -34,12 +34,12 @@ class HostsConfigurator(SingularityConfigurator):
 
         """
 
-        if not os.access(self.hosts_path, "w"):
-            logger.info("Can't write to %s", self.hosts_path)
-            return False
-
         if "hostname" not in configuration:
             logger.info("Not passed a hostname")
+            return False
+
+        if not os.access(self.hosts_path, "w"):
+            logger.info("Can't write to %s", self.hosts_path)
             return False
 
         with open(self.hosts_path, "r") as hosts:

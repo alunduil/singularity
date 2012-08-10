@@ -34,12 +34,12 @@ class ResolversConfigurator(SingularityConfigurator):
 
         """
 
-        if not os.access(self.resolvconf_path, "w"):
-            logger.info("Must be able to write %s", self.resolvconf_path)
-            return False
-
         if "resolvers" not in configuration:
             logger.info("Must be passed resolver information in the message")
+            return False
+
+        if not os.access(self.resolvconf_path, "w"):
+            logger.info("Must be able to write %s", self.resolvconf_path)
             return False
 
         existing_resolvers = set()

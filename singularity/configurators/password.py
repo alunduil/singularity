@@ -30,16 +30,29 @@ class PasswordConfigurator(SingularityConfigurator):
 
         """
 
-        if pwd.getpwuid(os.getuid())[0] != "root":
-            logger.info("This command must be run as root!")
-            return False
-
-        if subprocess.call("which passwd", shell = True) != 0:
-            logger.info("Must have access to passwd")
-            return False
-
         if "password" not in configuration:
             logger.info("Must be passed a password in the message")
+            return False
+
+        if os.getuid() != 0:
+            logger.info("This command must be run as uid 0!")
+            return False
+
+        self._chpasswd_path = None
+
+        for prefix in ["/bin/", "/usr/bin/"]:
+            try:
+                self._chpasswd_path = subprocess.check_output(prefix + "which chpasswd")
+            except subprocess.CalledProcessError:
+                pass
+
+            if self._chpasswd_path is not None:
+                break
+
+        logger.debug("chpasswd path: %s", self._chpasswd_path)
+
+        if self._chpasswd_path is None:
+            logger.info("Must have access to chpasswd")
             return False
 
         logger.info("PasswordConfigurator is runnable!")
@@ -60,7 +73,7 @@ class PasswordConfigurator(SingularityConfigurator):
 
         """
 
-        subprocess.call("passwd {0}".format(configuration["password"]), shell = True) # pylint: disable=C0301
+        subprocess.check_call("echo 'root:{0}' | {1}".format(configuration["password"], self._chpasswd_path)) # pylint: disable=C0301
 
         return { "": "" }
 
