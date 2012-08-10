@@ -91,7 +91,7 @@ class SingularityDaemon(object):
 
                 # TODO Add proper error handling here ...
 
-                logger.debug("Length of configurators: %s", len(self._configurators))
+                logger.debug("Length of configurators: %s", len(self._configurators)) # pylint: disable=C0301
 
                 for configurator in self._configurators:
                     logger.info("Testing configurator %s", configurator)
@@ -104,7 +104,7 @@ class SingularityDaemon(object):
                     logger.info("Found configurator, %s, with functions, %s", configurator, configurator.functions) # pylint: disable=C0301
                     functions |= set(configurator.functions)
 
-                    for filename, content in configurator.contents(message).iteritems():
+                    for filename, content in configurator.contents(message).iteritems(): # pylint: disable=C0301
                         logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator) # pylint: disable=C0301
                         with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile: # pylint: disable=C0301
                             cachefile.write(content)
@@ -118,6 +118,13 @@ class SingularityDaemon(object):
                 self._communicator.send(identifier, response)
            
     def stop(self):
+        """Stop any running daemons.
+        
+        ### Description
+
+        Sends a SIGTERM to any daemon that is currently running.
+        
+        """
         if self.running:
             logger.info("Sending daemon, %s, SIGTERM.", self.daemon_pid)
             os.kill(self.daemon_pid, signal.SIGTERM)
@@ -126,6 +133,15 @@ class SingularityDaemon(object):
             print("Singularity is not running ...", file = sys.stderr)
 
     def reinit(self):
+        """Reinitializes the daemon.
+
+        ### Description
+
+        Sends a SIGHUP to any daemon that is currently running.  If no daemon
+        is running it starts the daemon.
+
+        """
+
         if self.running:
             logger.info("Sending daemon, %s, SIGHUP.", self.daemon_pid)
             os.kill(self.daemon_pid, signal.SIGHUP)
@@ -134,6 +150,15 @@ class SingularityDaemon(object):
             self.start()
 
     def restart(self):
+        """Stop and start the daemon.
+
+        ### Description
+
+        Stops the daemon and then waits for it to actually stop running before
+        starting the daemon again.
+
+        """
+
         self.stop()
 
         while self.running:
@@ -142,10 +167,12 @@ class SingularityDaemon(object):
         self.start()
 
     def status(self):
+        """Reports the pid of a running daemon."""
         logger.info("Singularity is running at %s", self.daemon_pid)
 
     @property
     def daemon_pid(self): # pylint: disable=R0201
+        """Returns the pid of a running daemon."""
         try: # There is a race condition if we do a check first ... skipping.
             with open(SingularityParameters()["daemon.pidfile"], "r") as pidfile: # pylint: disable=C0301
                 return int(pidfile.readline())
@@ -156,6 +183,7 @@ class SingularityDaemon(object):
 
     @property
     def running(self):
+        """True if the daemon is currently running."""
         return os.path.exists("/proc/{0}".format(self.daemon_pid))
 
 class PidFile(object): # pylint: disable=R0903

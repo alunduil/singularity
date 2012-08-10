@@ -9,7 +9,7 @@ import os
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
-def translate(message): # pylint: disable=R0912
+def translate(message): # pylint: disable=R0912,R0915
     """Translate the expected message to the new format.
 
     ### Arguments
@@ -108,7 +108,7 @@ def translate(message): # pylint: disable=R0912
     message["ips"] = {}
 
     try:
-        logger.debug("Interface name for %s: %s", parsed["mac"], interface(parsed["mac"]))
+        logger.debug("Interface name for %s: %s", parsed["mac"], interface(parsed["mac"])) # pylint: disable=C0301
         message["ips"][interface(parsed["mac"])] = []
     except KeyError:
         logger.warning("Did not receive 'mac' from message, %s", parsed)
@@ -160,12 +160,12 @@ def translate(message): # pylint: disable=R0912
             logger.debug("Resolver to create an entry for: %s", resolver)
             message["resolvers"].append((resolver, "ipv4", interface(parsed["mac"]))) # Should be ipv4 but need to verify ... # pylint: disable=C0301
     except KeyError:
-        logger.warning("Did not receive 'dns' or 'mac' from message, %s", parsed)
+        logger.warning("Did not receive 'dns' or 'mac' from message, %s", parsed) # pylint: disable=C0301
         if "resolvers" in message and not len(message["resolvers"]):
             del message["resolvers"]
 
     if len(message["ips"]):
-        if not any([ len(message["ips"][nic]) for nic in message["ips"].iterkeys() ]):
+        if not any([ len(message["ips"][nic]) for nic in message["ips"].iterkeys() ]): # pylint: disable=C0301
             del message["ips"]
     else:
         del message["ips"]
