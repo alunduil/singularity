@@ -8,6 +8,8 @@ import json
 
 import xen.lowlevel.xs as xs
 
+import singularity.communicators.helpers as helpers
+
 from singularity.communicators import Communicator
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
@@ -247,7 +249,7 @@ class XenCommunicator(Communicator):
 
         # TODO Define identifier ...
 
-        return identifier, message
+        return identifier, helpers.translate(message)
 
     def send(self, identifier, message, status = 0):
         """Send the passed message to the hypervisor.
