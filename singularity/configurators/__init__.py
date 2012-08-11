@@ -58,7 +58,7 @@ class SingularityConfigurator(object):
 
         """
 
-        logger.debug("Probable function: %s", self.__class__.__name__.replace("Configurator", "").lower())
+        logger.debug("Probable function: %s", self.__class__.__name__.replace("Configurator", "").lower()) # pylint: disable=C0301
         return [self.__class__.__name__.replace("Configurator", "").lower()]
 
     def runnable(self, configuration):

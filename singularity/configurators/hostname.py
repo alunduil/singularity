@@ -39,15 +39,15 @@ class HostnameConfigurator(SingularityConfigurator):
             logger.info("This command must be run as uid 0!")
             return False
 
-        self._hostname_path = None
+        self._hostname_path = None # pylint: disable=W0201
 
         for prefix in ["/bin/", "/usr/bin/"]:
             try:
-                self._chpasswd_path = subprocess.check_output(prefix + "which hostname")
+                self._hostname_path = subprocess.check_output(prefix + "which hostname") # pylint: disable=C0301,W0201
             except subprocess.CalledProcessError:
                 pass
 
-            if self._chpasswd_path is not None:
+            if self._hostname_path is not None:
                 break
 
         logger.debug("hostname path: %s", self._hostname_path)
@@ -83,7 +83,7 @@ class GentooHostnameConfigurator(SingularityConfigurator):
         return ["hostname"]
 
     @property
-    def confd_hostname_path(self):
+    def confd_hostname_path(self): # pylint: disable=R0201
         return os.path.join(os.path.sep, "etc", "conf.d", "hostname")
 
     def runnable(self, configuration):
@@ -107,8 +107,8 @@ class GentooHostnameConfigurator(SingularityConfigurator):
             logger.info("Must be passed a hostname in the message")
             return False
 
-        if os.access(self.confd_hostname, os.W_OK):
-            logger.info("Can't write to %s", self.confd_hostname)
+        if os.access(self.confd_hostname_path, os.W_OK):
+            logger.info("Can't write to %s", self.confd_hostname_path)
             return False
 
         logger.info("GentooHostnameConfigurator is runnable!")
@@ -131,8 +131,8 @@ class GentooHostnameConfigurator(SingularityConfigurator):
 
         lines = [
                 "# Set to the hostname of this machine",
-                "hostname=\"{0}\"".format(configuration["hostname"].split('.', 1)[0]),
+                "hostname=\"{0}\"".format(configuration["hostname"].split('.', 1)[0]), # pylint: disable=C0301
                 ]
 
-        return { self.confd_hostname, lines }
+        return { self.confd_hostname_path, lines }
 

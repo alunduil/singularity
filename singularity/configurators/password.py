@@ -4,7 +4,6 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
-import pwd
 import os
 import subprocess
 
@@ -38,11 +37,11 @@ class PasswordConfigurator(SingularityConfigurator):
             logger.info("This command must be run as uid 0!")
             return False
 
-        self._chpasswd_path = None
+        self._chpasswd_path = None # pylint: disable=W0201
 
         for prefix in ["/bin/", "/usr/bin/"]:
             try:
-                self._chpasswd_path = subprocess.check_output(prefix + "which chpasswd")
+                self._chpasswd_path = subprocess.check_output(prefix + "which chpasswd") # pylint: disable=W0201,C0301
             except subprocess.CalledProcessError:
                 pass
 
