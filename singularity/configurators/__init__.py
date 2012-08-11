@@ -34,6 +34,7 @@ class SingularityConfigurator(object):
         Legal values that can be returned from this function are the following:
         * "network"
         * "hosts"
+        * "hostname"
         * "resolvers"
         * "password"
         * "version" Not generally used as it returns the version of singularity
