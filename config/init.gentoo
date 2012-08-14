@@ -9,7 +9,7 @@ PIDFILE=/var/run/singularity.pid
 
 start () {
 	ebegin "Starting singularity"
-	start-stop-daemon --start --quiet --interpreted --pidfile ${PIDFILE} --exec ${DAEMON}
+	start-stop-daemon --start --quiet --interpreted --pidfile ${PIDFILE} --exec ${DAEMON} -- daemon start
         eend $?
 }
 
