@@ -24,7 +24,7 @@ PARAMS["url"] = information.URL
 PARAMS["license"] = information.LICENSE
 
 PARAMS["scripts"] = [
-        "sbin/singularity",
+        "bin/singularity",
         ]
 PARAMS["packages"] = [
         "singularity",
