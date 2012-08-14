@@ -134,5 +134,5 @@ class GentooHostnameConfigurator(SingularityConfigurator):
                 "hostname=\"{0}\"".format(configuration["hostname"].split('.', 1)[0]), # pylint: disable=C0301
                 ]
 
-        return { self.confd_hostname_path, lines }
+        return { self.confd_hostname_path: lines }
 

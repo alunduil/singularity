@@ -155,5 +155,5 @@ class GentooNetworkConfigurator(SingularityConfigurator):
                 lines.append("{0} via {1}".format(route[0], route[1]))
             lines.append("\"")
 
-        return { self.confd_net_path, lines }
+        return { self.confd_net_path: lines }
 
