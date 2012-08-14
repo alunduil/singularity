@@ -42,7 +42,7 @@ PARAMS["data_files"] = [
         ]
 
 PARAMS["requires"] = [
-        "python-daemon",
+        "daemon",
         ]
 
 if helpers.VIRTUAL == "xenU":
