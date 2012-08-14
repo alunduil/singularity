@@ -29,6 +29,7 @@ PARAMS["scripts"] = [
 PARAMS["packages"] = [
         "singularity",
         "singularity.configurators",
+        "singularity.communicators",
         "singularity.parameters",
         ]
 PARAMS["data_files"] = [
