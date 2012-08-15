@@ -5,6 +5,7 @@
 
 import logging
 import json
+import os
 
 import xen.lowlevel.xs as xs
 
