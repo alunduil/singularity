@@ -63,10 +63,9 @@ class SingularityDaemon(object):
         context.gid = grp.getgrnam(SingularityParameters()["daemon.gid"]).gr_gid
         context.prevent_core = not SingularityParameters()["daemon.coredumps"]
         context.detach_process = not SingularityParameters()["daemon.nodaemonize"] # pylint: disable=C0301
-        context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
 
-        if hasattr(self._communicator, "socket"):
-            context.files_preserve.append(self._communicator.socket)
+        context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
+        context.files_preserve.extend(self._communicator.files)
 
         def term_handler(signum, frame): # pylint: disable=W0613
             logger.info("Shutting down.")

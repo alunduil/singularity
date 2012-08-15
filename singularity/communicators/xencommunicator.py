@@ -227,6 +227,11 @@ class XenCommunicator(Communicator):
         self.xs.unwatch(self._receive_prefix, "COMMAND")
         self.xs.unwatch(self._data_prefix, "DATA")
 
+    @property
+    def files(self):
+        fd_path = os.path.join(os.path.sep, "proc", "self", "fd")
+        return [ fd for fd in os.listdir(fd_path) if re.search(r"xen", os.path.realpath(os.path.join(fd_path, fd))) ]
+
     def receive(self):
         """Recieve message from hypervisor and package for upstream consumption
 
