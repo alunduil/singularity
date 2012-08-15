@@ -231,7 +231,12 @@ class XenCommunicator(Communicator):
     @property
     def files(self):
         fd_path = os.path.join(os.path.sep, "proc", "self", "fd")
-        return [ fd for fd in os.listdir(fd_path) if os.path.realpath(os.path.join(fd_path, fd)).find("xen") != -1 ]
+        fds = [ fd for fd in os.listdir(fd_path) if os.path.realpath(os.path.join(fd_path, fd)).find("xen") != -1 ]
+        logger.debug("FDs open: %s", os.listdir(fd_path))
+        logger.debug("Files open: %s", [ os.path.realpath(os.path.join(fd_path, fd)) for fd in os.listdir(fd_path) ])
+        logger.debug("FDs using xen: %s", fds)
+        logger.debug("Files using xen: %s", [ os.path.realpath(os.path.join(fd_path, fd)) for fd in fds ])
+        return fds
 
     def receive(self):
         """Recieve message from hypervisor and package for upstream consumption
