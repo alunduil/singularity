@@ -7,9 +7,14 @@
 DAEMON=/usr/bin/singularity
 PIDFILE=/var/run/singularity.pid
 
+depend() {
+        before net ssh
+}
+
 start () {
 	ebegin "Starting singularity"
 	start-stop-daemon --start --quiet --interpreted --pidfile ${PIDFILE} --exec ${DAEMON} -- daemon start
+        # TODO Dont' start networking until we have a configuration ... networkmanager?
         eend $?
 }
 
