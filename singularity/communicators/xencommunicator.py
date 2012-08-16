@@ -267,7 +267,7 @@ class XenCommunicator(Communicator):
         transaction = self.xs.transaction_start()
         message = self.xs.read(transaction, path)
         logger.info("Received message, %s, from %s", message, path)
-        self.xs.transaction_end()
+        self.xs.transaction_end(transaction)
 
         identifier = ""
         if token == "COMMAND":
@@ -297,6 +297,6 @@ class XenCommunicator(Communicator):
             })
 
         transaction = self.xs.transaction_start()
-        self.xs.write(transaction, self._send_prefix + identifier, message)
-        self.xs.transaction_end()
+        self.xs.write(transaction, self._send_prefix + "/" + identifier, message)
+        self.xs.transaction_end(transaction)
 
