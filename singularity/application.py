@@ -44,8 +44,8 @@ class SingularityApplication(object): # pylint: disable=R0903
         root.setLevel(getattr(logging, SingularityParameters()["main.loglevel"].upper())) # pylint: disable=C0301
         sladdr = { "linux2": "/dev/log", "darwin": "/var/run/syslog", }
 
-        dhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform]) # pylint: disable=C0301
-        nhl = logging.handlers.SysLogHandler(facility = "daemon", address = sladdr[sys.platform]) # pylint: disable=C0301
+        dhl = logging.handlers.SysLogHandler(facility = logging.handlers.SysLogHandler.LOG_DAEMON, address = sladdr[sys.platform]) # pylint: disable=C0301
+        nhl = logging.handlers.SysLogHandler(facility = logging.handlers.SysLogHandler.LOG_DAEMON, address = sladdr[sys.platform]) # pylint: disable=C0301
 
         if SingularityParameters()["main.loghandler"] == "-":
             dhl = logging.StreamHandler(stream = sys.stderr)
