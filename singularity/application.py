@@ -15,6 +15,7 @@ logger.addHandler(handler)
 
 import os
 
+logger.setLevel(logging.CRITICAL)
 if "LOGLEVEL" in os.environ:
     logger.setLevel(getattr(logging, os.environ["LOGLEVEL"].upper()))
 
