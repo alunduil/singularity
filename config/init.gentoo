@@ -7,7 +7,7 @@
 config="${CONFIG:-/etc/singularity/singularity.conf}"
 pidfile="${PIDFILE:-$(awk '/pidfile/ { print $NF }' ${config})}"
 
-command_args="daemon --pidfile --configuration ${config%/*}"
+command_args="daemon --configuration ${config%/*}"
 command_args="${command_args} ${EXTRA_OPTS}"
 
 command="/usr/bin/singularity"
