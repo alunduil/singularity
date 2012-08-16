@@ -7,7 +7,7 @@
 config="${CONFIG:-/etc/singularity/singularity.conf}"
 pidfile="${PIDFILE:-$(awk '/pidfile/ { print $NF }' ${config})}"
 
-command_args="daemon --pidfile ${pidfile} --configuration ${config%/*} start"
+command_args="daemon --pidfile --configuration ${config%/*}"
 command_args="${command_args} ${EXTRA_OPTS}"
 
 command="/usr/bin/singularity"
@@ -19,6 +19,18 @@ depend() {
   before net
   after bootmisc
   use logger
+}
+
+start() {
+  ebegin "Starting ${SVCNAME}"
+  start-stop-daemon --start --interpreted --pidfile ${pidfile} ${command} -- ${command_args} start
+  eend $? "Failed to start ${SVCNAME}"
+}
+
+stop() {
+  ebegin "Stopping ${SVCNAME}"
+  start-stop-daemon --stop --pidfile ${pidfile} ${command} -- ${command_args} stop
+  eend $? "Failed to stop ${SVCNAME}"
 }
 
 reload() {
