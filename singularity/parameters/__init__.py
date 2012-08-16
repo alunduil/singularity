@@ -208,14 +208,17 @@ class SingularityParameters(object): # pylint: disable=R0903
         default = "" 
         if short in DEFAULTS:
             default = DEFAULTS[short]
+        logger.debug("default: %s", default)
 
         argument = ""
         if key in self._arguments:
             argument = self._arguments[key]
+        logger.debug("argument: %s", argument)
 
         configuration = ""
         if key in self._configuration:
             configuration = self._configuration[key]
+        logger.debug("configuration: %s", configuration)
 
         # TODO Collapse dictionaries into one reference.
         # TODO Check for string length seems unnecessary.
