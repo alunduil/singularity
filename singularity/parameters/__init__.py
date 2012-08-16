@@ -143,7 +143,6 @@ DAEMON_PARAMETERS = [
         { # --configurators=DIR, -d=DIR
             "options": [ "--configurators", "-d" ],
             "metavar": "DIR",
-            "default": [os.path.join(CONFIG_DIR, "configurators")],
             "action": "append",
             "nargs": "*",
             "help": \

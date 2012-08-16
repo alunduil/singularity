@@ -176,11 +176,12 @@ class SingularityConfigurators(object): # pylint: disable=R0903
         self.path = [
                 mydir,
                 re.sub(r"usr/", r"usr/local/", mydir),
+                os.path.join(SingularityParameters()["main.configuration"], "configurators"),
                 ]
 
         logger.debug("Extra directories passed: %s", SingularityParameters()["daemon.configurators"]) # pylint: disable=C0301
         logger.debug("Type of daemon.configurators: %s", type(SingularityParameters()["daemon.configurators"]))
-        self.path.extend(SingularityParameters()["daemon.configurators"] or [])
+        self.path.extend(SingularityParameters()["daemon.configurators"])
 
         logger.debug("SingularityConfigurator.path: %s", self.path)
 
