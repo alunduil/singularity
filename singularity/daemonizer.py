@@ -91,6 +91,7 @@ class SingularityDaemon(object):
 
         logger.info("Starting up.")
         with context:
+            self._communicator = communicators.create() # TODO Testing initialization here ...
             while True:
                 logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ])
 
