@@ -250,7 +250,11 @@ class XenCommunicator(Communicator):
 
         # TODO Add error handling that is appropriate here ...
         # TODO Split off the D and allow us to die ...
-        path, token = self.xs.read_watch()
+        path = self._receive_prefix
+        while path in [ self._receive_prefix, self._data_prefix ]:
+            logger.debug("Current path: %s", path)
+            path, token = self.xs.read_watch()
+
         logger.info("Recieved a watch event on %s with token, %s", path, token)
 
         transaction = self.xs.transaction_start()
