@@ -67,6 +67,9 @@ class SingularityDaemon(object):
         context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
         context.files_preserve.extend(self._communicator.files)
 
+        logger.debug("Preserved files: %s", context.files_preserve)
+        logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ])
+
         def term_handler(signum, frame): # pylint: disable=W0613
             logger.info("Shutting down.")
             context.close()
@@ -85,6 +88,8 @@ class SingularityDaemon(object):
         logger.info("Starting up.")
         with context:
             while True:
+                logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ])
+
                 identifier, message = self._communicator.receive()
                 logger.info("Got message, %s, with identifier, %s", message, identifier) # pylint: disable=C0301
 
