@@ -76,6 +76,7 @@ class SingularityDaemon(object):
         def term_handler(signum, frame): # pylint: disable=W0613
             logger.info("Shutting down.")
             context.close()
+            logging.shutdown()
             sys.exit(0)
 
         def hup_handler(signum, frame): # pylint: disable=W0613

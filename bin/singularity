@@ -20,6 +20,7 @@ def main():
         app.run()
     except Exception as error:
         logger.exception(error)
+        logging.shutdown()
         sys.exit(1)
 
 if __name__ == "__main__":
