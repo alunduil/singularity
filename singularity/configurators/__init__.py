@@ -181,7 +181,7 @@ class SingularityConfigurators(object): # pylint: disable=R0903
 
         logger.debug("Extra directories passed: %s", SingularityParameters()["daemon.configurators"]) # pylint: disable=C0301
         logger.debug("Type of daemon.configurators: %s", type(SingularityParameters()["daemon.configurators"]))
-        self.path.extend(SingularityParameters()["daemon.configurators"])
+        self.path.extend(SingularityParameters()["daemon.configurators"] or [])
 
         logger.debug("SingularityConfigurator.path: %s", self.path)
 
