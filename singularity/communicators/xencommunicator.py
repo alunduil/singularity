@@ -225,6 +225,7 @@ class XenCommunicator(Communicator):
         self.xs.watch(self._data_prefix, "DATA")
 
     def __del__(self):
+        logger.info("XenCommunicator watches are being removed.")
         self.xs.unwatch(self._receive_prefix, "COMMAND")
         self.xs.unwatch(self._data_prefix, "DATA")
 
@@ -251,7 +252,9 @@ class XenCommunicator(Communicator):
         # TODO Add error handling that is appropriate here ...
         # TODO Split off the D and allow us to die ...
         while True:
+            logger.info("Reading watched xenstore locations.")
             path, token = self.xs.read_watch()
+            logger.info("Received information from xenstore locations.")
             logger.debug("Recieved a watch event on %s with token, %s", path, token)
             logger.debug("Receive Prefix: %s", self._receive_prefix)
             logger.debug("Data Prefix: %s", self._data_prefix)
@@ -266,7 +269,13 @@ class XenCommunicator(Communicator):
         logger.info("Received message, %s, from %s", message, path)
         self.xs.transaction_end()
 
-        # TODO Define identifier ...
+        identifier = ""
+        if token == "COMMAND":
+            identifier = path.replace(self._receive_prefix + "/", "")
+        elif token == "DATA":
+            identifier = path.replace(self._data_prefix + "/", "")
+
+        logger.debug("Identifier received: %s", identifier)
 
         return identifier, helpers.translate(message)
 

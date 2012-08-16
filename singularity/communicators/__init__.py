@@ -42,6 +42,20 @@ def create(*args, **kwargs):
     return communicator
 
 class Communicator(object):
+    @property
+    def files(self):
+        """The file objects or integer file descriptors this communicator uses.
+
+        ### Description
+
+        Must be a list of file objects or integer file descriptors that need to
+        be kept open when daemonizing.  If it is not listed here the file will 
+        be closed and unavailabe inside the daemonized process.
+
+        """
+
+        raise AttributeError("{0} object has no attribute 'files'".format(self.__class__.__name__))
+
     def receive(self):
         """Receive a message from the hypervisor and pass it to the requester.
 
