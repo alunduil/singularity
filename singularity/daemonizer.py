@@ -64,7 +64,9 @@ class SingularityDaemon(object):
         context.prevent_core = not SingularityParameters()["daemon.coredumps"]
         context.detach_process = not SingularityParameters()["daemon.nodaemonize"] # pylint: disable=C0301
 
-        context.files_preserve = [ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ] # pylint: disable=C0301
+        context.files_preserve = []
+        context.files_preserve.extend([ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ]) # pylint: disable=C0301
+        context.files_preserve.extend([ handler.socket for handler in logging.getLogger().handlers if hasattr(handler, "socket") ]) # pylint: disable=C0301
         context.files_preserve.extend(self._communicator.files)
 
         logger.debug("Preserved files: %s", context.files_preserve)
