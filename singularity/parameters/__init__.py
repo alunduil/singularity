@@ -223,11 +223,14 @@ class SingularityParameters(object): # pylint: disable=R0903
         # TODO Collapse dictionaries into one reference.
         # TODO Check for string length seems unnecessary.
         if len(str(default)) and str(default) in sys.argv[0] or argument != default:
+            logger.debug("Selected value: %s", argument)
             return argument
 
         if configuration:
+            logger.debug("Selected value: %s", configuration)
             return configuration
 
+        logger.debug("Selected value: %s", default or None) 
         return default or None
 
     def reinit(self):
