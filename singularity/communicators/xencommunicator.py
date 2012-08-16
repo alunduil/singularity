@@ -235,7 +235,7 @@ class XenCommunicator(Communicator):
         logger.debug("FDs open: %s", os.listdir(fd_path))
         logger.debug("Files open: %s", [ os.path.realpath(os.path.join(fd_path, fd)) for fd in os.listdir(fd_path) ])
         logger.debug("FDs using xen: %s", fds)
-        logger.debug("Files using xen: %s", [ os.path.realpath(os.path.join(fd_path, fd)) for fd in fds ])
+        logger.debug("Files using xen: %s", [ os.path.realpath(os.path.join(fd_path, fd)) for fd in str(fds) ])
         return fds
 
     def receive(self):
