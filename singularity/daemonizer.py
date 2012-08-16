@@ -62,6 +62,7 @@ class SingularityDaemon(object):
         context.uid = pwd.getpwnam(SingularityParameters()["daemon.uid"]).pw_uid
         context.gid = grp.getgrnam(SingularityParameters()["daemon.gid"]).gr_gid
         context.prevent_core = not SingularityParameters()["daemon.coredumps"]
+        logger.debug("nodaemonize: %s", SingularityParameters()["daemon.nodaemonize"])
         context.detach_process = not SingularityParameters()["daemon.nodaemonize"] # pylint: disable=C0301
 
         context.files_preserve = []
