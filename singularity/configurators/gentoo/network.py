@@ -3,6 +3,13 @@
 # singularity is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+import logging
+import os
+
+from singularity.configurators import SingularityConfigurator
+
+logger = logging.getLogger(__name__) # pylint: disable=C0103
+
 class GentooNetworkConfigurator(SingularityConfigurator):
     def functions(self):
         return ["network"]

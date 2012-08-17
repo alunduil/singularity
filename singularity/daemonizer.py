@@ -62,7 +62,6 @@ class SingularityDaemon(object):
         context.uid = pwd.getpwnam(SingularityParameters()["daemon.uid"]).pw_uid
         context.gid = grp.getgrnam(SingularityParameters()["daemon.gid"]).gr_gid
         context.prevent_core = not SingularityParameters()["daemon.coredumps"]
-        logger.debug("nodaemonize: %s", SingularityParameters()["daemon.nodaemonize"])
         context.detach_process = not SingularityParameters()["daemon.nodaemonize"] # pylint: disable=C0301
 
         context.files_preserve = []
@@ -71,7 +70,7 @@ class SingularityDaemon(object):
         context.files_preserve.extend(self._communicator.files)
 
         logger.debug("Preserved files: %s", context.files_preserve)
-        logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ])
+        logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ]) # pylint: disable=C0301
 
         def term_handler(signum, frame): # pylint: disable=W0613
             logger.info("Shutting down.")
@@ -92,7 +91,7 @@ class SingularityDaemon(object):
         logger.info("Starting up.")
         with context:
             while True:
-                logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ])
+                logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ]) # pylint: disable=C0301
 
                 identifier, message = self._communicator.receive()
                 logger.info("Got message, %s, with identifier, %s", message, identifier) # pylint: disable=C0301

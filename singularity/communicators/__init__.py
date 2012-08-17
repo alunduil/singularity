@@ -54,7 +54,7 @@ class Communicator(object):
 
         """
 
-        raise AttributeError("{0} object has no attribute 'files'".format(self.__class__.__name__))
+        raise AttributeError("{0} object has no attribute 'files'".format(self.__class__.__name__)) # pylint: disable=C0301
 
     def receive(self):
         """Receive a message from the hypervisor and pass it to the requester.
