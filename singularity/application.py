@@ -57,8 +57,8 @@ class SingularityApplication(object): # pylint: disable=R0903
         dhl.setLevel(logging.DEBUG)
         nhl.setLevel(logging.INFO)
 
-        dhl.setFormatter(logging.Formatter("{0}: %(levelname)s => %(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s".format(sys.argv[0]))) # pylint: disable=C0301
-        nhl.setFormatter(logging.Formatter("{0}: %(levelname)s => %(name)s: %(message)s".format(sys.argv[0]))) # pylint: disable=C0301
+        dhl.setFormatter(logging.Formatter("1 %(asctime)s - %(processName)s %(process)d - - \ufeff %(levelname)s => %(name)s: %(pathname)s:%(lineno)d in %(funcName)s: %(message)s", '%b %e %H:%M:%S')) # pylint: disable=C0301
+        nhl.setFormatter(logging.Formatter("1 %(asctime)s - %(processName)s %(process)d - - \ufeff %(levelname)s => %(name)s: %(message)s", '%b %e %H:%M:%S')) # pylint: disable=C0301
 
         class LevelFilter(logging.Filter):
             def __init__(self, level, *args, **kwargs):
