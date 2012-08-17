@@ -248,6 +248,7 @@ class XenCommunicator(Communicator):
         # TODO Add error handling that is appropriate here ...
         # TODO Split off the D and allow us to die ...
         while True:
+            logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ]) # pylint: disable=C0301
             logger.info("Reading watched xenstore locations.")
             path, token = self.xs.read_watch()
             logger.debug("Recieved a watch event on %s with token, %s", path, token) # pylint: disable=C0301
