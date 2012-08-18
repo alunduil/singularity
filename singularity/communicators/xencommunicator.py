@@ -281,10 +281,17 @@ class XenCommunicator(Communicator):
                     msg.append(self.xs.read(transaction, self._network_prefix + "/" + entry))
                 self.xs.transaction_end(transaction)
 
+                logger.debug("Message: %s", message
+
                 for item in msg:
                     tmp = helpers.translate(item)
+
+                    logger.debug("Adding in items: %s", tmp)
+
                     message["ips"].update(tmp["ips"])
                     message["routes"].update(tmp["routes"])
+
+                    logger.debug("Message: %s", message)
                 
                 msg = None
 
@@ -294,7 +301,7 @@ class XenCommunicator(Communicator):
                 self.xs.transaction_end(transaction)
 
                 if msg is not None:
-                    message.update({"hostname": msg})
+                    message["hostname"] = msg
 
         logger.debug("Passing back identifier, %s, message, %s", identifier, message)
 
