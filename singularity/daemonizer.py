@@ -63,7 +63,6 @@ class SingularityDaemon(object):
         context.files_preserve = []
         context.files_preserve.extend([ handler.stream for handler in logging.getLogger().handlers if hasattr(handler, "stream") ]) # pylint: disable=C0301
         context.files_preserve.extend([ handler.socket for handler in logging.getLogger().handlers if hasattr(handler, "socket") ]) # pylint: disable=C0301
-        context.files_preserve.extend(self._communicator.files)
 
         logger.debug("Preserved files: %s", context.files_preserve)
         logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ]) # pylint: disable=C0301
