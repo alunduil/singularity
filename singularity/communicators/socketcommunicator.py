@@ -39,10 +39,6 @@ class SocketCommunicator(Communicator):
     def __del__(self):
         self.connection.close()
 
-    @property
-    def files(self):
-        return [self.socket]
-
     def receive(self):
         """Recieve message from the user and package for upstream consumption
 

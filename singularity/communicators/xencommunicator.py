@@ -221,6 +221,8 @@ class XenCommunicator(Communicator):
         self._receive_prefix = receive_prefix
         self._send_prefix = send_prefix
         self._data_prefix = data_prefix
+        self._network_prefix = data_prefix + "/networking"
+        self._hostname_prefix = data_prefix + "/hostname"
 
         self._queue = Queue.Queue()
 
@@ -244,18 +246,11 @@ class XenCommunicator(Communicator):
 
         self.watches = []
         self.watches.append(xswatch(self._receive_prefix, xs_watch))
-        self.watches.append(xswatch(self._data_prefix, xs_watch))
 
     def __del__(self):
         logger.info("XenCommunicator watches are being removed.")
         for watch in self.watches:
             watch.unwatch()
-
-    @property
-    def files(self):
-        fd_path = os.path.join(os.path.sep, "proc", "self", "fd")
-        fds = [ int(fd) for fd in os.listdir(fd_path) if os.path.realpath(os.path.join(fd_path, fd)).find("xen") != -1 ] # pylint: disable=C0301
-        return fds
 
     def receive(self):
         """Recieve message from hypervisor and package for upstream consumption
@@ -271,11 +266,37 @@ class XenCommunicator(Communicator):
 
         identifier = path
         identifier = identifier.replace(self._receive_prefix + "/", "")
-        identifier = identifier.replace(self._data_prefix + "/", "")
 
         logger.info("Received identifier, %s", identifier)
 
-        return identifier, helpers.translate(message)
+        message = helpers.translate(message)
+
+        if "function" in message:
+            if message["function"] == "resetnetwork":
+                msg = [] 
+
+                transaction = self.xs.transaction_start()
+                entries = self.xs.ls(transaction, self._network_prefix)
+                for entry in entries:
+                    msg.append(self.xs.read(transaction, self._network_prefix + "/" + entry))
+                self.xs.transaction_end(transaction)
+
+                for item in msg:
+                    message.update(helpers.translate(item))
+
+                msg = None
+
+                transaction = self.xs_transaction_start()
+                if self.xs.ls(transaction, self._hostname_prefix) is not None:
+                    msg = self.xs.read(transaction, self._hostname_prefix)
+                self.xs.transaction_end(transaction)
+
+                if msg is not None:
+                    message.update({"hostname": msg})
+
+        logger.debug("Passing back identifier, %s, message, %s", identifier, message)
+
+        return identifier, message
 
     def send(self, identifier, message, status = 0):
         """Send the passed message to the hypervisor.
