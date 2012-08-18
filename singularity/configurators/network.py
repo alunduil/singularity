@@ -78,7 +78,11 @@ class NetworkConfigurator(SingularityConfigurator):
             for ip in ips: # pylint: disable=C0103
                 logger.info("Calling: %s addr add %s dev %s", self._ip_path, ip[0], interface) # pylint: disable=C0301
                 command = [ self._ip_path, "address", "add", ip[0], "dev", interface ]
-                subprocess.check_call(command)
+                try:
+                    subprocess.check_call(command)
+                except subprocess.CalledProcessError as error:
+                    if error.returncode != 2:
+                        raise
 
         for interface, routes in configuration["routes"].iteritems():
             for route in routes:
