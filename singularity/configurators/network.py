@@ -46,7 +46,7 @@ class NetworkConfigurator(SingularityConfigurator):
         self._ip_path = None # pylint: disable=W0201
 
         try:
-            self._ip_path = subprocess.check_output("which ip", shell = True) # pylint: disable=C0301,W0201
+            self._ip_path = subprocess.check_output("which ip", shell = True).strip() # pylint: disable=C0301,W0201
         except subprocess.CalledProcessError:
             pass
 
