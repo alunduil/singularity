@@ -60,6 +60,9 @@ class VersionConfigurator(SingularityConfigurator):
                 }
 
         if "arguments" in configuration:
-            return { "message": versions[configuration["arguments"]] }
+            try:
+                return { "message": versions[configuration["arguments"]] }
+            except KeyError:
+                return { "message": "Version for {0} not found".format(configuration["arguments"]), "status": "404" }
         return { "message": "versions: {0}".format(versions) }
 
