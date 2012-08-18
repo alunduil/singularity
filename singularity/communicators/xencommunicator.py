@@ -198,7 +198,7 @@ class XenCommunicator(Communicator):
     * agentupdate
     * resetnetwork
     * injectfile
-    * kmsactivate # TODO What is this?
+    * kmsactivate # Apparently registers a RHEL box with RHN?
     * help # Registered as a command but only acts locally.
 
     Hostname is available in vm-data/hostname.
@@ -286,7 +286,7 @@ class XenCommunicator(Communicator):
 
                 msg = None
 
-                transaction = self.xs_transaction_start()
+                transaction = self.xs.transaction_start()
                 if self.xs.ls(transaction, self._hostname_prefix) is not None:
                     msg = self.xs.read(transaction, self._hostname_prefix)
                 self.xs.transaction_end(transaction)
