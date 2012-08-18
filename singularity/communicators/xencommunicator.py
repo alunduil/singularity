@@ -26,7 +26,7 @@ class XenCommunicator(Communicator):
     ### Notes
 
     Found the key!  /local/domain/<dom_id>
-    To get the key: dom_id
+    To get the key: domid
 
     Although, once one knows this secret they can open up the following data
     structue with a xenstore ls /local/domain/<dom_id>:
@@ -219,15 +219,34 @@ class XenCommunicator(Communicator):
         self._send_prefix = send_prefix
         self._data_prefix = data_prefix
 
+        self._queue = Queue.Queue()
+
         self.xs = xs.xshandle() # pylint: disable=C0103
 
-        self.xs.watch(self._receive_prefix, "COMMAND")
-        self.xs.watch(self._data_prefix, "DATA")
+        def xs_watch(path):
+            if path in [ self._receive_prefix, self._data_prefix ]:
+                return True
+
+            logger.info("Received a watch even on %s", path)
+
+            transaction = self.xs.transaction_start()
+            message = self.xs.read(transaction, path)
+            self.xs.transaction_end(transaction)
+
+            logger.info("Received message, %s", message)
+
+            self._queue.put((path, message))
+
+            return True
+
+        self.watches = []
+        self.watches.append(xswatch(self._receive_prefix, xs_watch))
+        self.watches.append(xswatch(self._data_prefix, xs_watch))
 
     def __del__(self):
         logger.info("XenCommunicator watches are being removed.")
-        self.xs.unwatch(self._receive_prefix, "COMMAND")
-        self.xs.unwatch(self._data_prefix, "DATA")
+        for watch in self.watches:
+            watch.unwatch()
 
     @property
     def files(self):
@@ -245,33 +264,12 @@ class XenCommunicator(Communicator):
 
         """
 
-        # TODO Add error handling that is appropriate here ...
-        # TODO Split off the D and allow us to die ...
-        while True:
-            logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ]) # pylint: disable=C0301
-            logger.info("Reading watched xenstore locations.")
-            path, token = self.xs.read_watch()
-            logger.debug("Recieved a watch event on %s with token, %s", path, token) # pylint: disable=C0301
-            logger.debug("Receive Prefix: %s", self._receive_prefix)
-            logger.debug("Data Prefix: %s", self._data_prefix)
+        path, message = self._queue.get()
 
-            if path not in [ self._receive_prefix, self._data_prefix ]:
-                break
+        identifier = path.replace(self._receive_prefix + "/", "")
+        identifier = path.replace(self._data + "/", "")
 
-        logger.info("Recieved a watch event on %s with token, %s", path, token)
-
-        transaction = self.xs.transaction_start()
-        message = self.xs.read(transaction, path)
-        logger.info("Received message, %s, from %s", message, path)
-        self.xs.transaction_end(transaction)
-
-        identifier = ""
-        if token == "COMMAND":
-            identifier = path.replace(self._receive_prefix + "/", "")
-        elif token == "DATA":
-            identifier = path.replace(self._data_prefix + "/", "")
-
-        logger.debug("Identifier received: %s", identifier)
+        logger.info("Received identifier, %s", identifier)
 
         return identifier, helpers.translate(message)
 
