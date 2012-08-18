@@ -269,12 +269,9 @@ class XenCommunicator(Communicator):
 
         path, message = self._queue.get()
 
-        logger.debug("Path: %s", path)
-        logger.debug("Receive Prefix: %s", self._receive_prefix)
-        logger.debug("Data Prefix: %s", self._data_prefix)
-
-        identifier = path.replace(self._receive_prefix + "/", "")
-        identifier = path.replace(self._data_prefix + "/", "")
+        identifier = path
+        identifier = identifier.replace(self._receive_prefix + "/", "")
+        identifier = identifier.replace(self._data_prefix + "/", "")
 
         logger.info("Received identifier, %s", identifier)
 
