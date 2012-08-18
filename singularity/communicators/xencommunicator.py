@@ -270,7 +270,7 @@ class XenCommunicator(Communicator):
         path, message = self._queue.get()
 
         identifier = path.replace(self._receive_prefix + "/", "")
-        identifier = path.replace(self._data + "/", "")
+        identifier = path.replace(self._data_prefix + "/", "")
 
         logger.info("Received identifier, %s", identifier)
 
