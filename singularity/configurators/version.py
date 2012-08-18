@@ -62,7 +62,7 @@ class VersionConfigurator(SingularityConfigurator):
         if "arguments" in configuration:
             try:
                 return { "message": versions[configuration["arguments"]] }
-            except KeyError:
-                return { "message": "Version for {0} not found".format(configuration["arguments"]), "status": "404" }
+            except KeyError: # Default to the agent version.
+                return { "message": versions["agent"] }
         return { "message": "versions: {0}".format(versions) }
 
