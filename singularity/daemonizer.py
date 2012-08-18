@@ -24,10 +24,6 @@ from singularity.applicator import SingularityApplicator
 logger = logging.getLogger("console") # pylint: disable=C0103
 
 class SingularityDaemon(object):
-    def __init__(self):
-        self._configurators = SingularityConfigurators()
-        self._communicator = communicators.create()
-
     def __call__(self):
         actions = {
                 "start": self.start,
@@ -90,6 +86,10 @@ class SingularityDaemon(object):
 
         logger.info("Starting up.")
         with context:
+
+            self._configurators = SingularityConfigurators()
+            self._communicator = communicators.create()
+
             while True:
                 logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ]) # pylint: disable=C0301
 
