@@ -282,8 +282,10 @@ class XenCommunicator(Communicator):
                 self.xs.transaction_end(transaction)
 
                 for item in msg:
-                    message.update(helpers.translate(item))
-
+                    tmp = helpers.translate(item)
+                    message["ips"].update(tmp["ips"])
+                    message["routes"].update(tmp["routes"])
+                
                 msg = None
 
                 transaction = self.xs.transaction_start()
