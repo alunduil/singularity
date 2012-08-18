@@ -7,7 +7,7 @@ import logging
 import json
 import os
 
-import xen.lowlevel.xs as xs
+import xen.xend.xenstore.xsutil as xs
 
 import singularity.communicators.helpers as helpers
 
@@ -219,7 +219,7 @@ class XenCommunicator(Communicator):
         self._send_prefix = send_prefix
         self._data_prefix = data_prefix
 
-        self.xs = xs.xs() # pylint: disable=C0103
+        self.xs = xs.xshandle() # pylint: disable=C0103
 
         self.xs.watch(self._receive_prefix, "COMMAND")
         self.xs.watch(self._data_prefix, "DATA")
