@@ -227,10 +227,10 @@ class XenCommunicator(Communicator):
         self.xs = xs.xshandle() # pylint: disable=C0103
 
         def xs_watch(path):
+            logger.info("Received a watch even on %s", path)
+
             if path in [ self._receive_prefix, self._data_prefix ]:
                 return True
-
-            logger.info("Received a watch even on %s", path)
 
             transaction = self.xs.transaction_start()
             message = self.xs.read(transaction, path)
