@@ -281,7 +281,7 @@ class XenCommunicator(Communicator):
                     msg.append(self.xs.read(transaction, self._network_prefix + "/" + entry))
                 self.xs.transaction_end(transaction)
 
-                logger.debug("Message: %s", message
+                logger.debug("Message: %s", message)
 
                 for item in msg:
                     tmp = helpers.translate(item)
