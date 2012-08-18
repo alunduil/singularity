@@ -45,14 +45,10 @@ class NetworkConfigurator(SingularityConfigurator):
 
         self._ip_path = None # pylint: disable=W0201
 
-        for prefix in ["/bin/", "/usr/bin/"]:
-            try:
-                self._ip_path = subprocess.check_output(prefix + "which ip") # pylint: disable=C0301,W0201
-            except subprocess.CalledProcessError:
-                pass
-
-            if self._ip_path is not None:
-                break
+        try:
+            self._ip_path = subprocess.check_output("which ip", shell = True) # pylint: disable=C0301,W0201
+        except subprocess.CalledProcessError:
+            pass
 
         logger.debug("ip path: %s", self._ip_path)
 
@@ -81,12 +77,14 @@ class NetworkConfigurator(SingularityConfigurator):
         for interface, ips in configuration["ips"].iteritems():
             for ip in ips: # pylint: disable=C0103
                 logger.info("Calling: %s addr add %s dev %s", self._ip_path, ip[0], interface) # pylint: disable=C0301
-                subprocess.check_call("{0} addr add {1} dev {2}".format(self._ip_path, ip[0], interface)) # pylint: disable=C0301
+                command = [ self._ip_path, "address", "add", ip[0], "dev", interface ]
+                subprocess.check_call(command)
 
         for interface, routes in configuration["routes"].iteritems():
             for route in routes:
                 logger.info("Calling: %s route add to %s via %s dev %s", self._ip_path, route[0], route[1], interface) # pylint: disable=C0301
-                subprocess.check_call("{0} route add to {1} via {2} dev {3}".format(self._ip_path, route[0], route[1], interface)) # pylint: disable=C0301
+                command = [ self._ip_path, "route", "add", "to", route[0], "via", route[1], "dev", interface ]
+                subprocess.check_call(command)
 
         return { "": "" }
 
