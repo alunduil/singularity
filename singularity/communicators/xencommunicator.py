@@ -6,8 +6,11 @@
 import logging
 import json
 import os
+import Queue
 
 import xen.xend.xenstore.xsutil as xs
+
+from xen.xend.xenstore.xswatch import xswatch
 
 import singularity.communicators.helpers as helpers
 
