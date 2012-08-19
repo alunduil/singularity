@@ -115,7 +115,7 @@ class SingularityDaemon(object):
                         if "message" == filename:
                             response += content + "\n"
                         elif filename.startswith("/"):
-                            SingularityCache[configurator.function + "." + filename] = content # pylint: disable=C0301
+                            SingularityCache()[configurator.function + "." + filename] = content # pylint: disable=C0301
 
                 logger.info("Applying the functions found ...")
                 SingularityApplicator()(actions = functions)
