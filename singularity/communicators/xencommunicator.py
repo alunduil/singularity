@@ -290,11 +290,13 @@ class XenCommunicator(Communicator):
 
                     if not "ips" in message and "ips" in tmp:
                         message["ips"] = {}
-                    message["ips"].update(tmp["ips"])
+                    message["ips"].update(tmp.pop("ips"))
 
                     if not "routes" in message and "routes" in tmp:
                         message["routes"] = {}
-                    message["routes"].update(tmp["routes"])
+                    message["routes"].update(tmp.pop("routes"))
+
+                    message.update(tmp)
 
                     logger.debug("Message: %s", message)
                 
