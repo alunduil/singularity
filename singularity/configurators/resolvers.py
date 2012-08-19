@@ -77,14 +77,13 @@ class ResolversConfigurator(SingularityConfigurator):
         if "hostname" in configuration:
             domain = ".".join(configuration["hostname"].split(".")[-2:])
 
-        # TODO Improve the merge performed here.
         with open(self.resolvconf_path, "r") as resolvconf:
             lines.extend([ line.strip() for line in resolvconf.readlines() ])
 
-            if "domain" not in "".join(lines):
+            if "hostname" in configuration and "domain" not in "".join(lines):
                 lines.append("domain {0}".format(domain))
 
-            if "search" not in "".join(lines):
+            if "hostname" in configuration and "search" not in "".join(lines):
                 lines.append("search {0}".format(domain))
 
             for resolver in configuration["resolvers"]:
