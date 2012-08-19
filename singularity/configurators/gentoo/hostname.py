@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class GentooHostnameConfigurator(SingularityConfigurator):
     def functions(self):
-        return ["hostname"]
+        return "hostname"
 
     @property
     def confd_hostname_path(self): # pylint: disable=R0201

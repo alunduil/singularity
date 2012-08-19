@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class GentooNetworkConfigurator(SingularityConfigurator):
     def functions(self):
-        return ["network"]
+        return "network"
 
     @property
     def confd_net_path(self): # pylint: disable=R0201

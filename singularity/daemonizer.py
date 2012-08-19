@@ -110,8 +110,8 @@ class SingularityDaemon(object):
 
                     # TODO Add conflict resolution ...
 
-                    logger.info("Found configurator, %s, with functions, %s", configurator, configurator.functions) # pylint: disable=C0301
-                    functions |= set(configurator.functions)
+                    logger.info("Found configurator, %s, with function, %s", configurator, configurator.function) # pylint: disable=C0301
+                    functions |= set(configurator.function)
 
                     for filename, content in configurator.content(message).iteritems(): # pylint: disable=C0301
                         if "message" == filename:
@@ -119,10 +119,10 @@ class SingularityDaemon(object):
                         elif filename.startswith("/"):
                             logger.debug("Cache directory, %s", SingularityParameters()["main.cache"])
                             logger.debug("Type of cache directory, %s", type(SingularityParameters()["main.cache"]))
-                            logger.debug("Cache file: %s", os.path.join(SingularityParameters()["main.cach"], filename))
+                            logger.debug("Cache file: %s", os.path.join(SingularityParameters()["main.cach"], configurator.function, filename[1:]))
 
-                            logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator) # pylint: disable=C0301
-                            with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile: # pylint: disable=C0301
+                            logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:]), configurator) # pylint: disable=C0301
+                            with open(os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:]), "w") as cachefile: # pylint: disable=C0301
                                 cachefile.write("\n".join(content))
 
                 logger.info("Applying the functions found ...")

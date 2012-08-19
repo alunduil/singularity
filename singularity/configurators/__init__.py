@@ -52,14 +52,14 @@ class SingularityConfigurator(object):
         
         Configurator Name    | Default Return Value
         -----------------    | --------------------
-        PasswordConfigurator | ["password"]
-        FooBarConfigurator   | ["foobar"]
-        FooBar               | ["foobar"]
+        PasswordConfigurator | "password"
+        FooBarConfigurator   | "foobar"
+        FooBar               | "foobar"
 
         """
 
         logger.debug("Probable function: %s", self.__class__.__name__.replace("Configurator", "").lower()) # pylint: disable=C0301
-        return [self.__class__.__name__.replace("Configurator", "").lower()]
+        return self.__class__.__name__.replace("Configurator", "").lower()
 
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
