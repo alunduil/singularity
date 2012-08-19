@@ -5,8 +5,6 @@
 
 import logging
 
-import singularity.information as info
-
 from singularity.configurators import SingularityConfigurator
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
@@ -55,5 +53,5 @@ class FeaturesConfigurator(SingularityConfigurator):
         """
         
         # TODO Implement a proper features check.
-        return { "message": "password,version,features,agentupdate,resetnetwork" }
+        return { "message": "password,version,features,agentupdate,resetnetwork" } # pylint: disable=C0301
 

@@ -52,7 +52,7 @@ class AgentUpdateConfigurator(SingularityConfigurator):
             if self._emerge_path is not None:
                 break
 
-        logger.debug("emerge path: %s", self._chpasswd_path)
+        logger.debug("emerge path: %s", self._emerge_path)
 
         if self._emerge_path is None:
             logger.info("Must have access to emerge")

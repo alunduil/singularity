@@ -5,7 +5,6 @@
 
 import logging
 import json
-import os
 import Queue
 
 import xen.xend.xenstore.xsutil as xs
@@ -310,7 +309,7 @@ class XenCommunicator(Communicator):
                 if msg is not None:
                     message["hostname"] = msg
 
-        logger.debug("Passing back identifier, %s, message, %s", identifier, message)
+        logger.debug("Passing back identifier, %s, message, %s", identifier, message) # pylint: disable=C0301
 
         return identifier, message
 

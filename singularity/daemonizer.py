@@ -20,6 +20,7 @@ import singularity.communicators as communicators
 from singularity.parameters import SingularityParameters
 from singularity.configurators import SingularityConfigurators
 from singularity.applicator import SingularityApplicator
+from singularity.cache import SingularityCache
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 
@@ -86,8 +87,8 @@ class SingularityDaemon(object):
         logger.info("Starting up.")
         with context:
 
-            self._configurators = SingularityConfigurators()
-            self._communicator = communicators.create()
+            self._configurators = SingularityConfigurators() # pylint: disable=W0201,C0301
+            self._communicator = communicators.create() # pylint: disable=W0201
 
             while True:
                 logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ]) # pylint: disable=C0301
@@ -104,7 +105,7 @@ class SingularityDaemon(object):
 
                 for configurator in self._configurators:
                     if not configurator.runnable(message):
-                        logger.info("Configurator, %s, is not runnable.", configurator)
+                        logger.info("Configurator, %s, is not runnable.", configurator) # pylint: disable=C0301
                         continue
 
                     logger.info("Found configurator, %s, with function, %s", configurator, configurator.function) # pylint: disable=C0301
@@ -114,17 +115,7 @@ class SingularityDaemon(object):
                         if "message" == filename:
                             response += content + "\n"
                         elif filename.startswith("/"):
-                            cache_filename = os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:])
-
-                            logger.info("Writing cache file, %s, from configurator, %s", cache_filename, configurator) # pylint: disable=C0301
-
-                            if not os.path.exists(os.path.dirname(cache_filename)):
-                                os.makedirs(os.path.dirname(cache_filename))
-
-                            # TODO Add conflict resolution ...
-
-                            with open(os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:]), "w") as cachefile: # pylint: disable=C0301
-                                cachefile.write("\n".join(content))
+                            SingularityCache[configurator.function + "." + filename] = content # pylint: disable=C0301
 
                 logger.info("Applying the functions found ...")
                 SingularityApplicator()(actions = functions)

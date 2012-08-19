@@ -51,6 +51,8 @@ class SingularityApplicator(object):
                 logger.error("Conflict found for %s!  Please check the logs for more information.") # pylint: disable=C0301
                 continue
 
+
+
             # Find all files in action_dir
             # Backup all matching files in system if requested
             # Move all files from action_dir to the system locations

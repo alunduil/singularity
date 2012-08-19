@@ -46,7 +46,7 @@ class NetworkConfigurator(SingularityConfigurator):
         self._ip_path = None # pylint: disable=W0201
 
         try:
-            self._ip_path = subprocess.check_output("which ip", shell = True).strip() # pylint: disable=C0301,W0201
+            self._ip_path = subprocess.check_output("which ip", shell = True).strip() # pylint: disable=C0301,W0201,E1103
         except subprocess.CalledProcessError:
             pass
 
@@ -77,21 +77,21 @@ class NetworkConfigurator(SingularityConfigurator):
         for interface, ips in configuration["ips"].iteritems():
             for ip in ips: # pylint: disable=C0103
                 logger.info("Calling: %s addr add %s dev %s", self._ip_path, ip[0], interface) # pylint: disable=C0301
-                command = [ self._ip_path, "address", "add", ip[0], "dev", interface ]
+                command = [ self._ip_path, "address", "add", ip[0], "dev", interface ] # pylint: disable=C0301
                 try:
                     subprocess.check_call(command)
                 except subprocess.CalledProcessError as error:
-                    if error.returncode != 2: # TODO Verify this exit code means already present.
+                    if error.returncode != 2: # TODO Verify this exit code means already present. # pylint: disable=C0301
                         raise
 
         for interface, routes in configuration["routes"].iteritems():
             for route in routes:
                 logger.info("Calling: %s route add to %s via %s dev %s", self._ip_path, route[0], route[1], interface) # pylint: disable=C0301
-                command = [ self._ip_path, "route", "add", "to", route[0], "via", route[1], "dev", interface ]
+                command = [ self._ip_path, "route", "add", "to", route[0], "via", route[1], "dev", interface ] # pylint: disable=C0301
                 try:
                     subprocess.check_call(command)
                 except subprocess.CalledProcessError as error:
-                    if error.returncode != 2: # TODO Verify this exit code means already present.
+                    if error.returncode != 2: # TODO Verify this exit code means already present. # pylint: disable=C0301
                         raise
 
         return { "": "" }
