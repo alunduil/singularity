@@ -81,14 +81,18 @@ class NetworkConfigurator(SingularityConfigurator):
                 try:
                     subprocess.check_call(command)
                 except subprocess.CalledProcessError as error:
-                    if error.returncode != 2:
+                    if error.returncode != 2: # TODO Verify this exit code means already present.
                         raise
 
         for interface, routes in configuration["routes"].iteritems():
             for route in routes:
                 logger.info("Calling: %s route add to %s via %s dev %s", self._ip_path, route[0], route[1], interface) # pylint: disable=C0301
                 command = [ self._ip_path, "route", "add", "to", route[0], "via", route[1], "dev", interface ]
-                subprocess.check_call(command)
+                try:
+                    subprocess.check_call(command)
+                except subprocess.CalledProcessError as error:
+                    if error.returncode != 2: # TODO Verify this exit code means already present.
+                        raise
 
         return { "": "" }
 
