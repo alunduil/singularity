@@ -6,6 +6,7 @@
 import logging
 import itertools
 import os
+import glob
 
 from singularity.parameters import SingularityParameters
 
@@ -67,6 +68,40 @@ class SingularityCache(object): # pylint: disable=R0903
 
         if os.access(cache_path(function, filename), os.W_OK):
             os.unlink(cache_path(function, filename))
+
+    def __iter__(self):
+        for file_ in self.iterfiles():
+            yield file_.replace(SingularityParameters()["main.cache"], "").replace("/", ".", 1)
+
+    def keys(self):
+        return list(self.iterkeys())
+
+    def iterkeys(self):
+        return self.__iter__()
+
+    def iter(self):
+        return self.__iter__()
+
+    def clear(self):
+        for path in glob.glob(SingularityParameters()["main.cache"] + "/*"):
+            os.removedirs(path)
+
+    def __contains__(self, key):
+        return key in list(self.iterkeys())
+
+    def items(self):
+        return list(self.iteritems())
+
+    def iteritems(self):
+        for key in self.iterkeys():
+            yield (key, self[key])
+
+    def values(self):
+        return list(self.itervalues())
+
+    def itervalues(self):
+        for key in self.iterkeys():
+            yield self[key]
 
 def cache_path(function, filename):
     return os.path.join(SingularityParameters()["main.cache"], function, filename[1:]) # pylint: disable=C0301
