@@ -119,7 +119,7 @@ class SingularityDaemon(object):
                         elif filename.startswith("/"):
                             logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator) # pylint: disable=C0301
                             with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile: # pylint: disable=C0301
-                                cachefile.write(content)
+                                cachefile.write("\n".join(content))
 
                 logger.info("Applying the functions found ...")
                 SingularityApplicator()(actions = functions)
