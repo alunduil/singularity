@@ -117,11 +117,15 @@ class SingularityDaemon(object):
                         if "message" == filename:
                             response += content + "\n"
                         elif filename.startswith("/"):
-                            logger.debug("Cache directory, %s", SingularityParameters()["main.cache"])
-                            logger.debug("Type of cache directory, %s", type(SingularityParameters()["main.cache"]))
-                            logger.debug("Cache file: %s", os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:]))
+                            cache_filename = os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:])
+
+                            logger.debug("Cache file: %s", cache_filename)
 
                             logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:]), configurator) # pylint: disable=C0301
+
+                            if not os.path.exists(os.path.dirname(cache_filename)):
+                                os.makedirs(os.path.dirname(cache_filename))
+
                             with open(os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:]), "w") as cachefile: # pylint: disable=C0301
                                 cachefile.write("\n".join(content))
 
