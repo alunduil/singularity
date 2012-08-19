@@ -118,13 +118,15 @@ def translate(message): # pylint: disable=R0912,R0915
 
     try:
         for ip in parsed["ips"]: # pylint: disable=C0103
-            message["ips"][interface(parsed["mac"])].append((cidr(ip["ip"], ip["netmask"]), "ipv4")) # pylint: disable=C0301
+            if ip["enabled"]:
+                message["ips"][interface(parsed["mac"])].append((cidr(ip["ip"], ip["netmask"]), "ipv4")) # pylint: disable=C0301
     except KeyError:
         logger.warning("Did not receive 'ips' or 'ips.ip' or 'ips.netmask' from message") # pylint: disable=C0301
 
     try:
         for ip in parsed["ip6s"]: # pylint: disable=C0103
-            message["ips"][interface(parsed["mac"])].append((cidr(ip["ip"], ip["netmask"]), "ipv6")) # pylint: disable=C0301
+            if ip["enabled"]:
+                message["ips"][interface(parsed["mac"])].append((cidr(ip["ip"], ip["netmask"]), "ipv6")) # pylint: disable=C0301
     except KeyError:
         logger.warning("Did not receive 'ip6s' or ip6s.ip' or 'ip6s.netmask' from message") # pylint: disable=C0301
 
