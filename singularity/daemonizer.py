@@ -103,12 +103,9 @@ class SingularityDaemon(object):
                 logger.debug("Length of configurators: %s", len(self._configurators)) # pylint: disable=C0301
 
                 for configurator in self._configurators:
-                    logger.info("Testing configurator %s", configurator)
                     if not configurator.runnable(message):
-                        logger.info("Configurator is not runnable.")
+                        logger.info("Configurator, %s, is not runnable.", configurator)
                         continue
-
-                    # TODO Add conflict resolution ...
 
                     logger.info("Found configurator, %s, with function, %s", configurator, configurator.function) # pylint: disable=C0301
                     functions |= set(configurator.function)
@@ -119,12 +116,12 @@ class SingularityDaemon(object):
                         elif filename.startswith("/"):
                             cache_filename = os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:])
 
-                            logger.debug("Cache file: %s", cache_filename)
-
-                            logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:]), configurator) # pylint: disable=C0301
+                            logger.info("Writing cache file, %s, from configurator, %s", cache_filename, configurator) # pylint: disable=C0301
 
                             if not os.path.exists(os.path.dirname(cache_filename)):
                                 os.makedirs(os.path.dirname(cache_filename))
+
+                            # TODO Add conflict resolution ...
 
                             with open(os.path.join(SingularityParameters()["main.cache"], configurator.function, filename[1:]), "w") as cachefile: # pylint: disable=C0301
                                 cachefile.write("\n".join(content))
@@ -132,7 +129,6 @@ class SingularityDaemon(object):
                 logger.info("Applying the functions found ...")
                 SingularityApplicator()(actions = functions)
 
-                # TODO Fill in response ...
                 response = "" + "\n" + response
 
                 self._communicator.send(identifier, response.strip())
