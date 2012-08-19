@@ -116,7 +116,7 @@ class SingularityDaemon(object):
                     for filename, content in configurator.content(message).iteritems(): # pylint: disable=C0301
                         if "message" == filename:
                             response += content + "\n"
-                        else:
+                        elif: filename.startswith("/"):
                             logger.info("Writing cache file, %s, from configurator, %s", os.path.join(SingularityParameters()["main.cache"], filename), configurator) # pylint: disable=C0301
                             with open(os.path.join(SingularityParameters()["main.cache"], filename), "w") as cachefile: # pylint: disable=C0301
                                 cachefile.write(content)
