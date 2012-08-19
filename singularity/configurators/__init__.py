@@ -20,7 +20,7 @@ class SingularityConfigurator(object):
         pass
 
     @property
-    def functions(self):
+    def function(self):
         """Name of the functions this configurator fulfills.
 
         ### Description

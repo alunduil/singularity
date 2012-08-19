@@ -11,7 +11,8 @@ from singularity.configurators import SingularityConfigurator
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class GentooHostnameConfigurator(SingularityConfigurator):
-    def functions(self):
+    @property
+    def function(self):
         return "hostname"
 
     @property
