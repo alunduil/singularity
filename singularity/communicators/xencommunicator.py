@@ -275,8 +275,10 @@ class XenCommunicator(Communicator):
 
         """
 
-        path = message = None
-        while message is None or path is None:
+        path = None
+        message = None
+
+        while message is None and path is None:
             logger.debug("Current message at path, %s: %s", path, message)
             path, message = self._queue.get(timeout = sys.maxint)
 
