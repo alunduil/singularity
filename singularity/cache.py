@@ -35,7 +35,7 @@ class SingularityCache(object): # pylint: disable=R0903
         return list(self.iterfiles())
 
     def iterfiles(self):
-        return itertools.chain(*[ [ os.path.join(file_[0], name) for name in file_[2] ] for file_ in os.walk(SingularityParameters["main.cache"]) if len(file_[2]) ]) # pylint: disable=C0301
+        return itertools.chain(*[ [ os.path.join(file_[0], name) for name in file_[2] ] for file_ in os.walk(SingularityParameters()["main.cache"]) if len(file_[2]) ]) # pylint: disable=C0301
 
     def __len__(self):
         return len(self.files)
