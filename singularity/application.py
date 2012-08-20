@@ -84,6 +84,7 @@ class SingularityApplication(object): # pylint: disable=R0903
             module.logger = logging.getLogger(module.__name__)
 
     def run(self): # pylint: disable=R0201
+        """Run the specified commands for the application."""
         logger.info("Running %s ... ", SingularityParameters()["subcommand"])
         subcommands = {
                 "apply": SingularityApplicator,

@@ -4,21 +4,13 @@
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import logging
-import os
+import base64
 
 from singularity.configurators import SingularityConfigurator
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
-class GentooHostnameConfigurator(SingularityConfigurator):
-    @property
-    def function(self):
-        return "hostname"
-
-    @property
-    def confd_hostname_path(self): # pylint: disable=R0201,C0111
-        return os.path.join(os.path.sep, "etc", "conf.d", "hostname")
-
+class FileConfigurator(SingularityConfigurator):
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
 
@@ -31,41 +23,43 @@ class GentooHostnameConfigurator(SingularityConfigurator):
         ### Description
 
         We should be able to run if the following conditions are true:
-        * On a Gentoo system
-        * Has a writable /etc/conf.d/hostname file
+        * Recieve a function of file
+        * Receive an argument
 
         """
 
-        if "hostname" not in configuration:
-            logger.info("Must be passed a hostname in the message")
+        if "function" not in configuration:
+            logger.info("Must be passed a function in the message")
             return False
 
-        if os.access(self.confd_hostname_path, os.W_OK):
-            logger.info("Can't write to %s", self.confd_hostname_path)
+        if configuration["function"] != "file":
+            logger.info("Must be passed \"file\" as the function")
             return False
 
-        logger.info("GentooHostnameConfigurator is runnable!")
+        if "arguments" not in configuration:
+            logger.info("Must be passed an argument in the message")
+            return False
+
+        logger.info("FeaturesConfigurator is runnable!")
         return True
 
     def content(self, configuration):
         """Generated content of this configurator as a dictionary.
-
+        
         ### Arguments
 
-        Argumnet      | Description
+        Argument      | Description
         --------      | -----------
         configuration | Configuration settings to be applied by this configurator (dict)
 
         ### Description
 
-        Provides the contents of /etc/conf.d/hostname.
-
+        Writes the file passed out to the disk.
+        
         """
+        
+        # TODO Add capability to inject files with commas in them.
+        filename, content = base64.b64decode(configuration["arguments"]).split(',', 1) # pylint: disable=C0301
 
-        lines = [
-                "# Set to the hostname of this machine",
-                "hostname=\"{0}\"".format(configuration["hostname"].split('.', 1)[0]), # pylint: disable=C0301
-                ]
-
-        return { self.confd_hostname_path: lines }
+        return { filename: content }
 

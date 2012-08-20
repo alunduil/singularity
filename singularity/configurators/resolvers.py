@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class ResolversConfigurator(SingularityConfigurator):
     @property
-    def resolvconf_path(self): # pylint: disable=R0201
+    def resolvconf_path(self): # pylint: disable=R0201,C0111
         return os.path.join(os.path.sep, "etc", "resolv.conf")
 
     def runnable(self, configuration):

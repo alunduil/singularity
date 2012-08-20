@@ -36,7 +36,7 @@ class SingularityCache(object): # pylint: disable=R0903
         logger.debug("Files in the cache: %s", list(self.iterfiles()))
         return list(self.iterfiles())
 
-    def iterfiles(self):
+    def iterfiles(self): # pylint: disable=R0201
         """Generator of list of files in the cache."""
         return itertools.chain(*[ [ os.path.join(file_[0], name) for name in file_[2] ] for file_ in os.walk(SingularityParameters()["main.cache"]) if len(file_[2]) ]) # pylint: disable=C0301
 
@@ -99,21 +99,24 @@ class SingularityCache(object): # pylint: disable=R0903
             os.unlink(cache_path(function, filename))
 
     def __iter__(self):
+        """Generates the keys for this dict-like."""
         for file_ in self.iterfiles():
             logger.debug("key: %s", file_.replace(SingularityParameters()["main.cache"] + "/", "").replace("/", "./", 1)) # pylint: disable=C0301
-            yield file_.replace(SingularityParameters()["main.cache"] + "/", "").replace("/", "./", 1)
+            yield file_.replace(SingularityParameters()["main.cache"] + "/", "").replace("/", "./", 1) # pylint: disable=C0301
 
     def keys(self):
         """Files in the cache in key format."""
         return list(self.iterkeys())
 
     def iterkeys(self):
+        """Alias for __iter__"""
         return self.__iter__()
 
     def iter(self):
+        """Alias for __iter__"""
         return self.__iter__()
 
-    def clear(self):
+    def clear(self): # pylint: disable=R0201
         """Delete all files in the cache."""
         for path in glob.glob(SingularityParameters()["main.cache"] + "/*"):
             os.removedirs(path)
@@ -126,6 +129,7 @@ class SingularityCache(object): # pylint: disable=R0903
         return list(self.iteritems())
 
     def iteritems(self):
+        """Generates (key, value) pairs in this dict-like."""
         for key in self.iterkeys():
             yield (key, self[key])
 
@@ -134,9 +138,26 @@ class SingularityCache(object): # pylint: disable=R0903
         return list(self.itervalues())
 
     def itervalues(self):
+        """Generates the values for this dict-like."""
         for key in self.iterkeys():
             yield self[key]
 
 def cache_path(function, filename):
+    """Return the corresponding cache path for the fuction and file.
+
+    ### Description
+
+    Given a function and filename returns the full cache path to the
+    corresponding file.
+
+    ### Examples
+
+    Assuming a default cache location:
+
+    >>> cache_path("network", "/etc/conf.d/net")
+    '/var/cache/singularity/network/etc/conf.d/net'
+
+    """
+
     return os.path.join(SingularityParameters()["main.cache"], function, filename[1:]) # pylint: disable=C0301
 

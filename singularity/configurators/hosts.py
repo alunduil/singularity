@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class HostsConfigurator(SingularityConfigurator):
     @property
-    def hosts_path(self): # pylint: disable=R0201
+    def hosts_path(self): # pylint: disable=R0201,C0111
         return os.path.join(os.path.sep, "etc", "hosts")
 
     def runnable(self, configuration):

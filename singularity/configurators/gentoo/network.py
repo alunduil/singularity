@@ -16,7 +16,7 @@ class GentooNetworkConfigurator(SingularityConfigurator):
         return "network"
 
     @property
-    def confd_net_path(self): # pylint: disable=R0201
+    def confd_net_path(self): # pylint: disable=R0201,C0111
         return os.path.join(os.path.sep, "etc", "conf.d", "net")
 
     def runnable(self, configuration):

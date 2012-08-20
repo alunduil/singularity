@@ -258,7 +258,7 @@ class XenCommunicator(Communicator):
         logger.debug("Missed messages: %s", entries)
 
         if entries is not None:
-            for path in [ self._receive_prefix + "/" + entry for entry in entries ]:
+            for path in [ self._receive_prefix + "/" + entry for entry in entries ]: # pylint: disable=C0301
                 xs_watch(path)
 
     def __del__(self):
@@ -296,7 +296,7 @@ class XenCommunicator(Communicator):
                 transaction = self.xs.transaction_start()
                 entries = self.xs.ls(transaction, self._network_prefix)
                 for entry in entries:
-                    msg.append(self.xs.read(transaction, self._network_prefix + "/" + entry))
+                    msg.append(self.xs.read(transaction, self._network_prefix + "/" + entry)) # pylint: disable=C0301
                 self.xs.transaction_end(transaction)
 
                 logger.debug("Message: %s", message)
@@ -327,6 +327,9 @@ class XenCommunicator(Communicator):
 
                 if msg is not None:
                     message["hostname"] = msg
+
+            elif message["function"] == "injectfile":
+                message["function"] = "file"
 
         logger.debug("Passing back identifier, %s, message, %s", identifier, message) # pylint: disable=C0301
 
