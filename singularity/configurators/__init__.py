@@ -215,7 +215,7 @@ class SingularityConfigurators(object): # pylint: disable=R0903
             logger.info("Searching for submodules")
 
             while True:
-                submodules = [ submodule for submodule in itertools.chain(*[ inspect.getmembers(module, inspect.ismodule) for module in modules ]) if submodule not in modules ]
+                submodules = [ submodule for name, submodule in itertools.chain(*[ inspect.getmembers(module, inspect.ismodule) for module in modules ]) if submodule not in modules ]
                 logger.debug("New modules found as submodules of known modules: %s", submodules)
 
                 if not len(submodules):
