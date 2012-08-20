@@ -64,11 +64,15 @@ class GentooNetworkConfigurator(SingularityConfigurator):
 
         lines = []
 
+        logger.debug("ips: %s", configuration["ips"])
+
         for interface, ips in configuration["ips"].iteritems():
             lines.append("config_{0}=\"".format(interface))
             for ip in ips: # pylint: disable=C0103
                 lines.append(ip[0])
             lines.append("\"")
+
+        logger.debug("routes: %s", configuration["routes"])
 
         for interface, routes in configuration["ips"].iteritems():
             lines.append("routes_{0}=\"".format(interface))
