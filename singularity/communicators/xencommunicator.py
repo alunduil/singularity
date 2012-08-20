@@ -348,7 +348,7 @@ class XenCommunicator(Communicator):
         # TODO Add error handling that is appropriate here ...
 
         message = json.dumps({
-            "returncode": status,
+            "returncode": str(status), # Upstream can't take an int ...
             "message": message,
             })
 
