@@ -210,20 +210,20 @@ class SingularityConfigurators(object): # pylint: disable=R0903
                     logger.warning("Module, %s, not able to be imported", module_name) # pylint: disable=C0301
                     continue
 
-            logger.debug("First level modules: %s", modules)
-            logger.info("Searching for submodules")
+            #logger.debug("First level modules: %s", modules)
+            #logger.info("Searching for submodules")
 
-            while True:
-                submodules = [ submodule for submodule in itertools.chain(*[ inspect.getmembers(module, inspect.ismodule) for module in modules ]) if submodule not in modules and hasattr(submodule, "__name__") ]
-                logger.debug("New modules found as submodules of known modules: %s", submodules)
+            #while True:
+            #    submodules = [ submodule for submodule in itertools.chain(*[ inspect.getmembers(module, inspect.ismodule) for module in modules ]) if submodule not in modules ]
+            #    logger.debug("New modules found as submodules of known modules: %s", submodules)
 
-                if not len(submodules):
-                    logger.info("No more submodules found")
-                    break
+            #    if not len(submodules):
+            #        logger.info("No more submodules found")
+            #        break
 
-                modules.extend(submodules)
+            #    modules.extend(submodules)
 
-            logger.debug("All found modules: %s", modules)
+            #logger.debug("All found modules: %s", modules)
 
             for module in modules:
                 logger.debug("Classes found in Module, %s: %s", module.__name__, inspect.getmembers(module, inspect.isclass)) # pylint: disable=C0301
