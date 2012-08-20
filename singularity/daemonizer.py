@@ -118,6 +118,7 @@ class SingularityDaemon(object):
                             SingularityCache()[configurator.function + "." + filename] = content # pylint: disable=C0301
 
                 logger.info("Applying the functions found ...")
+                logger.debug("Functions found: %s", functions)
                 SingularityApplicator()(actions = functions)
 
                 response = "" + "\n" + response
