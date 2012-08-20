@@ -6,6 +6,7 @@
 import logging
 
 from singularity.configurators import SingularityConfigurator
+from singularity.parameters import SingularityParameters
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
@@ -51,7 +52,11 @@ class FeaturesConfigurator(SingularityConfigurator):
         Returns the requested features information.  As a return message.
 
         """
-        
-        # TODO Implement a proper features check.
-        return { "message": "password,version,features,agentupdate,resetnetwork" } # pylint: disable=C0301
+
+        from singularity.configurators import SingularityConfigurators
+
+        actions = set([ configurator.function for configurator in SingularityConfigurators() ]) # pylint: disable=C0301
+        actions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
+
+        return { "message": ",".join(actions) }
 
