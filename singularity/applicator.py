@@ -7,6 +7,7 @@ import logging
 import os
 
 from singularity.parameters import SingularityParameters
+from singularity.cache import SingularityCache
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 
@@ -22,12 +23,6 @@ class SingularityApplicator(object):
 
         """
 
-        cache_dir = SingularityParameters()["main.cache"]
-
-        if not os.access(cache_dir, os.R_OK):
-            logger.warning("Cache directory is not accessible.  Application aborted!") # pylint: disable=C0301
-            return
-
         if not actions:
             actions = SingularityParameters()["action"]
 
@@ -38,22 +33,20 @@ class SingularityApplicator(object):
 
         actions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
 
-        for action in actions:
-            logger.info("Applying %s configuration to the system ...", action)
+        for key, content in SingularityCache().iteritems():
+            function, filename = key.split('.', 1)
 
-            action_dir = os.path.join(cache_dir, action)
-
-            if not os.access(action_dir, os.R_OK):
-                logger.warning("Cache for %s not accessible.  Application of %s skipped!", action, action) # pylint: disable=C0301
+            if function not in actions:
+                logger.info("Skipping %s since %s is not an allowed function.", filename, function) # pylint: disable=C0301
                 continue
 
-            if os.access(os.path.join(action_dir, "conflict")):
-                logger.error("Conflict found for %s!  Please check the logs for more information.") # pylint: disable=C0301
+            if not os.access(filename, os.W_OK):
+                logger.error("Cannot write to %s", filename)
                 continue
 
+            if SingularityParameters()["main.backup"]:
+                os.rename(filename, filename + ".bak")
 
-
-            # Find all files in action_dir
-            # Backup all matching files in system if requested
-            # Move all files from action_dir to the system locations
+            with open(filename, "w") as output:
+                output.writelines(content)
 
