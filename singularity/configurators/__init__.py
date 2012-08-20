@@ -199,9 +199,7 @@ class SingularityConfigurators(object): # pylint: disable=R0903
             logger.debug("Files in current directory, %s: %s", directory, os.listdir(directory)) # pylint: disable=C0301
 
             # TODO Find a cleaner way to get this list.
-            walk = os.walk(directory)
-
-            logger.debug("Walked output: %s", walk)
+            walk = list(os.walk(directory))
 
             filenames = []
             filenames.extend(itertools.chain(*[ [ os.path.join(file_[0], name) for name in file_[1] ] for file_ in walk if len(file_[1]) ])) # pylint: disable=C0301
