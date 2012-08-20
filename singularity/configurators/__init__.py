@@ -205,6 +205,7 @@ class SingularityConfigurators(object): # pylint: disable=R0903
             logger.debug("Files and directories found: %s",file_list)
 
             module_names = list(set([ re.sub(r"\.py.?", "", filename).replace("/", ".") for filename in file_list if not re.search(r"(/|^)_", filename) ])) # pylint: disable=C0301
+            module_names = sorted(module_names, key = len, reverse = True)
 
             logger.debug("Potential modules found: %s", module_names)
 
