@@ -40,7 +40,7 @@ class GentooNetworkConfigurator(SingularityConfigurator):
             logger.info("Must be passed ips in the message")
             return False
 
-        if os.access(self.confd_net_path, os.W_OK):
+        if not os.access(self.confd_net_path, os.W_OK):
             logger.info("Can't write to %s", self.confd_net_path)
             return False
 
