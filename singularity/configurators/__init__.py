@@ -201,8 +201,11 @@ class SingularityConfigurators(object): # pylint: disable=R0903
             # TODO Find a cleaner way to get this list.
             walk = os.walk(directory)
             filenames = []
-            filenames.extend(itertools.chain(*[ [ os.path.join(file_[0], name).replace(directory + "/", "") for name in file_[1] ] for file_ in walk if len(file_[1]) ])) # pylint: disable=C0301
-            filenames.extend(itertools.chain(*[ [ os.path.join(file_[0], name).replace(directory + "/", "") for name in file_[2] ] for file_ in walk if len(file_[2]) ])) # pylint: disable=C0301
+            filenames.extend(itertools.chain(*[ [ os.path.join(file_[0], name) for name in file_[1] ] for file_ in walk if len(file_[1]) ])) # pylint: disable=C0301
+            filenames.extend(itertools.chain(*[ [ os.path.join(file_[0], name) for name in file_[2] ] for file_ in walk if len(file_[2]) ])) # pylint: disable=C0301
+            filenames = list(set([ filename.replace(directory + "/", "") for filename in filenames ])) # pylint: disable=C0301
+
+            logger.debug("Files found: %s", filenames)
 
             module_names = list(set([ re.sub(r"\.py.?", "", filename).replace("/", ".") for filename in filenames if not re.search(r"(/|^)_", filename) ])) # pylint: disable=C0301
 
