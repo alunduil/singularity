@@ -109,7 +109,7 @@ class SingularityDaemon(object):
                         continue
 
                     logger.info("Found configurator, %s, with function, %s", configurator, configurator.function) # pylint: disable=C0301
-                    functions |= set(configurator.function)
+                    functions.add(configurator.function)
 
                     for filename, content in configurator.content(message).iteritems(): # pylint: disable=C0301
                         if "message" == filename:
