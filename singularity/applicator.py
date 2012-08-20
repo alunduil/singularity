@@ -53,5 +53,5 @@ class SingularityApplicator(object):
                 os.rename(filename, filename + ".bak")
 
             with open(filename, "w") as output:
-                output.write("\n".join(content))
+                output.write("\n".join(content) + "\n")
 
