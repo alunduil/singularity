@@ -139,13 +139,15 @@ def translate(message): # pylint: disable=R0912,R0915
 
     try:
         for ip in parsed["ips"]: # pylint: disable=C0103
-            message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv4")) # pylint: disable=C0301
+            if ip["enabled"] == "1": # A string? Really?
+                message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv4")) # pylint: disable=C0301
     except KeyError:
         logger.warning("Did not receive 'ips' or 'ips.gateway' from message") # pylint: disable=C0301
 
     try:
         for ip in parsed["ip6s"]: # pylint: disable=C0103
-            message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv6")) # pylint: disable=C0301
+            if ip["enabled"] == "1": # A string? Really?
+                message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv6")) # pylint: disable=C0301
     except KeyError:
         logger.warning("Did not receive 'ip6s' or 'ip6s.gateway' from message") # pylint: disable=C0301
 
