@@ -29,6 +29,7 @@ PARAMS["scripts"] = [
 PARAMS["packages"] = [
         "singularity",
         "singularity.configurators",
+        "singularity.configurators.gentoo",
         "singularity.communicators",
         "singularity.parameters",
         ]
