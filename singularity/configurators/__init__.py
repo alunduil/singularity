@@ -200,12 +200,11 @@ class SingularityConfigurators(object): # pylint: disable=R0903
             file_list = []
             file_list.extend(itertools.chain(*[ [ os.path.join(file_[0], name) for name in file_[2] ] for file_ in os.walk(directory) if len(file_[2]) ]))
             file_list.extend(itertools.chain(*[ [ os.path.join(file_[0], name) for name in file_[1] ] for file_ in os.walk(directory) if len(file_[1]) ]))
-
             file_list = list(set([ file_.replace(directory + "/", "") for file_ in file_list ]))
 
             logger.debug("Files and directories found: %s",file_list)
 
-            module_names = list(set([ re.sub(r"\.py.?", "", filename).replace("/", ".") for filename in file_list if not filename.startswith("_") ])) # pylint: disable=C0301
+            module_names = list(set([ re.sub(r"\.py.?", "", filename).replace("/", ".") for filename in file_list if not re.search(r"\._", filename) ])) # pylint: disable=C0301
 
             logger.debug("Potential modules found: %s", module_names)
 
@@ -214,24 +213,10 @@ class SingularityConfigurators(object): # pylint: disable=R0903
             for module_name in module_names:
                 try:
                     modules.append(__import__(module_name, globals(), locals(), [], -1)) # pylint: disable=C0301
+                    logger.info("Mdoule, %s, imported", module_name)
                 except ImportError:
                     logger.warning("Module, %s, not able to be imported", module_name) # pylint: disable=C0301
                     continue
-
-            #logger.debug("First level modules: %s", modules)
-            #logger.info("Searching for submodules")
-
-            #while True:
-            #    submodules = [ submodule for submodule in itertools.chain(*[ inspect.getmembers(module, inspect.ismodule) for module in modules ]) if submodule not in modules and hasattr(submodule, "__name__") ]
-            #    logger.debug("New modules found as submodules of known modules: %s", submodules)
-
-            #    if not len(submodules):
-            #        logger.info("No more submodules found")
-            #        break
-
-            #    modules.extend(submodules)
-
-            #logger.debug("All found modules: %s", modules)
 
             for module in modules:
                 logger.debug("Classes found in Module, %s: %s", module.__name__, inspect.getmembers(module, inspect.isclass)) # pylint: disable=C0301
