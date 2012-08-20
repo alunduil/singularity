@@ -279,9 +279,9 @@ class XenCommunicator(Communicator):
         path = None
         message = None
 
-        while message is None or path is None:
-            logger.debug("Current message at path, %s: %s", path, message)
+        while message is None:
             path, message = self._queue.get(timeout = sys.maxint)
+            logger.debug("Current message at path, %s: %s", path, message)
 
         identifier = path
         identifier = identifier.replace(self._receive_prefix + "/", "")
