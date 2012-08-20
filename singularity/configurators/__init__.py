@@ -9,6 +9,7 @@ import re
 import sys
 import inspect
 import copy
+import itertools
 
 from singularity.parameters import SingularityParameters
 
