@@ -276,15 +276,12 @@ class XenCommunicator(Communicator):
 
         """
 
-        path = None
         message = None
-
         while message is None:
             path, message = self._queue.get(timeout = sys.maxint)
             logger.debug("Current message at path, %s: %s", path, message)
 
-        identifier = path
-        identifier = identifier.replace(self._receive_prefix + "/", "")
+        identifier = path.replace(self._receive_prefix + "/", "")
 
         logger.info("Received identifier, %s", identifier)
         logger.info("Translating message: %s", message)
