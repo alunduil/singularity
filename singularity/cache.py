@@ -87,7 +87,7 @@ class SingularityCache(object): # pylint: disable=R0903
         # TODO Check for conflicts.
 
         with open(cache_path(function, filename), "w") as cachefile:
-            cachefile.writelines(value)
+            cachefile.write("\n".join(value))
 
     def __delitem__(self, key):
         """Delete a file from the cache."""
