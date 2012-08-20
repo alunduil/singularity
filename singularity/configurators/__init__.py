@@ -219,6 +219,8 @@ class SingularityConfigurators(object): # pylint: disable=R0903
                     continue
 
             for module in modules:
+                logger.info("Checking module, %s, for appropriate classes", module.__name__)
+                logger.debug("Everything found in Module, %s: %s", module.__name__, inspect.getmembers(module))
                 logger.debug("Classes found in Module, %s: %s", module.__name__, inspect.getmembers(module, inspect.isclass)) # pylint: disable=C0301
 
                 for object_ in [ class_() for name, class_ in inspect.getmembers(module, inspect.isclass) if issubclass(class_, SingularityConfigurator) and class_ != SingularityConfigurator]: # pylint: disable=C0301,W0612
