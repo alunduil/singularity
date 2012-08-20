@@ -206,6 +206,7 @@ class SingularityConfigurators(object): # pylint: disable=R0903
             for module_name in module_names:
                 try:
                     modules.append(__import__(module_name, globals(), locals(), [], -1)) # pylint: disable=C0301
+                    logger.info("Module, %s, imported", module_name)
                 except ImportError:
                     logger.warning("Module, %s, not able to be imported", module_name) # pylint: disable=C0301
                     continue
