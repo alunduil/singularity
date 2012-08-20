@@ -71,6 +71,7 @@ class SingularityCache(object): # pylint: disable=R0903
 
     def __iter__(self):
         for file_ in self.iterfiles():
+            logger.debug("key: %s", file_.replace(SingularityParameters()["main.cache"], "").replace("/", ".", 1)) # pylint: disable=C0301
             yield file_.replace(SingularityParameters()["main.cache"], "").replace("/", ".", 1)
 
     def keys(self):
