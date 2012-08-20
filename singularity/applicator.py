@@ -31,7 +31,12 @@ class SingularityApplicator(object):
         else:
             actions = set(actions)
 
+        logger.debug("Actions specified: %s", actions)
+        logger.debug("Functions passed in parameters: %s", SingularityParameters()["main.functions"].split(","))
+
         actions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
+
+        logger.info("Actions to be applied: %s", actions)
 
         for key, content in SingularityCache().iteritems():
             function, filename = key.split('.', 1)
