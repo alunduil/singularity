@@ -6,6 +6,7 @@
 import logging
 import json
 import Queue
+import sys
 
 import xen.xend.xenstore.xsutil as xs
 
@@ -261,7 +262,9 @@ class XenCommunicator(Communicator):
 
         """
 
-        path, message = self._queue.get()
+        path = message = None
+        while path is None and message is None:
+            path, message = self._queue.get(timeout = sys.maxint)
 
         identifier = path
         identifier = identifier.replace(self._receive_prefix + "/", "")
