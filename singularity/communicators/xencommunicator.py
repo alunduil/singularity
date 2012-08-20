@@ -251,6 +251,15 @@ class XenCommunicator(Communicator):
         self.watches = []
         self.watches.append(xswatch(self._receive_prefix, xs_watch))
 
+        transaction = self.xs.transaction_start()
+        entries = self.xs.ls(transaction, self._receive_prefix)
+        self.xs.transaction_end(transaction)
+
+        logger.debug("Missed messages: %s", entries)
+
+        for path in [ self._receive_prefix + "/" + entry for entry in entries ]:
+            xs_watch(path)
+
     def __del__(self):
         logger.info("XenCommunicator watches are being removed.")
         for watch in self.watches:
@@ -265,12 +274,6 @@ class XenCommunicator(Communicator):
         caller.
 
         """
-
-        transaction = self.xs.transaction_start()
-        entries = self.xs.ls(transaction, self._receive_prefix)
-        self.xs.transaction_end(transaction)
-
-        logger.debug("Missed messages: %s", entries)
 
         path = message = None
         while path is None and message is None:
