@@ -257,8 +257,9 @@ class XenCommunicator(Communicator):
 
         logger.debug("Missed messages: %s", entries)
 
-        for path in [ self._receive_prefix + "/" + entry for entry in entries ]:
-            xs_watch(path)
+        if entries is not None:
+            for path in [ self._receive_prefix + "/" + entry for entry in entries ]:
+                xs_watch(path)
 
     def __del__(self):
         logger.info("XenCommunicator watches are being removed.")
