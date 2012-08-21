@@ -46,10 +46,6 @@ class SingularityApplicator(object):
                 logger.info("Skipping %s since %s is not an allowed function.", filename, function) # pylint: disable=C0301
                 continue
 
-            if not os.access(filename, os.W_OK):
-                logger.error("Cannot write to %s", filename)
-                continue
-
             if SingularityParameters()["main.backup"]:
                 os.rename(filename, filename + ".bak")
 
