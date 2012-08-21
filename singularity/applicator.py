@@ -8,6 +8,7 @@ import os
 
 from singularity.parameters import SingularityParameters
 from singularity.cache import SingularityCache
+from singularity.configurators.features import FeaturesConfigurator
 
 logger = logging.getLogger("console") # pylint: disable=C0103
 
@@ -24,15 +25,15 @@ class SingularityApplicator(object):
         """
 
         if not actions:
-            actions = SingularityParameters()["action"]
+            actions = [SingularityParameters()["action"]]
 
-        if actions == "all":
-            actions = set([ "network", "hosts", "resolvers", "reboot", "password" ]) # pylint: disable=C0301
+        if "all" in actions:
+            actions = set(FeaturesConfigurator({})["message"].split(','))
         else:
             actions = set(actions)
 
         logger.debug("Actions specified: %s", actions)
-        logger.debug("Functions passed in parameters: %s", SingularityParameters()["main.functions"].split(","))
+        logger.debug("Allowed functions: %s", SingularityParameters()["main.functions"].split(","))
 
         actions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
 
