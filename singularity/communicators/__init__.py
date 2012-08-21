@@ -7,7 +7,7 @@ import logging
 
 from singularity import helpers
 
-logger = logging.getLogger(__name__) # pylint: disable=C0103
+logger = logging.getLogger("console") # pylint: disable=C0103
 
 def create(*args, **kwargs):
     """Factory returns communication mechanism for the current hypervisor.

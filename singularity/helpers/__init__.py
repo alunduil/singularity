@@ -6,7 +6,7 @@
 import logging
 import os
 
-logger = logging.getLogger(__name__) # pylint: disable=C0103
+logger = logging.getLogger("console") # pylint: disable=C0103
 
 VIRTUAL = "physical"
 

@@ -10,8 +10,7 @@ import glob
 
 from singularity.parameters import SingularityParameters
 
-# TODO Check if this should be "console"
-logger = logging.getLogger(__name__) # pylint: disable=C0103
+logger = logging.getLogger("console") # pylint: disable=C0103
 
 class SingularityCache(object): # pylint: disable=R0903
     """Dict-like interface for the cache directory for singularity.

@@ -8,7 +8,7 @@ import logging
 from singularity.configurators import SingularityConfigurator
 from singularity.parameters import SingularityParameters
 
-logger = logging.getLogger(__name__) # pylint: disable=C0103
+logger = logging.getLogger("console") # pylint: disable=C0103
 
 class FeaturesConfigurator(SingularityConfigurator):
     def runnable(self, configuration):

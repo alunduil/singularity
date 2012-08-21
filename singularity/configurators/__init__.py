@@ -14,7 +14,7 @@ import importlib
 
 from singularity.parameters import SingularityParameters
 
-logger = logging.getLogger(__name__) # pylint: disable=C0103
+logger = logging.getLogger("console") # pylint: disable=C0103
 
 class SingularityConfigurator(object):
     def __init__(self):
