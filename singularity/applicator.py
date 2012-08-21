@@ -46,6 +46,9 @@ class SingularityApplicator(object):
                 logger.info("Skipping %s since %s is not an allowed function.", filename, function) # pylint: disable=C0301
                 continue
 
+            if not os.path.exists(os.path.dirname(filename)):
+                os.makedirs(os.path.dirname(filename))
+
             if SingularityParameters()["main.backup"]:
                 os.rename(filename, filename + ".bak")
 
