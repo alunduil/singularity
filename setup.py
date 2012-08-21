@@ -45,6 +45,7 @@ PARAMS["data_files"] = [
 
 PARAMS["requires"] = [
         "daemon",
+        "Crypto",
         ]
 
 if helpers.VIRTUAL == "xenU":

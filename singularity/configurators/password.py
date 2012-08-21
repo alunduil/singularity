@@ -72,6 +72,8 @@ class PasswordConfigurator(SingularityConfigurator):
 
         """
 
+        logger.debug("Passed password: %s", configuration["password"]) # TODO MUST BE REMOVED! # pylint: disable=C0301
+
         subprocess.check_call("echo 'root:{0}' | {1}".format(configuration["password"], self._chpasswd_path)) # pylint: disable=C0301
 
         return { "": "" }

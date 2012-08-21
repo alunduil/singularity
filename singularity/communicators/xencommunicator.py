@@ -15,6 +15,7 @@ from xen.xend.xenstore.xswatch import xswatch
 import singularity.communicators.helpers as helpers
 
 from singularity.communicators import Communicator
+from singularity.helpers import crypto
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
@@ -198,6 +199,7 @@ class XenCommunicator(Communicator):
     * agentupdate
     * resetnetwork
     * injectfile
+    * keyinit # Why can't we just have a diffie-hellman item?
     * kmsactivate # Apparently registers a RHEL box with RHN?
     * help # Registered as a command but only acts locally.
 
@@ -266,7 +268,7 @@ class XenCommunicator(Communicator):
         for watch in self.watches:
             watch.unwatch()
 
-    def receive(self):
+    def receive(self): # pylint: disable=R0912
         """Recieve message from hypervisor and package for upstream consumption
 
         ### Description
@@ -330,6 +332,18 @@ class XenCommunicator(Communicator):
 
             elif message["function"] == "injectfile":
                 message["function"] = "file"
+
+            elif message["function"] == "keyinit":
+                crypto.generate_keys(message["arguments"])
+                self.send(identifier, crypto.PUBLIC_KEY, "D0")
+                return self.receive() # I'm scared of this recursion.
+
+            elif message["function"] == "password":
+                if crypto.AES_KEYS is not None:
+                    message["arguments"] = crypto.decrypt(message["arguments"])
+                    crypto.AES_KEYS = None
+                else:
+                    self._queue.put((path, message)) # TODO Verify this actually returns correct messages ... # pylint: disable=C0301
 
         logger.debug("Passing back identifier, %s, message, %s", identifier, message) # pylint: disable=C0301
 
