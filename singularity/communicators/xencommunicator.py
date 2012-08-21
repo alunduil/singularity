@@ -223,7 +223,6 @@ class XenCommunicator(Communicator):
 
         self._receive_prefix = receive_prefix
         self._send_prefix = send_prefix
-        self._data_prefix = data_prefix
         self._network_prefix = data_prefix + "/networking"
         self._hostname_prefix = data_prefix + "/hostname"
 
@@ -234,7 +233,7 @@ class XenCommunicator(Communicator):
         def xs_watch(path):
             logger.info("Received a watch even on %s", path)
 
-            if path in [ self._receive_prefix, self._data_prefix ]:
+            if path in [ self._receive_prefix, data_prefix ]:
                 return True
 
             transaction = self.xs.transaction_start()
@@ -296,6 +295,8 @@ class XenCommunicator(Communicator):
             if message["function"] == "resetnetwork":
                 msg = [] 
 
+                # TODO Add check for existence and wait for items to appear.
+                # TODO Utilize xswatch to get the entries and add them to msg.
                 transaction = self.xs.transaction_start()
                 entries = self.xs.ls(transaction, self._network_prefix)
                 for entry in entries:
@@ -350,7 +351,8 @@ class XenCommunicator(Communicator):
                     message["arguments"] = crypto.decrypt(message["arguments"])
                     crypto.AES_KEYS = None
                 else:
-                    self._queue.put((path, message)) # TODO Verify this actually returns correct messages ... # pylint: disable=C0301
+                    self._queue.put((path, message)) # TODO Verify translate is idempotent. # pylint: disable=C0301
+                    return self.receive() # Potential for busy loop with itself if no keyinit ever comes with a password ... # pylint: disable=C0301
 
         logger.debug("Passing back identifier, %s, message, %s", identifier, message) # pylint: disable=C0301
 
