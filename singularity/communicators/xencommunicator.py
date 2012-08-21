@@ -333,10 +333,16 @@ class XenCommunicator(Communicator):
             elif message["function"] == "injectfile":
                 message["function"] = "file"
 
+            elif message["function"] == "agentupdate":
+                message["function"] = "update"
+
             elif message["function"] == "keyinit":
                 crypto.generate_keys(message["arguments"])
+
+                logger.debug("Type of the key: %s", type(crypto.PUBLIC_KEY))
+
                 self.send(identifier, crypto.PUBLIC_KEY, "D0")
-                return self.receive() # I'm scared of this recursion.
+                return self.receive() # Hoping it's not keyinit's all the way down ... # pylint: disable=C0301
 
             elif message["function"] == "password":
                 if crypto.AES_KEYS is not None:
@@ -354,10 +360,33 @@ class XenCommunicator(Communicator):
 
         ### Description
 
-        Send the message to the hypervisor and wait for confirmation that
-        evertyhing was successful.
+        Send the message to the hypervisor.
 
         """
+
+        # I'm getting used to lying to the hypervisor but this is ridiculous.
+        features = FeaturesConfigurator().content({})
+
+        if message == features:
+            message = []
+
+            feature_mapping = {
+                    "resetnetwork": set(["hosts", "network", "resolvers"]),
+                    "injectfile": set(["file"]),
+                    "agentupdate": set(["update"]),
+                    }
+
+            features = set(features.split(','))
+
+            for result, items in feature_mapping.iteritems():
+                if items & features:
+                    message.append(result)
+                    features -= items
+
+            message.extend(features)
+            message = ",".join(message)
+
+            logger.debug("Replaced features for xen: %s", message)
 
         # TODO Add error handling that is appropriate here ...
 

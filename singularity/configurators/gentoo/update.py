@@ -11,7 +11,7 @@ from singularity.configurators import SingularityConfigurator
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
-class AgentUpdateConfigurator(SingularityConfigurator):
+class UpdateConfigurator(SingularityConfigurator):
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
 
@@ -33,8 +33,8 @@ class AgentUpdateConfigurator(SingularityConfigurator):
             logger.info("Must be passed a function in the message")
             return False
 
-        if configuration["function"] != "agentupdate":
-            logger.info("Must be passed \"agentupdate\" as the function")
+        if configuration["function"] != "update":
+            logger.info("Must be passed \"update\" as the function")
             return False
 
         if os.getuid() != 0:
@@ -58,7 +58,7 @@ class AgentUpdateConfigurator(SingularityConfigurator):
             logger.info("Must have access to emerge")
             return False
 
-        logger.info("AgentUpdateConfigurator is runnable!")
+        logger.info("UpdateConfigurator is runnable!")
         return True
 
     def content(self, configuration):
