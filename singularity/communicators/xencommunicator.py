@@ -16,6 +16,7 @@ import singularity.communicators.helpers as helpers
 
 from singularity.communicators import Communicator
 from singularity.helpers import crypto
+from singularity.configurators.features import FeaturesConfigurator
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
@@ -365,7 +366,7 @@ class XenCommunicator(Communicator):
         """
 
         # I'm getting used to lying to the hypervisor but this is ridiculous.
-        features = FeaturesConfigurator().content({})
+        features = FeaturesConfigurator().content({})["message"]
 
         if message == features:
             message = []
@@ -384,6 +385,7 @@ class XenCommunicator(Communicator):
                     features -= items
 
             message.extend(features)
+            message.append("keyinit") # Built-in to the communicator ...
             message = ",".join(message)
 
             logger.debug("Replaced features for xen: %s", message)
