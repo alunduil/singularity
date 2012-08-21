@@ -19,11 +19,7 @@ class SocketCommunicator(Communicator):
     def __init__(self, path = None, *args, **kwargs):
         super(SocketCommunicator, self).__init__(*args, **kwargs)
 
-        # TODO Clean this up ...
-        if not path:
-            path = SingularityParameters()["socket_communicator.path"]
-            if not path:
-                path = os.path.join(SingularityParameters()["main.cache"], "singularity.sock") # pylint: disable=C0301
+        path = path or SingularityParameters()["socket_communicator.path"] or os.path.join(SingularityParameters()["main.cache"], "singularity.sock") # pylint: disable=C0301
 
         logger.info("Setting up socket at %s", path)
 
