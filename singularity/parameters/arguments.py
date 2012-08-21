@@ -66,9 +66,9 @@ class SingularityArguments(object):
             logger.debug("Adding option, %s, with options, %s and %s", name, options["args"], options["kwargs"]) # pylint: disable=C0301
             apply_parser.add_argument(*options["args"], **options["kwargs"]) # pylint: disable=W0142,C0301
 
-        apply_parser.add_argument("action", metavar = "ACTION", choices = [
-            "all", "network", "hosts", "resolvers", "reboot", "password", "file", "update" ],
-            help = "Specifies the action to apply to the system.")
+        apply_parser.add_argument("action", metavar = "ACTION", nargs = "+",
+                choices = [ "all", "network", "hosts", "resolvers", "reboot", "password", "file", "update" ], # pylint: disable=C0301
+                help = "Specifies the action(s) to apply to the system.")
 
         daemon_parser = subparsers.add_parser('daemon', parents = [common],
                 help = \

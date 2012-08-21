@@ -22,6 +22,11 @@ class SingularityApplicator(object):
         directory (defaults to /var/cache/singularity) and replaces the
         corresponding items in the filesystem.
 
+        We iterate over all files in the cache regardless because there should
+        be a very small number of files generated.  If this is ever not the
+        case; we will need to revisit this design and update it to be more
+        efficient.
+
         """
 
         if not actions:
