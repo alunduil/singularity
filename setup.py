@@ -31,6 +31,7 @@ PARAMS["packages"] = [
         "singularity.configurators",
         "singularity.configurators.gentoo",
         "singularity.communicators",
+        "singularity.helpers",
         "singularity.parameters",
         ]
 PARAMS["data_files"] = [
