@@ -61,5 +61,5 @@ class FileConfigurator(SingularityConfigurator):
         # TODO Add capability to inject files with commas in them.
         filename, content = base64.b64decode(configuration["arguments"]).split(',', 1) # pylint: disable=C0301
 
-        return { filename: content }
+        return { filename: content.split('\n') }
 
