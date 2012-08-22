@@ -232,7 +232,7 @@ def macs():
 
     sys_net = os.path.join(os.path.sep, "sys", "class", "net")
 
-    macs = []
+    macs = [] # pylint: disable=W0621
     for nic in os.listdir(sys_net):
         with open(os.path.join(sys_net, nic, "address")) as mac:
             macs.append(mac.read().strip())
