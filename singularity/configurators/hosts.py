@@ -38,7 +38,7 @@ class HostsConfigurator(SingularityConfigurator):
             logger.info("Not passed a hostname")
             return False
 
-        if not os.access(self.hosts_path, "w"):
+        if not os.access(self.hosts_path, os.W_OK):
             logger.info("Can't write to %s", self.hosts_path)
             return False
 

@@ -6,6 +6,7 @@
 import logging
 import os
 import subprocess
+import tempfile
 
 from singularity.configurators import SingularityConfigurator
 
