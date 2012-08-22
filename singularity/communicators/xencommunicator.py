@@ -295,13 +295,23 @@ class XenCommunicator(Communicator):
             if message["function"] == "resetnetwork":
                 msg = [] 
 
-                # TODO Add check for existence and wait for items to appear.
-                # TODO Utilize xswatch to get the entries and add them to msg.
-                transaction = self.xs.transaction_start()
-                entries = self.xs.ls(transaction, self._network_prefix)
+                macs = set([ mac.replace(":", "") for mac in helpers.macs() ])
+                logger.debug("MAC Addresses: %s", macs)
+
+                # TODO Is there a better way than a busy wait?
+
+                entries = set()
+                while entries <= macs:
+                    transaction = self.xs.transaction_start()
+                    entries = set(self.xs.ls(transaction, self._network_prefix))
+                    self.xs.transaction_end(transaction)
+
+                    logger.debug("Entries: %s", entries)
+
                 for entry in entries:
+                    transaction = self.xs.transaction_start()
                     msg.append(self.xs.read(transaction, self._network_prefix + "/" + entry)) # pylint: disable=C0301
-                self.xs.transaction_end(transaction)
+                    self.xs.transaction_end(transaction)
 
                 logger.debug("Message: %s", message)
 

@@ -194,6 +194,9 @@ def translate(message): # pylint: disable=R0912,R0915
 def interface(mac_address):
     """The interface name for the given MAC address."""
 
+    # TODO Merge with mac_addresses?
+    # TODO Other OS's?
+
     sys_net = os.path.join(os.path.sep, "sys", "class", "net")
 
     nics = {}
@@ -220,4 +223,19 @@ def cidr(ip, netmask): # pylint: disable=C0103
         bit_count = int(netmask)
 
     return "{0}/{1}".format(ip, bit_count)
+
+def macs():
+    """Gets all mac addresses on the system."""
+
+    # TODO Merge with interface()?
+    # TODO Other OS's?
+
+    sys_net = os.path.join(os.path.sep, "sys", "class", "net")
+
+    macs = []
+    for nic in os.listdir(sys_net):
+        with open(os.path.join(sys_net, nic, "address")) as mac:
+            macs.append(mac.read().strip())
+
+    return macs
 
