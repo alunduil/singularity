@@ -301,7 +301,7 @@ class XenCommunicator(Communicator):
                 # TODO Is there a better way than a busy wait?
 
                 entries = set()
-                while entries <= macs:
+                while entries < macs:
                     transaction = self.xs.transaction_start()
                     entries = set(self.xs.ls(transaction, self._network_prefix))
                     self.xs.transaction_end(transaction)
