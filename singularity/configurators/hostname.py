@@ -41,14 +41,10 @@ class HostnameConfigurator(SingularityConfigurator):
 
         self._hostname_path = None # pylint: disable=W0201
 
-        for prefix in ["/bin/", "/usr/bin/"]:
-            try:
-                self._hostname_path = subprocess.check_output(prefix + "which hostname") # pylint: disable=C0301,W0201
-            except subprocess.CalledProcessError:
-                pass
-
-            if self._hostname_path is not None:
-                break
+        try:
+            self._hostname_path = subprocess.check_output("which hostname", shell = True).strip() # pylint: disable=C0301,W0201,E1103
+        except subprocess.CalledProcessError:
+            pass
 
         logger.debug("hostname path: %s", self._hostname_path)
 
@@ -74,7 +70,8 @@ class HostnameConfigurator(SingularityConfigurator):
 
         """
 
-        subprocess.check_call("{0} {1}".format(self._hostname_path, configuration["hostname"])) # pylint: disable=C0301
+        command = [ self._hostname_path, configuration["hostname"] ]
+        subprocess.check_call(command) # pylint: disable=C0301
 
         return { "": "" }
 

@@ -11,7 +11,7 @@ from singularity.configurators import SingularityConfigurator
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
-class UpdateConfigurator(SingularityConfigurator):
+class GentooUpdateConfigurator(SingularityConfigurator):
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
 
@@ -43,14 +43,10 @@ class UpdateConfigurator(SingularityConfigurator):
 
         self._emerge_path = None # pylint: disable=W0201
 
-        for prefix in ["/bin/", "/usr/bin/"]:
-            try:
-                self._emerge_path = subprocess.check_output(prefix + "which emerge") # pylint: disable=W0201,C0301
-            except subprocess.CalledProcessError:
-                pass
-
-            if self._emerge_path is not None:
-                break
+        try:
+            self._emerge_path = subprocess.check_output("which emerge", shell = True).strip() # pylint: disable=C0301,W0201,E1103
+        except subprocess.CalledProcessError:
+            pass
 
         logger.debug("emerge path: %s", self._emerge_path)
 
@@ -58,7 +54,7 @@ class UpdateConfigurator(SingularityConfigurator):
             logger.info("Must have access to emerge")
             return False
 
-        logger.info("UpdateConfigurator is runnable!")
+        logger.info("GentooUpdateConfigurator is runnable!")
         return True
 
     def content(self, configuration):
@@ -76,7 +72,9 @@ class UpdateConfigurator(SingularityConfigurator):
 
         """
 
-        subprocess.check_call("{0} -1 app-emulation/singularity".format(self._emerge_path)) # pylint: disable=C0301
+        command = [ self._emerge_path, "-1", "app-emulation/singularity" ]
+
+        subprocess.check_call(command)
 
         return { "": "" }
 

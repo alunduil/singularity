@@ -39,14 +39,10 @@ class PasswordConfigurator(SingularityConfigurator):
 
         self._chpasswd_path = None # pylint: disable=W0201
 
-        for prefix in ["/bin/", "/usr/bin/"]:
-            try:
-                self._chpasswd_path = subprocess.check_output(prefix + "which chpasswd") # pylint: disable=W0201,C0301
-            except subprocess.CalledProcessError:
-                pass
-
-            if self._chpasswd_path is not None:
-                break
+        try:
+            self._chpasswd_path = subprocess.check_output("which chpasswd", shell = True) # pylint: disable=C0301,W0201,E1103
+        except subprocess.CalledProcessError:
+            pass
 
         logger.debug("chpasswd path: %s", self._chpasswd_path)
 
@@ -74,7 +70,14 @@ class PasswordConfigurator(SingularityConfigurator):
 
         logger.debug("Passed password: %s", configuration["password"]) # TODO MUST BE REMOVED! # pylint: disable=C0301
 
-        subprocess.check_call("echo 'root:{0}' | {1}".format(configuration["password"], self._chpasswd_path)) # pylint: disable=C0301
+        # TODO Stop using a tempfile somehow ...
+        password = tempfile.TemporaryFile()
+        password.write("root:{0}\n".format(configuration["password"]))
+        password.seek(0)
+
+        command = [ self._chpasswd_path ] 
+
+        subprocess.check_call(command, stdin = password)
 
         return { "": "" }
 
