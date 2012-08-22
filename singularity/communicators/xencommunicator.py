@@ -295,7 +295,7 @@ class XenCommunicator(Communicator):
             if message["function"] == "resetnetwork":
                 msg = [] 
 
-                macs = set([ mac.replace(":", "") for mac in helpers.macs() ])
+                macs = set([ mac.replace(":", "") for mac in helpers.macs() if int(mac.replace(":", "")) ])
                 logger.debug("MAC Addresses: %s", macs)
 
                 # TODO Is there a better way than a busy wait?
