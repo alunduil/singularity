@@ -353,7 +353,7 @@ class XenCommunicator(Communicator):
 
                 logger.debug("Type of the key: %s", type(crypto.PUBLIC_KEY))
 
-                self.send(identifier, crypto.PUBLIC_KEY, "D0")
+                self.send(identifier, str(crypto.PUBLIC_KEY), "D0")
                 return self.receive() # Hoping it's not keyinit's all the way down ... # pylint: disable=C0301
 
             elif message["function"] == "password":
