@@ -289,7 +289,8 @@ class XenCommunicator(Communicator):
         logger.info("Translating message: %s", message)
         logger.info("Type of message: %s", type(message))
 
-        message = helpers.translate(message)
+        if type(message) is str:
+            message = helpers.translate(message)
 
         if "function" in message:
             if message["function"] == "resetnetwork":
@@ -361,8 +362,8 @@ class XenCommunicator(Communicator):
                     message["arguments"] = crypto.decrypt(message["arguments"])
                     crypto.AES_KEYS = None
                 else:
-                    self._queue.put((path, message)) # TODO Verify translate is idempotent. # pylint: disable=C0301
-                    return self.receive() # Potential for busy loop with itself if no keyinit ever comes with a password ... # pylint: disable=C0301
+                    self._queue.put((path, message))
+                    return self.receive() # Potential for busy loop with itself if no keyinit ever comes ... # pylint: disable=C0301
 
         logger.debug("Passing back identifier, %s, message, %s", identifier, message) # pylint: disable=C0301
 
