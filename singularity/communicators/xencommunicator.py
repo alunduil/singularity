@@ -359,7 +359,9 @@ class XenCommunicator(Communicator):
 
             elif message["function"] == "password":
                 if crypto.AES_KEYS is not None:
-                    message["arguments"] = crypto.decrypt(message["arguments"])
+                    logger.info("Decrypting password")
+                    message["password"] = crypto.decrypt(message["arguments"])
+                    logger.debug("Password: encrypted => %s; decrypted => %s", message["arguments"], message["password"]) # pylint: disable=C0301
                     crypto.AES_KEYS = None
                 else:
                     self._queue.put((path, message))
