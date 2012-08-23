@@ -45,6 +45,9 @@ def main():
     output.append("[daemon]")
     output.append("")
     for parameter in DAEMON_PARAMETERS:
+        if "default" not in parameter:
+            continue
+
         output.extend([ "# " + line for line in textwrap.wrap(parameter["help"], 78) ])
         output.append("#{0} = {1}".format(parameter["options"][0][2:], parameter["default"]))
         output.append("")
