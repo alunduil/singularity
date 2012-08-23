@@ -135,6 +135,8 @@ def decrypt(string):
     string = cipher.decrypt(base64.b64decode(string))
 
     logger.debug("Decoded string: %s", string)
+    logger.debug("Decoded string (str): %s", str(string))
+    logger.debug("Decoded string (unicode): %s", unicode(string))
 
     # TODO Check for invalid data?
     # Upstream uses the cutoff (the ord result) and checks that it is
