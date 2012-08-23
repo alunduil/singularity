@@ -125,7 +125,7 @@ def generate_keys(remote_public_key):
 
     AES_KEYS = aes_keys(SHARED_KEY)
 
-    logger.debug("AES_KEY: %s", AES_KEY)
+    logger.debug("AES_KEYS: %s", AES_KEYS)
     
 def decrypt(string):
     """Return the plain-text version of the passed string."""
