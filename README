@@ -45,3 +45,24 @@ Signals Interface
 * SIGHUP -> daemon reload
 * SIGTERM,SIGINT -> daemon stop
 
+New Server Protocol
+===================
+
+The following is an example exchange between the hypervisor and guest for a
+working openstack guest agent (the hypervisor is designated H and the guest, G):
+
+    H: {"name":"version", "value":"agent"}
+    G: {"message":"9999", "returncode":"0"}
+    
+    H: {"name":"features", "value":""}
+    G: {"message":"resetnetwork,injectfile,version,password,features,keyinit", "returncode":"0"}
+    
+    H: {"name":"resetnetwork", "value":""}
+    G: {"message":"", "returncode":"0"}
+    
+    H: {"name":"keyinit", "value":"126190143978468524724357084322869"}
+    G: {"message":"152515189133785336521547047713056", "returncode":"D0"}
+    
+    H: {"name":"password", "value":"YXazuqvtFdagFYrwKoYhWAbaJoW9eB7f+ju7GSwhBh4="}
+    G: {"message":"", "returncode":"0"}
+
