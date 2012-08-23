@@ -134,9 +134,14 @@ def decrypt(string):
 
     string = cipher.decrypt(base64.b64decode(string))
 
+    logger.debug("Decoded string: %s", string)
+
     # TODO Check for invalid data?
     # Upstream uses the cutoff (the ord result) and checks that it is
     # not larger than 16 and the string is at least 16 characters in length.
+
+    logger.debug("Cutoff size: %s", -ord(string[-1]))
+    logger.debug("Cut string: %s", string[:-ord(string[-1])])
 
     return string[:-ord(string[-1])].strip()
 
