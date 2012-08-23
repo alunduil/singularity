@@ -70,14 +70,6 @@ COMMON_PARAMETERS = [
         ]
 
 APPLY_PARAMETERS = [
-        { # --force
-            "options": [ "--force" ],
-            "action": "store_true",
-            "default": False,
-            "help": \
-                    "Force all functions to run even if a subset is " \
-                    "specified with --functions or -F.",
-            },
         { # --noop
             "options": [ "--noop" ],
             "action": "store_true",
