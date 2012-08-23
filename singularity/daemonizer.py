@@ -104,6 +104,10 @@ class SingularityDaemon(object):
                 logger.debug("Length of configurators: %s", len(self._configurators)) # pylint: disable=C0301
 
                 for configurator in self._configurators:
+                    if configurator.function not in [ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]: # pylint: disable=C0301
+                        logger.info("Configurator, %s, is not allowed.", configurator) # pylint: disable=C0301
+                        continue
+
                     if not configurator.runnable(message):
                         logger.info("Configurator, %s, is not runnable.", configurator) # pylint: disable=C0301
                         continue
