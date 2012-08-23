@@ -112,9 +112,20 @@ def generate_keys(remote_public_key):
     remote_public_key = long(remote_public_key) # We know we're getting a string ... # pylint: disable=C0301
 
     PRIVATE_KEY = private_key()
+
+    logger.debug("PRIVATE_KEY: %s", PRIVATE_KEY)
+
     PUBLIC_KEY = public_key(PRIVATE_KEY)
+
+    logger.debug("PUBLIC_KEY: %s", PUBLIC_KEY)
+
     SHARED_KEY = shared_key(PRIVATE_KEY, PUBLIC_KEY)
+
+    logger.debug("SHARED_KEY: %s", SHARED_KEY)
+
     AES_KEYS = aes_keys(SHARED_KEY)
+
+    logger.debug("AES_KEY: %s", AES_KEY)
     
 def decrypt(string):
     """Return the plain-text version of the passed string."""
