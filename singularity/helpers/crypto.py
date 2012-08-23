@@ -7,7 +7,7 @@ import logging
 import binascii
 import os
 import hashlib
-import Crypto.Cipher
+import Crypto.Cipher.AES
 import base64
 
 logger = logging.getLogger(__name__) # pylint: disable=C0103
