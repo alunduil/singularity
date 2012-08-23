@@ -58,7 +58,7 @@ COMMON_PARAMETERS = [
             },
         { # --functions=FUNCTIONS, -F=FUNCTIONS; FUNCTIONS => network,hosts,resolvers,reboot,password # pylint: disable=C0301
             "options": [ "--functions", "-F" ],
-            "default": "network,hosts,resolvers,reboot,password,file,update",
+            "default": "network,hosts,resolvers,reboot,password,file,update,version,features",
             "metavar": "FUNCTIONS",
             "help": \
                     "The functions that should be handled by singularity.  " \
