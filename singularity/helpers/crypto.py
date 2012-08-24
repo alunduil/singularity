@@ -89,6 +89,9 @@ def aes_keys(shar_key):
 
     aes_iv = hash_.digest()
 
+    logger.debug("aes_key: %s", aes_key)
+    logger.debug("aes_iv: %s", aes_iv)
+
     return aes_key, aes_iv
 
 def generate_keys(remote_public_key):
@@ -119,7 +122,7 @@ def generate_keys(remote_public_key):
 
     logger.debug("PUBLIC_KEY: %s", PUBLIC_KEY)
 
-    SHARED_KEY = shared_key(PRIVATE_KEY, PUBLIC_KEY)
+    SHARED_KEY = shared_key(PRIVATE_KEY, remote_public_key)
 
     logger.debug("SHARED_KEY: %s", SHARED_KEY)
 
@@ -130,13 +133,14 @@ def generate_keys(remote_public_key):
 def decrypt(string):
     """Return the plain-text version of the passed string."""
 
+    logger.debug("AES_KEYS: %s", AES_KEYS)
+
     cipher = Crypto.Cipher.AES.new(AES_KEYS[0], Crypto.Cipher.AES.MODE_CBC, AES_KEYS[1]) # pylint: disable=C0301
 
     string = cipher.decrypt(base64.b64decode(string))
 
     logger.debug("Decoded string: %s", string)
     logger.debug("Decoded string (str): %s", str(string))
-    logger.debug("Decoded string (unicode): %s", unicode(string))
 
     # TODO Check for invalid data?
     # Upstream uses the cutoff (the ord result) and checks that it is
