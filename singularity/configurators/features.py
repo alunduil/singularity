@@ -56,7 +56,12 @@ class FeaturesConfigurator(SingularityConfigurator):
         from singularity.configurators import SingularityConfigurators
 
         actions = set([ configurator.function for configurator in SingularityConfigurators() ]) # pylint: disable=C0301
+
+        logger.debug("All the actions: %s", actions)
+
         actions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
+
+        logger.debug("Allowed actions: %s", actions)
 
         return { "message": ",".join(actions) }
 
