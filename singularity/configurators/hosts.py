@@ -70,6 +70,8 @@ class HostsConfigurator(SingularityConfigurator):
 
         with open(self.hosts_path, "r") as hosts:
             for line in hosts:
+                line = line.strip()
+
                 if re.search(r"127\.0\.0\.1.*?(?!{0})".format(configuration["hostname"]), line): # pylint: disable=C0301
                     lines.append(line + " " + configuration["hostname"])
                 elif re.search(r"::1.*?(?!{0})".format(configuration["hostname"]), line): # pylint: disable=C0301
