@@ -29,12 +29,15 @@ class SingularityApplicator(object):
 
         """
 
-        if not actions:
+        if actions is None:
+            logger.debug("Not passed an action using CLI: %s", [SingularityParameters()["action"]]) # pylint: disable=C0301
             actions = [SingularityParameters()["action"]]
 
         if "all" in actions:
+            logger.debug("All actions specified, using %s", set(FeaturesConfigurator({})["message"].split(','))) # pylint: disable=C0301
             actions = set(FeaturesConfigurator({})["message"].split(','))
         else:
+            logger.debug("Nothing special, using %s", set(actions))
             actions = set(actions)
 
         logger.debug("Actions specified: %s", actions)

@@ -12,6 +12,10 @@ from singularity.configurators import SingularityConfigurator
 logger = logging.getLogger(__name__) # pylint: disable=C0103
 
 class GentooUpdateConfigurator(SingularityConfigurator):
+    @property
+    def function(self):
+        return "update"
+
     def runnable(self, configuration):
         """True if configurator can run on this system and in this context.
 

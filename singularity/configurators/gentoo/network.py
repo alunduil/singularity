@@ -72,6 +72,8 @@ class GentooNetworkConfigurator(SingularityConfigurator):
                 lines.append(ip[0])
             lines.append("\"")
 
+        logger.debug("routes: %s", configuration["routes"])
+
         for interface, routes in configuration["routes"].iteritems():
             lines.append("routes_{0}=\"".format(interface))
             for route in routes:

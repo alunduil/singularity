@@ -296,6 +296,8 @@ class XenCommunicator(Communicator):
             if message["function"] == "resetnetwork":
                 msg = [] 
 
+                # TODO Is this check necessary or should we just go for the data?
+
                 macs = set([ mac.replace(":", "") for mac in helpers.macs() if int(mac.replace(":", ""), 16) ]) # pylint: disable=C0301
                 logger.debug("MAC Addresses: %s", macs)
 

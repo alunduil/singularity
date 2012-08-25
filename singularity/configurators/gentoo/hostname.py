@@ -40,7 +40,7 @@ class GentooHostnameConfigurator(SingularityConfigurator):
             logger.info("Must be passed a hostname in the message")
             return False
 
-        if os.access(self.confd_hostname_path, os.W_OK):
+        if not os.access(self.confd_hostname_path, os.W_OK):
             logger.info("Can't write to %s", self.confd_hostname_path)
             return False
 
