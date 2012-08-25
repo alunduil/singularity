@@ -405,7 +405,17 @@ class XenCommunicator(Communicator):
 
             message.extend(features)
             message.append("keyinit") # Built-in to the communicator ...
-            message = ",".join(message)
+
+            # The following are required for instances to start on build ...
+            # Potentially restating items here in the event that other code
+            # specifying these actions is removed.
+            message.append("version")
+            message.append("features")
+            message.append("resetnetwork")
+            message.append("keyinit")
+            message.append("password")
+
+            message = ",".join(list(set(message)))
 
             logger.debug("Replaced features for xen: %s", message)
 
