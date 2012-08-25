@@ -41,7 +41,7 @@ class SingularityApplicator(object):
             actions = set(actions)
 
         logger.debug("Actions specified: %s", actions)
-        logger.debug("Allowed functions: %s", SingularityParameters()["main.functions"].split(","))
+        logger.debug("Allowed functions: %s", SingularityParameters()["main.functions"].split(",")) # pylint: disable=C0301
 
         actions &= set([ func.strip() for func in SingularityParameters()["main.functions"].split(",") ]) # pylint: disable=C0301
 

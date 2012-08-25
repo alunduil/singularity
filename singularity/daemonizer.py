@@ -69,12 +69,14 @@ class SingularityDaemon(object):
         logger.debug("Open files: %s", [ os.path.realpath(os.path.join(os.path.sep, "proc", "self", "fd", fd)) for fd in os.listdir(os.path.join(os.path.sep, "proc", "self", "fd")) ]) # pylint: disable=C0301
 
         def term_handler(signum, frame): # pylint: disable=W0613
+            """TERM and INT shut down the daemon."""
             logger.info("Shutting down.")
             context.close()
             logging.shutdown()
             sys.exit(0)
 
         def hup_handler(signum, frame): # pylint: disable=W0613
+            """HUP signal reloads the configuration and configurators."""
             SingularityParameters().reinit()
             self._configurators = SingularityConfigurators()
 

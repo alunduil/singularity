@@ -19,9 +19,10 @@ Classes and Features of this namespace:
 Name          | Description
 ----          | -----------
 Application   | Main driver for calling singularity from the command-line.
-Parameters    | Abstraction overtop of the arguments passed on the CLI as well as the configuration file
 Configurators | The work-horses, provides the content for configuration files on the system
+Communicators | The communication modules for talking with specific hypervisors
 Information   | Meta-information about the project itself (i.e. version, author, etc).
+Parameters    | Abstraction overtop of the arguments passed on the CLI as well as the configuration file
 
 """
 

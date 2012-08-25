@@ -8,9 +8,9 @@ import json
 import Queue
 import sys
 
-import xen.xend.xenstore.xsutil as xs
+import xen.xend.xenstore.xsutil as xs # pylint: disable=F0401
 
-from xen.xend.xenstore.xswatch import xswatch
+from xen.xend.xenstore.xswatch import xswatch # pylint: disable=F0401
 
 import singularity.communicators.helpers as helpers
 
@@ -296,7 +296,8 @@ class XenCommunicator(Communicator):
             if message["function"] == "resetnetwork":
                 msg = [] 
 
-                # TODO Is this check necessary or should we just go for the data?
+                # TODO Is this check necessary or should we just go for the 
+                # TODO data?
 
                 macs = set([ mac.replace(":", "") for mac in helpers.macs() if int(mac.replace(":", ""), 16) ]) # pylint: disable=C0301
                 logger.debug("MAC Addresses: %s", macs)

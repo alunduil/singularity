@@ -79,15 +79,15 @@ def aes_keys(shar_key):
     """
 
     hash_ = hashlib.md5() # pylint: disable=E1101
-    hash_.update(str(shar_key))
+    hash_.update(str(shar_key)) # pylint: disable=E1101
 
-    aes_key = hash_.digest()
+    aes_key = hash_.digest() # pylint: disable=E1101
 
     hash_ = hashlib.md5() # pylint: disable=E1101
-    hash_.update(aes_key)
-    hash_.update(str(shar_key))
+    hash_.update(aes_key) # pylint: disable=E1101
+    hash_.update(str(shar_key)) # pylint: disable=E1101
 
-    aes_iv = hash_.digest()
+    aes_iv = hash_.digest() # pylint: disable=E1101
 
     logger.debug("aes_key: %s", aes_key)
     logger.debug("aes_iv: %s", aes_iv)
