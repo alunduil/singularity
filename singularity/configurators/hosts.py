@@ -45,7 +45,7 @@ class HostsConfigurator(SingularityConfigurator):
         with open(self.hosts_path, "r") as hosts:
             lines = hosts.read()
             if re.search(r"127\.0\.0\.1.*?{0}".format(configuration["hostname"]), lines) and re.search(r"::1.*?{0}".format(configuration["hostname"]), lines): # pylint: disable=C0301
-                logger.info("Hostname already present.", self.hosts_path)
+                logger.info("Hostname already present.")
                 return False
 
         logger.info("HostsConfigurator is runnable!")
