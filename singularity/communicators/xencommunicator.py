@@ -340,6 +340,8 @@ class XenCommunicator(Communicator):
                     msg = self.xs.read(transaction, self._hostname_prefix)
                 self.xs.transaction_end(transaction)
 
+                logger.debug("Found the hostname: %s", msg)
+
                 if msg is not None:
                     message["hostname"] = msg
 
