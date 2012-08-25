@@ -41,7 +41,7 @@ class PasswordConfigurator(SingularityConfigurator):
         self._chpasswd_path = None # pylint: disable=W0201
 
         try:
-            self._chpasswd_path = subprocess.check_output("which chpasswd", shell = True) # pylint: disable=C0301,W0201,E1103
+            self._chpasswd_path = subprocess.check_output("which chpasswd", shell = True).strip() # pylint: disable=C0301,W0201,E1103
         except subprocess.CalledProcessError:
             pass
 
