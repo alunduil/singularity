@@ -72,6 +72,8 @@ class HostsConfigurator(SingularityConfigurator):
             for line in hosts:
                 line = line.strip()
 
+                # TODO Remove names from previous images somehow?
+
                 if re.search(r"127\.0\.0\.1.*?(?!{0})".format(configuration["hostname"]), line): # pylint: disable=C0301
                     lines.append(line + " " + configuration["hostname"])
                 elif re.search(r"::1.*?(?!{0})".format(configuration["hostname"]), line): # pylint: disable=C0301
