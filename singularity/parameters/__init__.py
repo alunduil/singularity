@@ -65,7 +65,10 @@ COMMON_PARAMETERS = [
                     "FUNCTIONS defaults to \"network,hosts,resolvers,reboot," \
                     "password\".  By specifying a subset of these functions; " \
                     "only the specified functions will be handled by " \
-                    "singularity.",
+                    "singularity.  WARNING!  IF NETWORK IS NOT ENABLED; NEW " \
+                    "SERVERS BUILT FROM IMAGES WILL NOT HAVE ANY NETWORKING " \
+                    "CONFIGURATION AND WILL NOT BE ACCESSIBLE OVER THE " \
+                    "INTERNET",
             },
         ]
 
