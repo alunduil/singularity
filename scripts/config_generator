@@ -4,6 +4,8 @@
 #
 # singularity is freely distributable under the terms of an MIT-style license.
 # See COPYING or http://www.opensource.org/licenses/mit-license.php.
+#
+# vim: filetype=python tabstop=4 shiftwidth=4
 
 import textwrap
 

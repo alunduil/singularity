@@ -12,7 +12,7 @@ import singularity.information as info
 logger = logging.getLogger("console") # pylint: disable=C0103
 
 class SingularityArguments(object):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, parse = True, *args, **kwargs):
         """Initialize the Singularity argument parser.
 
         ### Arguments
@@ -84,7 +84,8 @@ class SingularityArguments(object):
             "start", "stop", "restart", "reload", "status" ],
             help = "Specifies what action to take when controlling the daemon process.") # pylint: disable=C0301
 
-        self._parsed_args = self._parser.parse_args()
+        if parse:
+            self._parsed_args = self._parser.parse_args()
 
     @property
     def parser(self):
