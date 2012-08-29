@@ -9,6 +9,7 @@
 
 import re
 import os
+import argparse
 
 from datetime import datetime
 from argparse import RawTextHelpFormatter
@@ -158,6 +159,34 @@ def files():
 
     return output
 
+def signals(subcommand = "main"):
+    output = []
+    if subcommand not in [ "apply" ]:
+        output.append('.SH "SIGNALS"')
+        
+        output.append('.TP')
+        output.append('\\fBSIGHUP\\fR')
+        output.append(
+                'Reloads the configuration parameters that are read ' \
+                'dynamically during execuation as well as the loaded ' \
+                'configurators.'
+                )
+
+        output.append('.TP')
+        output.append('\\fBSIGTERM\\fR')
+        output.append(
+                'Restarts the daemon (kills current running instance and ' \
+                'starts a new daemon).'
+                )
+
+        output.append('.TP')
+        output.append('\\fBSIGINT\\fR')
+        output.append(
+                'See \\fBSIGTERM\\fR'
+                )
+
+    return output
+
 def author():
     output = []
     output.append('.SH "AUTHOR"')
@@ -201,6 +230,7 @@ def man_page(subcommand = "main"):
     output.extend(options(subcommand))
     output.extend(environment())
     output.extend(files())
+    output.extend(signals())
     output.extend(author())
     output.extend(see_also(subcommand))
     output.extend(security_considerations())
@@ -208,8 +238,27 @@ def man_page(subcommand = "main"):
     return output
 
 def main():
-    
-    print "\n".join(man_page("apply"))
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("directory", default = os.path.join("doc", "man"),
+            help = \
+                    "The directory to create the man section directories and " \
+                    "man in.  Defaults to ./doc/man"
+            )
+
+    arguments = parser.parse_args()
+
+    if not os.path.exists(os.path.join(arguments.directory, "man8")):
+        os.makedirs(os.path.join(arguments.directory, "man8"))
+
+    with open(os.path.join(arguments.directory, "man8", "singularity.8"), "w") as man_file:
+        man_file.write("\n".join(man_page("main")))
+
+    with open(os.path.join(arguments.directory, "man8", "singularity-apply.8"), "w") as man_file:
+        man_file.write("\n".join(man_page("apply")))
+
+    with open(os.path.join(arguments.directory, "man8", "singularity-daemon.8"), "w") as man_file:
+        man_file.write("\n".join(man_page("daemon")))
 
 if __name__ == "__main__":
     main()

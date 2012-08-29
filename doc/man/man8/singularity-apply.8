@@ -1,0 +1,67 @@
+.TH "SINGULARITY \- APPLY" "8" "August 29, 2012" "Openstack Guest Agent" "Singularity 9999"
+.SH "NAME"
+singularity apply \- An Openstack Guest Agent for Hypervisor and Guest Communication
+.SH "SYNOPSIS"
+.TP
+singularity [\fI\-h\fR] [\fI\-\-functions FUNCTIONS\fR] [\fI\-\-loglevel LEVEL\fR] [\fI\-\-cache DIR\fR] [\fI\-\-loghandler HANDLER\fR] [\fI\-\-configuration DIR\fR] [\fI\-\-backup\fR] [\fI\-\-noop\fR] ACTION [\fIACTION ...\fR]
+.SH "DESCRIPTION"
+An Openstack Guest Agent for communication between the hypervisor and the guest running this daemon.  Allows the hypervisor to manipulate things like the following: networking, resolvers, passwords, etc.
+.SH "OPTIONS"
+.SS "Apply"
+.TP
+\-h, \-\-help
+show this help message and exit
+.TP
+\-\-functions FUNCTIONS, \-F FUNCTIONS
+The functions that should be handled by singularity. FUNCTIONS defaults to "network,hosts,resolvers,reboot,password". By specifying a subset of these functions; only the specified functions will be handled by singularity. WARNING! IF NETWORK IS NOT ENABLED; NEW SERVERS BUILT FROM IMAGES WILL NOT HAVE ANY NETWORKING CONFIGURATION AND WILL NOT BE ACCESSIBLE OVER THE INTERNET
+.TP
+\-\-loglevel LEVEL, \-l LEVEL
+The logging level (corresponds to the levels in the python logging module). LEVEL defaults to warning.
+.TP
+\-\-cache DIR, \-c DIR
+The directory in which to cache items. DIR defaults to /var/cache/singularity
+.TP
+\-\-loghandler HANDLER, \-H HANDLER
+The log handler to utilize. HANDLER defaults to syslog. If a filepath is passed log messages will be sent to that file.
+.TP
+\-\-configuration DIR, \-f DIR
+The configuration directory to use for various settings. DIR defaults to /etc/singularity
+.TP
+\-\-backup, \-b
+Create backup files of all items modified by singularity. The backup file will be prefixed with '.' and suffixed with '.bak'.
+.TP
+\-\-noop
+Show what actions would occur but don't apply any changes. Works like a dry run mode and forces info level logging. Overrides \-\-force if it is specified.
+.SH "ENVIRONMENT"
+.TP
+\fBLOGLEVEL\fR
+The logging level for the pre\-setup run\-time.  This controls the logging output of the console logger until the specified logger can be completely setup.
+.SH "FILES"
+.TP
+/etc/singularity/singularity.conf
+The default configuration file for singularity.  This houses parameters that controls singularity's behavior.
+.TP
+/var/cache/singularity
+The default directory where cached results for singularity are stored.  Any configurators that create files as their output will have the results stored here before being applied to the filesystem.
+.TP
+/var/run/singularity/singularity.pid
+The default pidfile location for singularity.  While the daemon is running the PID of the running daemon is stored in this file.
+.TP
+Configurators Directory (default: /etc/singularity/configurators)
+The directory to search for more configurators (for development or other purposes).
+.SH "SIGNALS"
+.TP
+\fBSIGHUP\fR
+Reloads the configuration parameters that are read dynamically during execuation as well as the loaded configurators.
+.TP
+\fBSIGTERM\fR
+Restarts the daemon (kills current running instance and starts a new daemon).
+.TP
+\fBSIGINT\fR
+See \fBSIGTERM\fR
+.SH "AUTHOR"
+Alex Brandt <alunduil@alunduil.com>
+.SH "SEE ALSO"
+singularity-daemon(8), singularity(8), singularity.conf(5)
+.SH "SECURITY CONSIDERATIONS"
+When logging with \fIdebug\fR level, the passwords that are decrypted as part of the password reset functionality are logged in plain text.
