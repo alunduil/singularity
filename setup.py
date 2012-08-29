@@ -42,6 +42,11 @@ PARAMS["data_files"] = [
             "config/singularity.conf",
             "config/init.gentoo",
             ]),
+        ("share/man/man8", [
+            "doc/man/man8/singularity.8",
+            "doc/man/man8/singularity-apply.8",
+            "doc/man/man8/singularity-daemon.8",
+            ]),
         ]
 
 PARAMS["requires"] = [
