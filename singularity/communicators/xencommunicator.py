@@ -324,13 +324,15 @@ class XenCommunicator(Communicator):
 
                     logger.debug("Adding in items: %s", tmp)
 
-                    if not "ips" in message and "ips" in tmp:
-                        message["ips"] = {}
-                    message["ips"].update(tmp.pop("ips"))
+                    if "ips" in tmp:
+                        if "ips" not in message:
+                            message["ips"] = {}
+                        message["ips"].update(tmp.pop("ips"))
 
-                    if not "routes" in message and "routes" in tmp:
-                        message["routes"] = {}
-                    message["routes"].update(tmp.pop("routes"))
+                    if "routes" in tmp:
+                        if "routes" not in message:
+                            message["routes"] = {}
+                        message["routes"].update(tmp.pop("routes"))
 
                     message.update(tmp)
 
