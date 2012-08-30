@@ -299,15 +299,17 @@ class XenCommunicator(Communicator):
                 # TODO Is this check necessary or should we just go for the 
                 # TODO data?
 
-                macs = set([ mac.replace(":", "").lower() for mac in helpers.macs() if int(mac.replace(":", ""), 16) ]) # pylint: disable=C0301
+                macs = set([ mac.replace(":", "") for mac in helpers.macs() if int(mac.replace(":", ""), 16) ]) # pylint: disable=C0301
                 logger.debug("MAC Addresses: %s", macs)
 
                 # TODO Is there a better way than a busy wait?
+                # MAC Addresses are upper in next gen but lower in first gen
+                # Why do things like this happen?
 
                 entries = set()
-                while entries < macs: # TODO Change to len(entries) < 2 ?
+                while set([ entry.lower() for entry in entries ]) < set([ mac.lower() for mac in macs ]): # Required since we can't assume anything about the entries coming back ... pylint: disable=C0301
                     transaction = self.xs.transaction_start()
-                    entries = set([ entry.lower() for entry in self.xs.ls(transaction, self._network_prefix) ])
+                    entries = set(self.xs.ls(transaction, self._network_prefix))
                     self.xs.transaction_end(transaction)
 
                     logger.debug("Entries: %s", entries)

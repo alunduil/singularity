@@ -243,11 +243,11 @@ def interface(mac_address):
     nics = {}
     for nic in os.listdir(sys_net):
         with open(os.path.join(sys_net, nic, "address")) as mac:
-            nics[mac.read().strip()] = nic
+            nics[mac.read().strip().lower()] = nic
 
     logger.debug("Found MACs: %s", nics)
 
-    return nics[mac_address]
+    return nics[mac_address.lower()]
 
 def cidr(ip, netmask): # pylint: disable=C0103
     """Converts an IP and Netmask into CIDR notation."""
@@ -276,7 +276,7 @@ def macs():
     macs = [] # pylint: disable=W0621
     for nic in os.listdir(sys_net):
         with open(os.path.join(sys_net, nic, "address")) as mac:
-            macs.append(mac.read().strip())
+            macs.append(mac.read().strip().lower())
 
     return macs
 
