@@ -201,6 +201,7 @@ def see_also(subcommand = "main"):
             "main": "singularity(8)",
             "apply": "singularity-apply(8)",
             "daemon": "singularity-daemon(8)",
+            "singularity.conf": "singularity.conf(5)",
             }
     all_ = others.values()
     all_.append('singularity.conf(5)')
@@ -237,6 +238,61 @@ def man_page(subcommand = "main"):
 
     return output
 
+def config_man_page():
+    output = []
+    header = '.TH "SINGULARITY.CONF" "5" "{date:%B %d, %Y}" "Openstack Guest Agent" "Singularity {info.VERSION}"' # pylint: disable=C0301
+    output.append(header.format(info = info, date = datetime.now()))
+
+    default_path = [ param for param in COMMON_PARAMETERS if "--configuration" in param["options"] ][0]["default"]
+    default_path = os.path.join(default_path, "singularity.conf")
+
+    output.append('.SH "NAME"')
+    name = 'singularity.conf \- Main configuration file for singularity(8)'
+    output.append(name.format(info = info))
+
+    output.append('.SH "SYNOPSIS"')
+    output.append('\\fb{0}\\fR'.format(default_path))
+
+    output.append('.SH "DESCRIPTION"')
+    output.append('.TP')
+    output.append(
+            'singularity(8) reads configuration data from \\fI{0}\\fR (or ' \
+            'the file specified with \\fB-f\\fR on the command line).  The ' \
+            'file is in ini format and respects the following sections and ' \
+            'parameters:'
+            )
+    output[-1] = output[-1].format(default_path)
+
+    output.append('.SS \\fB[main]\\fR')
+
+    for parameter in COMMON_PARAMETERS:
+        output.append('.TP')
+        output.append('.IT')
+        output.append('\\fB{0}\\fR'.format(parameter["options"][0][2:]))
+        output.append(parameter["help"])
+
+    output.append('.SS \\fB[apply]\\fR')
+
+    for parameter in APPLY_PARAMETERS:
+        output.append('.TP')
+        output.append('.IT')
+        output.append('\\fB{0}\\fR'.format(parameter["options"][0][2:]))
+        output.append(parameter["help"])
+
+    output.append('.SS \\fB[daemon]\\fR')
+
+    for parameter in DAEMON_PARAMETERS:
+        output.append('.TP')
+        output.append('.IT')
+        output.append('\\fB{0}\\fR'.format(parameter["options"][0][2:]))
+        output.append(parameter["help"])
+
+    output.extend(files())
+    output.extend(author())
+    output.extend(see_also("singularity.conf"))
+
+    return output
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -259,6 +315,12 @@ def main():
 
     with open(os.path.join(arguments.directory, "man8", "singularity-daemon.8"), "w") as man_file:
         man_file.write("\n".join(man_page("daemon")))
+
+    if not os.path.exists(os.path.join(arguments.directory, "man5")):
+        os.makedirs(os.path.join(arguments.directory, "man5"))
+
+    with open(os.path.join(arguments.directory, "man5", "singularity.conf.5"), "w") as man_file:
+        man_file.write("\n".join(config_man_page()))
 
 if __name__ == "__main__":
     main()

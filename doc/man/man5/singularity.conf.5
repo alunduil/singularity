@@ -1,0 +1,84 @@
+.TH "SINGULARITY.CONF" "5" "August 30, 2012" "Openstack Guest Agent" "Singularity 9999"
+.SH "NAME"
+singularity.conf \- Main configuration file for singularity(8)
+.SH "SYNOPSIS"
+\fb/etc/singularity/singularity.conf\fR
+.SH "DESCRIPTION"
+.TP
+singularity(8) reads configuration data from \fI/etc/singularity/singularity.conf\fR (or the file specified with \fB-f\fR on the command line).  The file is in ini format and respects the following sections and parameters:
+.SS \fB[main]\fR
+.TP
+.IT
+\fBloglevel\fR
+The logging level (corresponds to the levels in the python logging module).  LEVEL defaults to warning.
+.TP
+.IT
+\fBbackup\fR
+Create backup files of all items modified by singularity.  The backup file will be prefixed with '.' and suffixed with '.bak'.
+.TP
+.IT
+\fBconfiguration\fR
+The configuration directory to use for various settings.  DIR defaults to /etc/singularity
+.TP
+.IT
+\fBcache\fR
+The directory in which to cache items.  DIR defaults to /var/cache/singularity
+.TP
+.IT
+\fBloghandler\fR
+The log handler to utilize.  HANDLER defaults to syslog.  If a filepath is passed log messages will be sent to that file.
+.TP
+.IT
+\fBfunctions\fR
+The functions that should be handled by singularity.  FUNCTIONS defaults to "network,hosts,resolvers,reboot,password".  By specifying a subset of these functions; only the specified functions will be handled by singularity.  WARNING!  IF NETWORK IS NOT ENABLED; NEW SERVERS BUILT FROM IMAGES WILL NOT HAVE ANY NETWORKING CONFIGURATION AND WILL NOT BE ACCESSIBLE OVER THE INTERNET
+.SS \fB[apply]\fR
+.TP
+.IT
+\fBnoop\fR
+Show what actions would occur but don't apply any changes.  Works like a dry run mode and forces info level logging.  Overrides --force if it is specified.
+.SS \fB[daemon]\fR
+.TP
+.IT
+\fBrun\fR
+The directory to store runtime items (sockets, etc).  Defaults to /var/run.
+.TP
+.IT
+\fBpidfile\fR
+The file that holds the PID of the running daemon.  FILE defaults to /var/run/singularity.pid
+.TP
+.IT
+\fBuid\fR
+Username for the daemon to run as.  USER defaults to root.  This can be changed but doesn't make sense with certain functions (i.e. password).
+.TP
+.IT
+\fBgid\fR
+Group for the daemon to run as.  GROUP defaults to root.  This can be changed but doesn't make sense with certain functions (i.e. password).
+.TP
+.IT
+\fBcoredumps\fR
+Turns on coredumps from singularity.  Defaults to False
+.TP
+.IT
+\fBnodaemonize\fR
+Detach, fork, the process into the background.  Defaults to False.
+.TP
+.IT
+\fBconfigurators\fR
+Directories that the daemon should check for other configurators that may be provided by another mechanism or by the administrator.  Defaults to []; which includes no extra directories.
+.SH "FILES"
+.TP
+/etc/singularity/singularity.conf
+The default configuration file for singularity.  This houses parameters that controls singularity's behavior.
+.TP
+/var/cache/singularity
+The default directory where cached results for singularity are stored.  Any configurators that create files as their output will have the results stored here before being applied to the filesystem.
+.TP
+/var/run/singularity/singularity.pid
+The default pidfile location for singularity.  While the daemon is running the PID of the running daemon is stored in this file.
+.TP
+Configurators Directory (default: /etc/singularity/configurators)
+The directory to search for more configurators (for development or other purposes).
+.SH "AUTHOR"
+Alex Brandt <alunduil@alunduil.com>
+.SH "SEE ALSO"
+singularity-apply(8), singularity-daemon(8), singularity(8), singularity.conf(5)
