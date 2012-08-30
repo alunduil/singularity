@@ -63,8 +63,32 @@ def translate(message): # pylint: disable=R0912,R0915
     This information has changed in next gen servers:
 
     {
-      "label": "public",
-      "ips": 
+      "ip6s": [
+        {
+          "ip": "2001:4800:780e:0510:39be:d318:ff04:5959", 
+          "netmask": 64, 
+          "enabled": "1", 
+          "gateway": "fe80::def"
+        },
+      ], 
+      "label": "public", 
+      "broadcast": "198.101.246.255", 
+      "ips": [
+        {
+          "ip": "198.101.246.127", 
+          "netmask": "255.255.255.0", 
+          "enabled": "1", 
+          "gateway": "198.101.246.1"
+        },
+      ], 
+      "mac": "BC:76:4E:04:59:59", 
+      "gateway_v6": "fe80::def", 
+      "dns": [
+        "72.3.128.241", 
+        "72.3.128.240",
+      ], 
+      "gateway": "198.101.246.1"
+    }
     
     {
       "label": "private",
@@ -180,22 +204,29 @@ def translate(message): # pylint: disable=R0912,R0915
 
     try:
         for ip in parsed["ips"]: # pylint: disable=C0103
-            if ip["enabled"] == "1": # A string? Really?
+            if ip["enabled"] == "1" and ip["gateway"] is not None:
                 message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv4")) # pylint: disable=C0301
     except KeyError:
         logger.warning("Did not receive 'ips' or 'ips.gateway' from message") # pylint: disable=C0301
 
     try:
         for ip in parsed["ip6s"]: # pylint: disable=C0103
-            if ip["enabled"] == "1": # A string? Really?
+            if ip["enabled"] == "1" and ip["gateway"] is not None:
                 message["routes"][interface(parsed["mac"])].append(("default", ip["gateway"], "ipv6")) # pylint: disable=C0301
     except KeyError:
         logger.warning("Did not receive 'ip6s' or 'ip6s.gateway' from message") # pylint: disable=C0301
 
     try:
-        message["routes"][interface(parsed["mac"])].append(("default", parsed["gateway"], "ipv4")) # Should be ipv4 but need to verify ... # pylint: disable=C0301 
+        if parsed["gateway"] is not None:
+            message["routes"][interface(parsed["mac"])].append(("default", parsed["gateway"], "ipv4")) # Should be ipv4 but need to verify ... # pylint: disable=C0301 
     except KeyError:
         logger.warning("Did not receive 'gateway' from message")
+
+    try:
+        if parsed["gateway_v6"] is not None:
+            message["routes"][interface(parsed["mac"])].append(("default", parsed["gateway_v6"], "ipv6")) # Should be ipv4 but need to verify ... # pylint: disable=C0301 
+    except KeyError:
+        logger.warning("Did not receive 'gateway_v6' from message")
 
     try:
         for route in parsed["routes"]:
