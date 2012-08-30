@@ -59,6 +59,12 @@ def translate(message): # pylint: disable=R0912,R0915
         "72.3.128.241"
       ]
     }
+
+    This information has changed in next gen servers:
+
+    {
+      "label": "public",
+      "ips": 
     
     {
       "label": "private",
@@ -83,6 +89,41 @@ def translate(message): # pylint: disable=R0912,R0915
       ],
       "mac": "40:40:a1:47:e2:af"
     }
+
+    The layout of this information has changed in next gen servers:
+
+    {
+      "label": "private",
+      "broadcast": "10.180.127.255",
+      "ips": [
+        {
+          "ip": "10.180.7.18",
+          "netmask": "255.255.128.0",
+          "enabled": "1",
+          "gateway": null,
+        },
+      ],
+      "mac": "BC:76:4E:04:59:AD",
+      "dns": [
+        "72.3.128.241",
+        "72.3.128.240",
+      ],
+      "routes": [
+        {
+          "route": "10.191.192.0",
+          "netmask": "255.255.192.0",
+          "gateway": "10.180.0.1",
+        },
+        {
+          "route": "10.176.0.0",
+          "netmask": "255.240.0.0",
+          "gateway": "10.180.0.1",
+        },
+      ],
+      "gateway": null,
+    }
+
+
 
     """
 
