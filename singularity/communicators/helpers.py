@@ -256,6 +256,9 @@ def translate(message): # pylint: disable=R0912,R0915
     if len(message["routes"]):
         if not any([ len(message["routes"][nic]) for nic in message["routes"].iterkeys() ]): # pylint: disable=C0301
             del message["routes"]
+        else:
+            for nic in message["routes"].iterkeys():
+                message["routes"][nic] = list(set(message["routes"][nic])) # Make sure we don't have any duplicate routes on a NIC # pylint: disable=C0301
     else:
         del message["routes"]
 
