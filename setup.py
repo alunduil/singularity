@@ -47,6 +47,9 @@ PARAMS["data_files"] = [
             "doc/man/man8/singularity-apply.8",
             "doc/man/man8/singularity-daemon.8",
             ]),
+        ("share/man/man5", [
+            "doc/man/man8/singularity.conf.5",
+            ]),
         ]
 
 PARAMS["requires"] = [
