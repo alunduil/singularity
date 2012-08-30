@@ -204,8 +204,6 @@ def see_also(subcommand = "main"):
             "singularity.conf": "singularity.conf(5)",
             }
     all_ = others.values()
-    all_.append('singularity.conf(5)')
-
     all_.remove(others[subcommand])
 
     output.append(", ".join(all_))
