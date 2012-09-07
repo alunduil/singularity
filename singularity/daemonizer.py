@@ -54,6 +54,10 @@ class SingularityDaemon(object):
         # the head, with which he will..."
 
         context = daemon.DaemonContext()
+
+        if not os.path.exists(SingularityParameters()["daemon.run"]):
+            os.makedirs(SingularityParameters()["daemon.run"])
+
         context.pidfile = PidFile(SingularityParameters()["daemon.pidfile"])
         context.umask = 0o002
         context.uid = pwd.getpwnam(SingularityParameters()["daemon.uid"]).pw_uid
