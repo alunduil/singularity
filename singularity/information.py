@@ -10,7 +10,7 @@ Contains tid-bits such as author, version, url, etc.
 """
 
 NAME = "singularity"
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 DESCRIPTION = "An Openstack Guest Agent for Hypervisor and Guest Communication"
 LONG_DESCRIPTION = \
         "An Openstack Guest Agent for communication between the hypervisor " \
