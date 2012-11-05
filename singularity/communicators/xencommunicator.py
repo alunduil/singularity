@@ -366,6 +366,12 @@ class XenCommunicator(Communicator):
                 self.send(identifier, str(crypto.PUBLIC_KEY), "D0")
                 return self.receive() # Hoping it's not keyinit's all the way down ... # pylint: disable=C0301
 
+            elif message["function"] == "version":
+                logger.info("Faking the version passed back ...")
+
+                self.send(identifier, "0.0.1.36") # Apparently it's a protocol version ...
+                return self.receive()
+
             elif message["function"] == "password":
                 if crypto.AES_KEYS is not None:
                     logger.info("Decrypting password")
