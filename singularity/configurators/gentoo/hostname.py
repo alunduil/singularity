@@ -64,7 +64,7 @@ class GentooHostnameConfigurator(SingularityConfigurator):
 
         lines = [
                 "# Set to the hostname of this machine",
-                "hostname=\"{0}\"".format(configuration["hostname"].split('.', 1)[0]), # pylint: disable=C0301
+                "hostname=\"{0}\"".format(configuration["hostname"]),
                 ]
 
         return { self.confd_hostname_path: lines }
