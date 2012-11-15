@@ -44,6 +44,19 @@ class GentooNetworkConfigurator(SingularityConfigurator):
             logger.info("Can't write to %s", self.confd_net_path)
             return False
 
+        self._rc_update_path = None # pylint: disable=W0201
+
+        try:
+            self._rc_update_path = subprocess.check_output("which rc-update", shell = True).strip() # pylint: disable=C0301
+        except subprocess.CalledProcessError:
+            pass
+
+        logger.debug("rc-update path: %s", self._rc_update_path)
+
+        if self._rc_update_path is None:
+            logger.info("Must have access to rc-update")
+            return False
+
         logger.info("GentooNetworkConfigurator is runnable!")
         return True
 
@@ -66,7 +79,20 @@ class GentooNetworkConfigurator(SingularityConfigurator):
 
         logger.debug("ips: %s", configuration["ips"])
 
+        init_path = os.path.join(os.path.sep, "etc", "init.d")
+
         for interface, ips in configuration["ips"].iteritems():
+
+            if not os.path.exists(os.path.join(init_path, "net." + interface)):
+                original_path = os.getcwd()
+                os.chdir(init_path)
+                os.symlink("net.lo", "net." + interface)
+                os.chdir(original_path)
+
+            logger.info("Calling: %s add net.%s default", self._rc_update_path, interface) # pylint: disable=C0301
+            command = [ self._rc_update_path, "add", "net." + interface, "default" ] # pylint: disable=C0301
+            subprocess.check_call(command)
+
             lines.append("config_{0}=\"".format(interface))
             for ip in ips: # pylint: disable=C0103
                 lines.append(ip[0])
