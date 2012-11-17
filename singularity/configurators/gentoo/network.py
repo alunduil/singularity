@@ -5,6 +5,7 @@
 
 import logging
 import os
+import subprocess
 
 from singularity.configurators import SingularityConfigurator
 
