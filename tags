@@ -1,0 +1,242 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AES_KEYS	singularity/helpers/crypto.py	/^AES_KEYS = None$/;"	v
+APPLY_PARAMETERS	singularity/parameters/__init__.py	/^APPLY_PARAMETERS = [$/;"	v
+AUTHOR	singularity/information.py	/^AUTHOR = "Alex Brandt"$/;"	v
+AUTHOR_EMAIL	singularity/information.py	/^AUTHOR_EMAIL = "alunduil@alunduil.com"$/;"	v
+COMMON_PARAMETERS	singularity/parameters/__init__.py	/^COMMON_PARAMETERS = [$/;"	v
+CONFIG_DIR	singularity/parameters/__init__.py	/^CONFIG_DIR = os.path.join(os.path.sep, "etc", "singularity")$/;"	v
+COPY_YEAR	singularity/information.py	/^COPY_YEAR = "2012"$/;"	v
+Communicator	singularity/communicators/__init__.py	/^class Communicator(object):$/;"	c
+DAEMON_PARAMETERS	singularity/parameters/__init__.py	/^DAEMON_PARAMETERS = [$/;"	v
+DEFAULTS	singularity/parameters/__init__.py	/^DEFAULTS = {}$/;"	v
+DEFAULT_RUN	singularity/parameters/__init__.py	/^DEFAULT_RUN = os.path.join(os.path.sep, "var", "run", "singularity")$/;"	v
+DESCRIPTION	singularity/information.py	/^DESCRIPTION = "An Openstack Guest Agent for Hypervisor and Guest Communication"$/;"	v
+FeaturesConfigurator	singularity/configurators/features.py	/^class FeaturesConfigurator(SingularityConfigurator):$/;"	c
+FileConfigurator	singularity/configurators/file.py	/^class FileConfigurator(SingularityConfigurator):$/;"	c
+GentooHostnameConfigurator	singularity/configurators/gentoo/hostname.py	/^class GentooHostnameConfigurator(SingularityConfigurator):$/;"	c
+GentooNetworkConfigurator	singularity/configurators/gentoo/network.py	/^class GentooNetworkConfigurator(SingularityConfigurator):$/;"	c
+GentooUpdateConfigurator	singularity/configurators/gentoo/update.py	/^class GentooUpdateConfigurator(SingularityConfigurator):$/;"	c
+HostnameConfigurator	singularity/configurators/hostname.py	/^class HostnameConfigurator(SingularityConfigurator):$/;"	c
+HostsConfigurator	singularity/configurators/hosts.py	/^class HostsConfigurator(SingularityConfigurator):$/;"	c
+LICENSE	singularity/information.py	/^LICENSE = "MIT"$/;"	v
+LONG_DESCRIPTION	singularity/information.py	/^        "passwords, etc."$/;"	v
+LevelFilter	singularity/application.py	/^        class LevelFilter(logging.Filter):$/;"	c	function:SingularityApplication.__init__
+NAME	singularity/information.py	/^NAME = "singularity"$/;"	v
+NetworkConfigurator	singularity/configurators/network.py	/^class NetworkConfigurator(SingularityConfigurator):$/;"	c
+PARAMS	setup.py	/^PARAMS = {}$/;"	v
+PRIVATE_KEY	singularity/helpers/crypto.py	/^PRIVATE_KEY = None$/;"	v
+PUBLIC_KEY	singularity/helpers/crypto.py	/^PUBLIC_KEY = None$/;"	v
+PasswordConfigurator	singularity/configurators/password.py	/^class PasswordConfigurator(SingularityConfigurator):$/;"	c
+PidFile	singularity/daemonizer.py	/^class PidFile(object): # pylint: disable=R0903$/;"	c
+ResolversConfigurator	singularity/configurators/resolvers.py	/^class ResolversConfigurator(SingularityConfigurator):$/;"	c
+SHARED_KEY	singularity/helpers/crypto.py	/^SHARED_KEY = None$/;"	v
+SingularityApplication	singularity/application.py	/^class SingularityApplication(object): # pylint: disable=R0903$/;"	c
+SingularityApplicator	singularity/applicator.py	/^class SingularityApplicator(object):$/;"	c
+SingularityArguments	singularity/parameters/arguments.py	/^class SingularityArguments(object):$/;"	c
+SingularityCache	singularity/cache.py	/^class SingularityCache(object): # pylint: disable=R0903$/;"	c
+SingularityConfiguration	singularity/parameters/configuration.py	/^class SingularityConfiguration(object): # pylint: disable=R0903$/;"	c
+SingularityConfigurator	singularity/configurators/__init__.py	/^class SingularityConfigurator(object):$/;"	c
+SingularityConfigurators	singularity/configurators/__init__.py	/^class SingularityConfigurators(object): # pylint: disable=R0903$/;"	c
+SingularityDaemon	singularity/daemonizer.py	/^class SingularityDaemon(object):$/;"	c
+SingularityParameters	singularity/parameters/__init__.py	/^class SingularityParameters(object): # pylint: disable=R0903$/;"	c
+SocketCommunicator	singularity/communicators/socketcommunicator.py	/^class SocketCommunicator(Communicator):$/;"	c
+URL	singularity/information.py	/^URL = ""$/;"	v
+VERSION	singularity/information.py	/^VERSION = "9999"$/;"	v
+VIRTUAL	singularity/helpers/__init__.py	/^    VIRTUAL = "xenU"$/;"	v
+VIRTUAL	singularity/helpers/__init__.py	/^VIRTUAL = "physical"$/;"	v
+VersionConfigurator	singularity/configurators/version.py	/^class VersionConfigurator(SingularityConfigurator):$/;"	c
+XenCommunicator	singularity/communicators/xencommunicator.py	/^class XenCommunicator(Communicator):$/;"	c
+_BASE	singularity/helpers/crypto.py	/^_BASE = 5$/;"	v
+_PRIME	singularity/helpers/crypto.py	/^_PRIME = 162259276829213363391578010288127$/;"	v
+__call__	singularity/applicator.py	/^    def __call__(self, actions = None):$/;"	m	class:SingularityApplicator	file:
+__call__	singularity/daemonizer.py	/^    def __call__(self):$/;"	m	class:SingularityDaemon	file:
+__contains__	singularity/cache.py	/^    def __contains__(self, key):$/;"	m	class:SingularityCache	file:
+__contains__	singularity/configurators/__init__.py	/^    def __contains__(self, item):$/;"	m	class:SingularityConfigurators	file:
+__contains__	singularity/parameters/arguments.py	/^    def __contains__(self, key):$/;"	m	class:SingularityArguments	file:
+__contains__	singularity/parameters/configuration.py	/^    def __contains__(self, key):$/;"	m	class:SingularityConfiguration	file:
+__del__	singularity/communicators/socketcommunicator.py	/^    def __del__(self):$/;"	m	class:SocketCommunicator	file:
+__del__	singularity/communicators/xencommunicator.py	/^    def __del__(self):$/;"	m	class:XenCommunicator	file:
+__delitem__	singularity/cache.py	/^    def __delitem__(self, key):$/;"	m	class:SingularityCache	file:
+__enter__	singularity/daemonizer.py	/^    def __enter__(self):$/;"	m	class:PidFile	file:
+__exit__	singularity/daemonizer.py	/^    def __exit__(self, exc_type = None, exc_value = None, exc_tb = None):$/;"	m	class:PidFile	file:
+__getitem__	singularity/cache.py	/^    def __getitem__(self, key):$/;"	m	class:SingularityCache	file:
+__getitem__	singularity/configurators/__init__.py	/^    def __getitem__(self, key):$/;"	m	class:SingularityConfigurators	file:
+__getitem__	singularity/parameters/__init__.py	/^    def __getitem__(self, key):$/;"	m	class:SingularityParameters	file:
+__getitem__	singularity/parameters/arguments.py	/^    def __getitem__(self, key):$/;"	m	class:SingularityArguments	file:
+__getitem__	singularity/parameters/configuration.py	/^    def __getitem__(self, key):$/;"	m	class:SingularityConfiguration	file:
+__init__	singularity/application.py	/^            def __init__(self, level, *args, **kwargs):$/;"	m	class:SingularityApplication.__init__.LevelFilter
+__init__	singularity/application.py	/^    def __init__(self):$/;"	m	class:SingularityApplication
+__init__	singularity/communicators/socketcommunicator.py	/^    def __init__(self, path = None, *args, **kwargs):$/;"	m	class:SocketCommunicator
+__init__	singularity/communicators/xencommunicator.py	/^    def __init__(self, receive_prefix = "data\/host", send_prefix = "data\/guest", data_prefix = "vm-data", *args, **kwargs): # pylint: disable=C0301$/;"	m	class:XenCommunicator
+__init__	singularity/configurators/__init__.py	/^    def __init__(self):$/;"	m	class:SingularityConfigurator
+__init__	singularity/configurators/__init__.py	/^    def __init__(self):$/;"	m	class:SingularityConfigurators
+__init__	singularity/daemonizer.py	/^    def __init__(self, path):$/;"	m	class:PidFile
+__init__	singularity/parameters/__init__.py	/^    def __init__(self, *args, **kwargs):$/;"	m	class:SingularityParameters
+__init__	singularity/parameters/arguments.py	/^    def __init__(self, parse = True, *args, **kwargs):$/;"	m	class:SingularityArguments
+__init__	singularity/parameters/configuration.py	/^    def __init__(self, configuration):$/;"	m	class:SingularityConfiguration
+__init__.py	singularity/__init__.py	1;"	F
+__init__.py	singularity/communicators/__init__.py	1;"	F
+__init__.py	singularity/configurators/__init__.py	1;"	F
+__init__.py	singularity/configurators/gentoo/__init__.py	1;"	F
+__init__.py	singularity/helpers/__init__.py	1;"	F
+__init__.py	singularity/parameters/__init__.py	1;"	F
+__iter__	singularity/cache.py	/^    def __iter__(self):$/;"	m	class:SingularityCache	file:
+__iter__	singularity/configurators/__init__.py	/^    def __iter__(self):$/;"	m	class:SingularityConfigurators	file:
+__len__	singularity/cache.py	/^    def __len__(self):$/;"	m	class:SingularityCache	file:
+__len__	singularity/configurators/__init__.py	/^    def __len__(self):$/;"	m	class:SingularityConfigurators	file:
+__reversed__	singularity/configurators/__init__.py	/^    def __reversed__(self):$/;"	m	class:SingularityConfigurators	file:
+__setitem__	singularity/cache.py	/^    def __setitem__(self, key, value):$/;"	m	class:SingularityCache	file:
+__shared_state	singularity/parameters/__init__.py	/^    __shared_state = {}$/;"	v	class:SingularityParameters
+_extract_defaults	singularity/parameters/configuration.py	/^def _extract_defaults(parameters):$/;"	f
+_extract_options	singularity/parameters/arguments.py	/^def _extract_options(parameters):$/;"	f
+aes_keys	singularity/helpers/crypto.py	/^def aes_keys(shar_key):$/;"	f
+application.py	singularity/application.py	1;"	F
+applicator.py	singularity/applicator.py	1;"	F
+arguments.py	singularity/parameters/arguments.py	1;"	F
+author	scripts/man_generator	/^def author():$/;"	f
+cache.py	singularity/cache.py	1;"	F
+cache_path	singularity/cache.py	/^def cache_path(function, filename):$/;"	f
+cidr	singularity/communicators/helpers.py	/^def cidr(ip, netmask): # pylint: disable=C0103$/;"	f
+clear	singularity/cache.py	/^    def clear(self): # pylint: disable=R0201$/;"	m	class:SingularityCache
+confd_hostname_path	singularity/configurators/gentoo/hostname.py	/^    def confd_hostname_path(self): # pylint: disable=R0201,C0111$/;"	m	class:GentooHostnameConfigurator
+confd_net_path	singularity/configurators/gentoo/network.py	/^    def confd_net_path(self): # pylint: disable=R0201,C0111$/;"	m	class:GentooNetworkConfigurator
+config_generator	scripts/config_generator	1;"	F
+config_man_page	scripts/man_generator	/^def config_man_page():$/;"	f
+configuration.py	singularity/parameters/configuration.py	1;"	F
+content	singularity/configurators/__init__.py	/^    def content(self, configuration):$/;"	m	class:SingularityConfigurator
+content	singularity/configurators/features.py	/^    def content(self, configuration):$/;"	m	class:FeaturesConfigurator
+content	singularity/configurators/file.py	/^    def content(self, configuration):$/;"	m	class:FileConfigurator
+content	singularity/configurators/gentoo/hostname.py	/^    def content(self, configuration):$/;"	m	class:GentooHostnameConfigurator
+content	singularity/configurators/gentoo/network.py	/^    def content(self, configuration):$/;"	m	class:GentooNetworkConfigurator
+content	singularity/configurators/gentoo/update.py	/^    def content(self, configuration):$/;"	m	class:GentooUpdateConfigurator
+content	singularity/configurators/hostname.py	/^    def content(self, configuration):$/;"	m	class:HostnameConfigurator
+content	singularity/configurators/hosts.py	/^    def content(self, configuration):$/;"	m	class:HostsConfigurator
+content	singularity/configurators/network.py	/^    def content(self, configuration):$/;"	m	class:NetworkConfigurator
+content	singularity/configurators/password.py	/^    def content(self, configuration):$/;"	m	class:PasswordConfigurator
+content	singularity/configurators/resolvers.py	/^    def content(self, configuration):$/;"	m	class:ResolversConfigurator
+content	singularity/configurators/version.py	/^    def content(self, configuration):$/;"	m	class:VersionConfigurator
+create	singularity/communicators/__init__.py	/^def create(*args, **kwargs):$/;"	f
+crypto.py	singularity/helpers/crypto.py	1;"	F
+daemon_pid	singularity/daemonizer.py	/^    def daemon_pid(self): # pylint: disable=R0201$/;"	m	class:SingularityDaemon
+daemonizer.py	singularity/daemonizer.py	1;"	F
+decrypt	singularity/helpers/crypto.py	/^def decrypt(string):$/;"	f
+description	scripts/man_generator	/^def description(subcommand = "main"):$/;"	f
+encode	singularity/helpers/crypto.py	/^def encode(base, exponent):$/;"	f
+environment	scripts/man_generator	/^def environment():$/;"	f
+features.py	singularity/configurators/features.py	1;"	F
+file.py	singularity/configurators/file.py	1;"	F
+files	scripts/man_generator	/^def files():$/;"	f
+files	singularity/cache.py	/^    def files(self):$/;"	m	class:SingularityCache
+filter	singularity/application.py	/^            def filter(self, record):$/;"	m	class:SingularityApplication.__init__.LevelFilter
+function	singularity/configurators/__init__.py	/^    def function(self):$/;"	m	class:SingularityConfigurator
+function	singularity/configurators/gentoo/hostname.py	/^    def function(self):$/;"	m	class:GentooHostnameConfigurator
+function	singularity/configurators/gentoo/network.py	/^    def function(self):$/;"	m	class:GentooNetworkConfigurator
+function	singularity/configurators/gentoo/update.py	/^    def function(self):$/;"	m	class:GentooUpdateConfigurator
+generate_keys	singularity/helpers/crypto.py	/^def generate_keys(remote_public_key):$/;"	f
+handler	singularity/application.py	/^handler = logging.StreamHandler() # pylint: disable=C0103$/;"	v
+header	scripts/man_generator	/^def header(subcommand = "main"):$/;"	f
+help_	scripts/man_generator	/^def help_(subcommand = "main"):$/;"	f
+helpers.py	singularity/communicators/helpers.py	1;"	F
+hostname.py	singularity/configurators/gentoo/hostname.py	1;"	F
+hostname.py	singularity/configurators/hostname.py	1;"	F
+hosts.py	singularity/configurators/hosts.py	1;"	F
+hosts_path	singularity/configurators/hosts.py	/^    def hosts_path(self): # pylint: disable=R0201,C0111$/;"	m	class:HostsConfigurator
+hup_handler	singularity/daemonizer.py	/^        def hup_handler(signum, frame): # pylint: disable=W0613$/;"	f	function:SingularityDaemon.start
+information.py	singularity/information.py	1;"	F
+interface	singularity/communicators/helpers.py	/^def interface(mac_address):$/;"	f
+items	singularity/cache.py	/^    def items(self):$/;"	m	class:SingularityCache
+iter	singularity/cache.py	/^    def iter(self):$/;"	m	class:SingularityCache
+iterfiles	singularity/cache.py	/^    def iterfiles(self): # pylint: disable=R0201$/;"	m	class:SingularityCache
+iteritems	singularity/cache.py	/^    def iteritems(self):$/;"	m	class:SingularityCache
+iterkeys	singularity/cache.py	/^    def iterkeys(self):$/;"	m	class:SingularityCache
+itervalues	singularity/cache.py	/^    def itervalues(self):$/;"	m	class:SingularityCache
+keys	singularity/cache.py	/^    def keys(self):$/;"	m	class:SingularityCache
+logger	bin/singularity	/^logger = logging.getLogger("console")$/;"	v
+logger	singularity/application.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/applicator.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/cache.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/communicators/__init__.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/communicators/helpers.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/communicators/socketcommunicator.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/communicators/xencommunicator.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/__init__.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/features.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/file.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/gentoo/hostname.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/gentoo/network.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/gentoo/update.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/hostname.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/hosts.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/network.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/password.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/resolvers.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/configurators/version.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/daemonizer.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/helpers/__init__.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/helpers/crypto.py	/^logger = logging.getLogger(__name__) # pylint: disable=C0103$/;"	v
+logger	singularity/parameters/__init__.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/parameters/arguments.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+logger	singularity/parameters/configuration.py	/^logger = logging.getLogger("console") # pylint: disable=C0103$/;"	v
+macs	singularity/communicators/helpers.py	/^def macs():$/;"	f
+main	bin/singularity	/^def main():$/;"	f
+main	scripts/config_generator	/^def main():$/;"	f
+main	scripts/man_generator	/^def main():$/;"	f
+man_generator	scripts/man_generator	1;"	F
+man_page	scripts/man_generator	/^def man_page(subcommand = "main"):$/;"	f
+network.py	singularity/configurators/gentoo/network.py	1;"	F
+network.py	singularity/configurators/network.py	1;"	F
+options	scripts/man_generator	/^def options(subcommand = "main"):$/;"	f
+parsed_args	singularity/parameters/arguments.py	/^    def parsed_args(self):$/;"	m	class:SingularityArguments
+parsers	singularity/parameters/arguments.py	/^    def parsers(self):$/;"	m	class:SingularityArguments
+password.py	singularity/configurators/password.py	1;"	F
+private_key	singularity/helpers/crypto.py	/^def private_key():$/;"	f
+public_key	singularity/helpers/crypto.py	/^def public_key(priv_key):$/;"	f
+receive	singularity/communicators/__init__.py	/^    def receive(self):$/;"	m	class:Communicator
+receive	singularity/communicators/socketcommunicator.py	/^    def receive(self):$/;"	m	class:SocketCommunicator
+receive	singularity/communicators/xencommunicator.py	/^    def receive(self): # pylint: disable=R0912$/;"	m	class:XenCommunicator
+reinit	singularity/daemonizer.py	/^    def reinit(self):$/;"	m	class:SingularityDaemon
+reinit	singularity/parameters/__init__.py	/^    def reinit(self):$/;"	m	class:SingularityParameters
+resolvconf_path	singularity/configurators/resolvers.py	/^    def resolvconf_path(self): # pylint: disable=R0201,C0111$/;"	m	class:ResolversConfigurator
+resolvers.py	singularity/configurators/resolvers.py	1;"	F
+restart	singularity/daemonizer.py	/^    def restart(self):$/;"	m	class:SingularityDaemon
+run	singularity/application.py	/^    def run(self): # pylint: disable=R0201$/;"	m	class:SingularityApplication
+runnable	singularity/configurators/__init__.py	/^    def runnable(self, configuration):$/;"	m	class:SingularityConfigurator
+runnable	singularity/configurators/features.py	/^    def runnable(self, configuration):$/;"	m	class:FeaturesConfigurator
+runnable	singularity/configurators/file.py	/^    def runnable(self, configuration):$/;"	m	class:FileConfigurator
+runnable	singularity/configurators/gentoo/hostname.py	/^    def runnable(self, configuration):$/;"	m	class:GentooHostnameConfigurator
+runnable	singularity/configurators/gentoo/network.py	/^    def runnable(self, configuration):$/;"	m	class:GentooNetworkConfigurator
+runnable	singularity/configurators/gentoo/update.py	/^    def runnable(self, configuration):$/;"	m	class:GentooUpdateConfigurator
+runnable	singularity/configurators/hostname.py	/^    def runnable(self, configuration):$/;"	m	class:HostnameConfigurator
+runnable	singularity/configurators/hosts.py	/^    def runnable(self, configuration):$/;"	m	class:HostsConfigurator
+runnable	singularity/configurators/network.py	/^    def runnable(self, configuration):$/;"	m	class:NetworkConfigurator
+runnable	singularity/configurators/password.py	/^    def runnable(self, configuration):$/;"	m	class:PasswordConfigurator
+runnable	singularity/configurators/resolvers.py	/^    def runnable(self, configuration):$/;"	m	class:ResolversConfigurator
+runnable	singularity/configurators/version.py	/^    def runnable(self, configuration):$/;"	m	class:VersionConfigurator
+running	singularity/daemonizer.py	/^    def running(self):$/;"	m	class:SingularityDaemon
+security_considerations	scripts/man_generator	/^def security_considerations():$/;"	f
+see_also	scripts/man_generator	/^def see_also(subcommand = "main"):$/;"	f
+send	singularity/communicators/__init__.py	/^    def send(self, identifier, message, status = 0):$/;"	m	class:Communicator
+send	singularity/communicators/socketcommunicator.py	/^    def send(self, identifier, message, status = 0):$/;"	m	class:SocketCommunicator
+send	singularity/communicators/xencommunicator.py	/^    def send(self, identifier, message, status = 0):$/;"	m	class:XenCommunicator
+setup.py	setup.py	1;"	F
+shared_key	singularity/helpers/crypto.py	/^def shared_key(priv_key, pub_key):$/;"	f
+signals	scripts/man_generator	/^def signals(subcommand = "main"):$/;"	f
+singularity	bin/singularity	1;"	F
+socketcommunicator.py	singularity/communicators/socketcommunicator.py	1;"	F
+start	singularity/daemonizer.py	/^    def start(self): # pylint: disable=R0201$/;"	m	class:SingularityDaemon
+status	singularity/daemonizer.py	/^    def status(self):$/;"	m	class:SingularityDaemon
+stop	singularity/daemonizer.py	/^    def stop(self):$/;"	m	class:SingularityDaemon
+synopsis	scripts/man_generator	/^def synopsis(subcommand = "main"):$/;"	f
+term_handler	singularity/daemonizer.py	/^        def term_handler(signum, frame): # pylint: disable=W0613$/;"	f	function:SingularityDaemon.start
+translate	singularity/communicators/helpers.py	/^def translate(message): # pylint: disable=R0912,R0915$/;"	f
+update.py	singularity/configurators/gentoo/update.py	1;"	F
+usage	scripts/man_generator	/^def usage(subcommand = "main"):$/;"	f
+values	singularity/cache.py	/^    def values(self):$/;"	m	class:SingularityCache
+version.py	singularity/configurators/version.py	1;"	F
+xencommunicator.py	singularity/communicators/xencommunicator.py	1;"	F
+xs_watch	singularity/communicators/xencommunicator.py	/^        def xs_watch(path):$/;"	f	function:XenCommunicator.__init__

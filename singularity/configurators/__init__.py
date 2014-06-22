@@ -48,10 +48,10 @@ class SingularityConfigurator(object):
         ### Default Value
 
         A default value of the lowercase class name without any Configurator
-        part is returned.  
-        
+        part is returned.
+
         #### Examples
-        
+
         Configurator Name    | Default Return Value
         -----------------    | --------------------
         PasswordConfigurator | "password"
@@ -89,7 +89,7 @@ class SingularityConfigurator(object):
         * password ::= str(administrator password)
         * function ::= str(system command to run)
         * arguments ::= str(arguments to command)
-        
+
         ### Description
 
         Returns the runnability of this configurator.  If this property is true
@@ -106,7 +106,7 @@ class SingularityConfigurator(object):
 
     def content(self, configuration):
         """Generated content of this configurator as a dictionary.
-        
+
         ### Arguments
 
         Argument           | Description
@@ -115,7 +115,7 @@ class SingularityConfigurator(object):
 
         [1]: See SingularityConfigurator.runnable for more information.
 
-        The configuration dict may have but must be tested for 
+        The configuration dict may have but must be tested for
 
         ### Description
 
